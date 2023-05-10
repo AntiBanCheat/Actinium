@@ -1139,13 +1139,15 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 		}*/
 
 		//Flareon
-		if (packet->isInstanceOf<PlayerAuthInputPacket>()) {
-			if (disabler->mode.getSelectedValue() == 5) {
-				PlayerAuthInputPacket* authInputPacket = reinterpret_cast<PlayerAuthInputPacket*>(packet);
-				C_MovePlayerPacket* movePacket = reinterpret_cast<C_MovePlayerPacket*>(packet);
-				LevelSoundEventPacket* actionPacket = reinterpret_cast<LevelSoundEventPacket*>(packet);
-				NetworkLatencyPacket* netlatency = reinterpret_cast<NetworkLatencyPacket*>(packet);
-				netlatency->sendBack = true;
+		if (disabler->mode.getSelectedValue() == 5)
+		{
+			NetworkLatencyPacket* netStack = reinterpret_cast<NetworkLatencyPacket*>(packet);
+			//NetworkLatencyPacket* pkt = (NetworkLatencyPacket*)packet;
+			if (packet->isInstanceOf<NetworkLatencyPacket>() && g_Data.isInGame()) {
+				return;
+			}
+
+			if (packet->isInstanceOf<C_InteractPacket>() && g_Data.isInGame()) {
 				return;
 			}
 		}
