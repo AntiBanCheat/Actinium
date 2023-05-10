@@ -65,6 +65,7 @@ private:
 
 	static void renderLabel(const char* text);
 	static void renderTooltip(std::string* text);
+	static void renderONECONFIG();
 	static void renderLunarCategory();
 	static void renderPacketCategory(Category category, MC_Color categoryColor);
 	static void renderPacketOldCategory(Category category, MC_Color categoryColor);

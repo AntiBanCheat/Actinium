@@ -10,6 +10,7 @@ Killsults::Killsults() : IModule(0, Category::OTHER, "Insults people you kill lo
 	mode.addEntry("Japanese810", 4);
 	mode.addEntry("UwUSpeak", 5);
 	mode.addEntry("Health", 6);
+	mode.addEntry("Custom", 7);
 	registerBoolSetting("Sound", &sound, sound);
 	registerBoolSetting("Notification", &notification, notification);
 }
@@ -102,28 +103,18 @@ string sigmaMessages[2] = {
 	"Funny Funny Abstractional"
 };
 
-string japaneseMessages[13] = {
+string japaneseMessages[11] = {
 	u8"Aeolus勢ざぁーこ♡ ",
-    u8"ざぁーーこ！♡ ",
+	u8"ざぁーーこ！♡ ",
 	u8"Zephyrとか使ってる情弱居るんだぁ♡ ",
-    u8"ざぁこ♡ ",
+	u8"ざぁこ♡ ",
 	u8"Aeolus使ってるとか情けないね〜♡ ",
 	u8"レポートしてやってもいいのよ？ ",
-	"繧上≠",
-	"蠑ｱ縺吶℃縺ｾ縺帙ｓ?",
-	"諤偵ｋ縺ｪ縺｣縺ｦw",
-	"Celeron縺ｿ縺溘＞縺ｪ閼ｳ縺ｮ謖√■荳ｻ縺ｧ縺吶°?",
-	"菴弱せ繝壹↑閼ｳ縺ｿ縺昴ｒ縺頑戟縺｡縺ｮ繧医≧縺ｧ",
-	"莉翫☆縺舌↓繝槭う繧ｯ繝ｩ繧貞炎髯､!",
-	"莉翫☆縺舌％繧薙↑繧ｴ繝滄ｯ悶°繧画栢縺代ｋ繧薙□!",
-	/*"縺翫▲縺ｨ縲∝菅縺ｮ閼ｳ縺ｧ繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆",
-	"莉翫☆縺仙菅縺ｮ莠ｺ逕溘ｒ蜑企勁",
-	"繝槭う繧ｯ繝ｩ髢峨§縺ｦ縺ｯ繧亥ｯ昴ｍ",
-	"莉翫☆縺植ntiBanJapan縺ｫ蜿ょ刈!",
-	"縺吶∪繧捺焔縺梧ｻ代▲縺溘ｏ",
-	"鮟剃ｺｺbypass",
-	"荳ｭ闖ｯbypass",
-	"逾樣ｯ悶□縺ｪ"*/
+	u8"すく死んじゃったね♡ ",
+	u8"Hiveのざぁこ♡ ",
+	u8"よわよわぁ～♡ ",
+	u8"負けちゃってはずかし～♡ ",
+	u8"ざぁこ♡ざぁこ♡ "
 };
 string japanese810Messages[8] = {
 	"縺ｾ縺壹＞縺ｧ縺吶ｈ!",
@@ -165,7 +156,7 @@ void Killsults::onPlayerTick(C_Player* plr) {
 	auto player = g_Data.getLocalPlayer();
 	if (player == nullptr) return;
 
-	int random = 0;
+	int randomVal = 0;
 	srand(time(NULL));
 	if (killed) {
 		C_TextPacket textPacket;
@@ -180,33 +171,33 @@ void Killsults::onPlayerTick(C_Player* plr) {
 		}
 		switch (mode.getSelectedValue()) {
 		case 0: // Normal
-			random = rand() % 32;
-			textPacket.message.setText(normalMessages[random]);
+			randomVal = rand() % 32;
+			textPacket.message.setText(normalMessages[randomVal]);
 			break;
 		case 1: // Sigma
-			random = rand() % 2;
-			textPacket.message.setText(sigmaMessages[random]);
+			randomVal = rand() % 2;
+			textPacket.message.setText(sigmaMessages[randomVal]);
 			break;
 		case 2: // HvH
-			random = rand() % 19;
-			textPacket.message.setText(hvhMessages[random]);
+			randomVal = rand() % 19;
+			textPacket.message.setText(hvhMessages[randomVal]);
 			break;
 		case 3: // Japanese
-			random = rand() % 13;
-			textPacket.message.setText(japaneseMessages[random]);
+			randomVal = random(0, 10);
+			textPacket.message.setText(japaneseMessages[randomVal]);
 			break;
 		case 4: // Japanese810
-			random = rand() % 8;
-			textPacket.message.setText(japanese810Messages[random]);
+			randomVal = rand() % 8;
+			textPacket.message.setText(japanese810Messages[randomVal]);
 			break;
 		case 5: // UwU
-			random = rand() % 13;
-			textPacket.message.setText(uwuspeakMessage[random]);
+			randomVal = rand() % 13;
+			textPacket.message.setText(uwuspeakMessage[randomVal]);
 			break;
 		case 6:
 			textPacket.message.setText(to_string(player->getHealth() + player->getAbsorption()) + " Health remaining, Want power? radiumclient.com");
 			break;
-	}
+		}
 		textPacket.sourceName.setText(player->getNameTag()->getText());
 		textPacket.xboxUserId = to_string(player->getUserId());
 		g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&textPacket);

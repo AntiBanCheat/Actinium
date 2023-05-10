@@ -271,6 +271,7 @@
     <ClCompile Include="PacketClient\Module\Modules\Other\AutoSave.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Other\DeathEffects.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Other\AutoSpellBook.cpp" />
+    <ClCompile Include="PacketClient\Module\Modules\Other\HiveSurround.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Player\AutoTool.cpp" />
     <ClCompile Include="PacketClient\Notifications\NotificationManager.cpp" />
     <ClCompile Include="Utils\ColorUtil.cpp" />
@@ -479,6 +480,7 @@
     <ClInclude Include="PacketClient\Module\Modules\Other\AutoSave.h" />
     <ClInclude Include="PacketClient\Module\Modules\Other\DeathEffects.h" />
     <ClInclude Include="PacketClient\Module\Modules\Other\AutoSpellBook.h" />
+    <ClInclude Include="PacketClient\Module\Modules\Other\HiveSurround.h" />
     <ClInclude Include="PacketClient\Module\Modules\Player\AutoTool.h" />
     <ClInclude Include="PacketClient\Notifications\NotificationManager.h" />
     <ClInclude Include="Utils\ColorUtil.h" />

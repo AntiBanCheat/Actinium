@@ -54,7 +54,7 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new Interface()));
 		moduleList.push_back(std::shared_ptr<IModule>(new TargetHUD()));
 		moduleList.push_back(std::shared_ptr<IModule>(new Watermark()));
-		moduleList.push_back(std::shared_ptr<IModule>(new SlowSwing()));
+		//moduleList.push_back(std::shared_ptr<IModule>(new SlowSwing())); mazide kore tukuttayatu sine koitunoseide birudo dekinai
 		moduleList.push_back(std::shared_ptr<IModule>(new Ambience()));
 		moduleList.push_back(std::shared_ptr<IModule>(new BlockESP()));
 		moduleList.push_back(std::shared_ptr<IModule>(new ChestESP()));
@@ -128,6 +128,7 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new Phase()));
 
 		// Other
+		moduleList.push_back(std::shared_ptr<IModule>(new HiveSurround()));
 		moduleList.push_back(std::shared_ptr<IModule>(new AutoSpellBook()));
 		moduleList.push_back(std::shared_ptr<IModule>(new ToggleSounds()));
 		moduleList.push_back(std::shared_ptr<IModule>(new DeathEffects()));
@@ -155,11 +156,11 @@ void ModuleManager::initModules() {
 		std::sort(moduleList.begin(), moduleList.end(), [](auto lhs, auto rhs) {
 			auto current = lhs;
 			auto other = rhs;
-			return std::string{*current->getModuleName()} < std::string{*other->getModuleName()};
-		});
+			return std::string{ *current->getModuleName() } < std::string{ *other->getModuleName() };
+			});
 		initialized = true;
 	}
-	
+
 	getModule<Notifications>()->setEnabled(true);
 	getModule<ClickGUIMod>()->setEnabled(false);
 	getModule<Killaura>()->setEnabled(false);

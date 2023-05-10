@@ -119,6 +119,7 @@
 #include "Modules/Exploit/Phase.h"
 
 // Other
+#include "Modules/Other/HiveSurround.h"
 #include "Modules/Other/ToggleSounds.h"
 #include "Modules/Other/AutoSpellBook.h"
 #include "Modules/Other/DeathEffects.h"

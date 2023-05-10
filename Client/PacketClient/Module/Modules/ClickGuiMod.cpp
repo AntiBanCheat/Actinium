@@ -2,7 +2,7 @@
 #include "pch.h"
 
 ClickGUIMod::ClickGUIMod() : IModule(VK_INSERT, Category::VISUAL, "A GUI that displays every module") {
-	registerEnumSetting("Theme", &theme, 5);
+	registerEnumSetting("Theme", &theme, 8);
 	theme.addEntry("PacketV2", 0);
 	theme.addEntry("Vape", 1);
 	theme.addEntry("Astolfo", 2);
@@ -11,6 +11,7 @@ ClickGUIMod::ClickGUIMod() : IModule(VK_INSERT, Category::VISUAL, "A GUI that di
 	theme.addEntry("Rise", 5); //LOL I'm KaeruClient :cold: developed
 	theme.addEntry("Lunar", 6); //Made by rasky1
 	theme.addEntry("Badlion", 7); //ika turai kanasii
+	theme.addEntry("ONECONFIG", 8); //ika ha turakunai kara motto tukurou! made by rasky1
 	registerEnumSetting("Color", &color, 0);
 	color.addEntry("Rainbow", 0);
 	color.addEntry("Astolfo", 1);
@@ -83,6 +84,7 @@ void ClickGUIMod::onDisable() {
 	animation = 1;
 	isSettingOpened = false;
 	settingOpened = false;
+
 }
 
 void ClickGUIMod::onLoadConfig(void* conf) {
