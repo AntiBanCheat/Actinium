@@ -3,10 +3,10 @@
 #include "../pch.h"
 using namespace std;
 
-HiveSurround::HiveSurround() : IModule(0, Category::OTHER, "Zidou tekini takara mamoru yatu by rasky1") {
+HiveSurround::HiveSurround() : IModule(0, Category::OTHER, u8"自動的に宝守るやつ by rasky1") {
 }
 const char* HiveSurround::getModuleName() {
-	return ("HiveSurround");
+	return ("TreasureProtect");
 }
 int HiveSurround::placeBlock(vec3_t pos) {
 	static vector<vec3_ti*> checklist;
