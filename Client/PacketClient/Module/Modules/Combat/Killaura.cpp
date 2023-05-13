@@ -280,11 +280,23 @@ void Killaura::onPlayerTick(C_Player* plr) {
 				}
 			}
 
-			if (animYaw > angle.y) animYaw -= ((animYaw - angle.y) / smoothing);
-			else if (animYaw < angle.y) animYaw += ((angle.y - animYaw) / smoothing);
-
-			if (animPitch > angle.x) animPitch -= ((animPitch - angle.x) / smoothing);
-			else if (animPitch < angle.x) animPitch += ((angle.x - animPitch) / smoothing);
+			if (fabsf(angle.y - animYaw) < 180) {
+				if (animYaw > angle.y) animYaw -= ((animYaw - angle.y) / smoothing);
+				else if (animYaw < angle.y) animYaw += ((angle.y - animYaw) / smoothing);
+			}
+			else
+			{
+				float angle2;
+				float animYaw2;
+				if (0 <= angle.y) angle2 = 180 - angle.y;
+				else angle2 = -180 - angle.y;
+				if (0 <= animYaw) animYaw2 = 180 - animYaw;
+				else animYaw2 = -180 - animYaw;
+				if (animYaw2 > angle2) animYaw2 -= ((animYaw2 - angle2) / smoothing);
+				else if (animYaw2 < angle2) animYaw2 += ((angle2 - animYaw2) / smoothing);
+				if (0 <= animYaw2) animYaw = 180 - animYaw2;
+				else animYaw = -180 - animYaw2;
+			}
 			if (!instarot)
 			{
 				switch (rotations.getSelectedValue()) {
@@ -343,45 +355,24 @@ void Killaura::onSendPacket(C_Packet* packet) {
 			return;
 
 		sort(targetList.begin(), targetList.end(), CompareTargetEnArray());
-		if (packet->isInstanceOf<C_MovePlayerPacket>() && rotations.getSelectedValue() != 3 && !targetList.empty()) {
-			vec2_t angle = g_Data.getLocalPlayer()->getPos()->CalcAngle(targetList[0]->eyePos0);
-			auto* movePacket = reinterpret_cast<C_MovePlayerPacket*>(packet);
-
-			if (rotations.getSelectedValue() == 2 || rotations.getSelectedValue() == 3) {
-				movePacket->pitch = animPitch + yRandom;
-				movePacket->headYaw = animYaw + xRandom;
-				movePacket->yaw = animYaw + xRandom;
-			}
-			else if (rotations.getSelectedValue() == 7) {
-				movePacket->pitch = animPitch + yRandom;
-				movePacket->headYaw = animYaw + xRandom;
-				movePacket->yaw = angle.y + xRandom;
-			}
-			else
-			{
-				movePacket->pitch = angle.x + yRandom;
-				movePacket->headYaw = animYaw + xRandom;
-				movePacket->yaw = animYaw + xRandom;
-			}
-		}
 		if (packet->isInstanceOf<PlayerAuthInputPacket>() && rotations.getSelectedValue() != 3 && !targetList.empty()) {
 			vec2_t angle = g_Data.getLocalPlayer()->getPos()->CalcAngle(targetList[0]->eyePos0);
 			auto* authPacket = reinterpret_cast<PlayerAuthInputPacket*>(packet);
-
 			if (rotations.getSelectedValue() == 2 || rotations.getSelectedValue() == 3) {
-				authPacket->pitch = angle.x + yRandom;
-				authPacket->yaw = angle.y + xRandom;
-				authPacket->yawUnused = angle.y + xRandom;
+				authPacket->pitch = animPitch + yRandom;
+				authPacket->yawUnused = animYaw + xRandom;
+				authPacket->yaw = animYaw + xRandom;
 			}
 			else if (rotations.getSelectedValue() == 7) {
-				authPacket->pitch = angle.x + yRandom;
-				authPacket->pos.y = angle.y + xRandom;
+				authPacket->pitch = animPitch + yRandom;
+				authPacket->yawUnused = animYaw + xRandom;
+				authPacket->yaw = angle.y + xRandom;
 			}
 			else
 			{
 				authPacket->pitch = angle.x + yRandom;
-				authPacket->yaw = angle.y + xRandom;
-				authPacket->yawUnused = angle.y + xRandom;
+				authPacket->yawUnused = animYaw + xRandom;
+				authPacket->yaw = animYaw + xRandom;
 			}
 		}
 	}
