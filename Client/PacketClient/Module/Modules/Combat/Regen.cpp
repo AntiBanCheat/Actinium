@@ -437,8 +437,9 @@ void Regen::onSendPacket(C_Packet* packet) {
 			animYaw += ((angle.y - animYaw) / 10);
 		if (destroy) {
 			if (g_Data.canUseMoveKeys()) {
-				movePacket->pos.y = angle.y;
-				movePacket->pos.x = angle.x;
+				movePacket->yaw = angle.y;
+				movePacket->yawUnused = angle.y;
+				movePacket->pitch = angle.x;
 			}
 		}
 	}
