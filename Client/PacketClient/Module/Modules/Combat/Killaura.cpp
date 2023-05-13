@@ -83,11 +83,11 @@ struct CompareTargetEnArray {
 };
 
 void Killaura::onEnable() {
+	auto player = g_Data.getLocalPlayer();
+	if (player == nullptr) return;
 	C_InventoryTransactionManager* manager = g_Data.getLocalPlayer()->getTransactionManager();
 	C_PlayerInventoryProxy* supplies = g_Data.getLocalPlayer()->getSupplies();
 	C_Inventory* inv = supplies->inventory;
-	auto player = g_Data.getLocalPlayer();
-	if (player == nullptr) return;
 	targetListEmpty = true;
 	preventflagrot = false;
 	targetList.clear();

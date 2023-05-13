@@ -1,4 +1,4 @@
-#include "Killsults.h"
+﻿#include "Killsults.h"
 
 using namespace std;
 Killsults::Killsults() : IModule(0, Category::OTHER, "Insults people you kill lol") {
@@ -10,7 +10,7 @@ Killsults::Killsults() : IModule(0, Category::OTHER, "Insults people you kill lo
 	mode.addEntry("Japanese810", 4);
 	mode.addEntry("UwUSpeak", 5);
 	mode.addEntry("Health", 6);
-	mode.addEntry("Custom", 7);
+	mode.addEntry(u8"おにまい", 7);
 	registerBoolSetting("Sound", &sound, sound);
 	registerBoolSetting("Notification", &notification, notification);
 }
@@ -26,6 +26,8 @@ const char* Killsults::getModuleName() {
 	if (mode.getSelectedValue() == 3) name = string("Killsults ") + string(GRAY) + string(u8"メスガキ");
 	if (mode.getSelectedValue() == 4) name = string("Killsults ") + string(GRAY) + string("Japanese810");
 	if (mode.getSelectedValue() == 5) name = string("Killsults ") + string(GRAY) + string("UwUSpeak");
+	if (mode.getSelectedValue() == 6) name = string("Killsults ") + string(GRAY) + string("Health");
+	if (mode.getSelectedValue() == 7) name = string("Killsults ") + string(GRAY) + string(u8"おにまい");
 	return name.c_str();
 }
 
@@ -103,7 +105,7 @@ string sigmaMessages[2] = {
 	"Funny Funny Abstractional"
 };
 
-string japaneseMessages[11] = {
+string japaneseMessages[14] = {
 	u8"Aeolus勢ざぁーこ♡ ",
 	u8"ざぁーーこ！♡ ",
 	u8"Zephyrとか使ってる情弱居るんだぁ♡ ",
@@ -114,7 +116,10 @@ string japaneseMessages[11] = {
 	u8"Hiveのざぁこ♡ ",
 	u8"よわよわぁ～♡ ",
 	u8"負けちゃってはずかし～♡ ",
-	u8"ざぁこ♡ざぁこ♡ "
+	u8"ざぁこ♡ざぁこ♡ ",
+	u8"あれ～？ざぁこすぎて泣いちゃった？♡",
+	u8"エイムざぁこ♡",
+	u8"アンチチートよわ～い♡"
 };
 string japanese810Messages[8] = {
 	"縺ｾ縺壹＞縺ｧ縺吶ｈ!",
@@ -146,6 +151,16 @@ string uwuspeakMessage[13] = {
 	"You're such a sussy baka",
 	"OwO! You're so easy!",
 	"I got stuck in the washing machine~"
+};
+string onimai[8] = {
+	u8"だめだめえっちすぎます！",
+	u8"出る..出ちゃうぅ....///",
+	u8"緒山が悪いんだぞ..",
+	u8"み、みはりぃそれはだめ...////",
+	u8"お兄ちゃんここが弱いんだぁ♡...//",
+	u8"そんなぁ...出る....////",
+	u8"あうあうあー！",
+	u8"はうぅ.."
 };
 
 void Killsults::onEnable() {
@@ -183,7 +198,7 @@ void Killsults::onPlayerTick(C_Player* plr) {
 			textPacket.message.setText(hvhMessages[randomVal]);
 			break;
 		case 3: // Japanese
-			randomVal = random(0, 10);
+			randomVal = random(0, 13);
 			textPacket.message.setText(japaneseMessages[randomVal]);
 			break;
 		case 4: // Japanese810
@@ -196,6 +211,10 @@ void Killsults::onPlayerTick(C_Player* plr) {
 			break;
 		case 6:
 			textPacket.message.setText(to_string(player->getHealth() + player->getAbsorption()) + " Health remaining, Want power? radiumclient.com");
+			break;
+		case 7: // おにまい
+			randomVal = rand() % 7;
+			textPacket.message.setText(onimai[randomVal] + u8" | お兄ちゃんはおしまい！");
 			break;
 		}
 		textPacket.sourceName.setText(player->getNameTag()->getText());
