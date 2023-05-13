@@ -132,21 +132,6 @@ void Killaura::onTick(C_GameMode* gm) {
 
 	if (autosword.getSelectedValue() == 2 && !targetList.empty()) slot = supplies->selectedHotbarSlot;
 
-	//Strafe Disabler
-	C_MovePlayerPacket mp;
-	if (moduleMgr->getModule<Disabler>()->hivetest == true && !targetList.empty()) {
-		vec3_t enemypos = *targetList[0]->getPos();
-		enemypos.y = player->getPos()->y;
-		float distance = (enemypos).dist(*g_Data.getLocalPlayer()->getPos());
-		if (distance < 1) {
-			mp.Position.x = targetList[0]->currentPos.x;
-			g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&mp);
-			mp.Position.z = targetList[0]->currentPos.z;
-			g_Data.getClientInstance()->loopbackPacketSender->sendToServer(&mp);
-			//clientMessageF("Packet");
-		}
-	}
-
 	//AutoSword
 
 	float SwordDamage = 0;
@@ -384,18 +369,32 @@ void Killaura::onSendPacket(C_Packet* packet) {
 			auto* authPacket = reinterpret_cast<PlayerAuthInputPacket*>(packet);
 
 			if (rotations.getSelectedValue() == 2 || rotations.getSelectedValue() == 3) {
-				authPacket->pos.x = animPitch + yRandom;
-				authPacket->pos.y = animYaw + xRandom;
+				authPacket->pitch = animPitch + yRandom;
+				authPacket->yaw = animYaw + xRandom;
+				authPacket->yawUnused = animYaw + xRandom;
 			}
 			else if (rotations.getSelectedValue() == 7) {
-				authPacket->pos.x = animPitch + yRandom;
+				authPacket->pitch = animPitch + yRandom;
 				authPacket->pos.y = angle.y + xRandom;
 			}
 			else
 			{
-				authPacket->pos.x = angle.x + yRandom;
-				authPacket->pos.y = animYaw + xRandom;
+				authPacket->pitch = angle.x + yRandom;
+				authPacket->yaw = animYaw + xRandom;
+				authPacket->yawUnused = animYaw + xRandom;
 			}
+		}
+	}
+		//Strafe Disabler
+	PlayerAuthInputPacket mp;
+	if (moduleMgr->getModule<Disabler>()->hivetest == true && !targetList.empty()) {
+		vec3_t enemypos = *targetList[0]->getPos();
+		enemypos.y = player->getPos()->y;
+		float distance = (enemypos).dist(*g_Data.getLocalPlayer()->getPos());
+		if (distance < 1) {
+			mp.pos.x = targetList[0]->currentPos.x;
+			mp.pos.z = targetList[0]->currentPos.z;
+			//clientMessageF("Packet");
 		}
 	}
 }
