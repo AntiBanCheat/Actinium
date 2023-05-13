@@ -35,6 +35,8 @@ public:
 };
 
 class PlayerAuthInputPacket : public C_Packet {
+	private:
+	char pad_[0x28];  // 0x8
 public:
 	//uint64_t entityRuntimeId; //0x0020
 	float pitch;  //0x0028
