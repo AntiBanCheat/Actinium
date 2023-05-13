@@ -3,7 +3,7 @@
 #include <cmath>
 
 bool alground = false;
-
+float hiveflytim = 1;
 uintptr_t ViewBobbing = FindSignature("0F B6 80 DB 01 00 00");
 
 using namespace std;
@@ -30,7 +30,8 @@ Flight::Flight() : IModule(0, Category::MOVEMENT, "Allows you to fly") {
 	registerFloatSetting("Duration", &duration, duration, 0.5f, 1.05f);
 	registerIntSetting("HiveDelay", &HiveDelay, HiveDelay, 0, 10);
 	registerFloatSetting("HiveVelocity", &HiveVelocity, HiveVelocity, -1.00f, -0.00f);
-	registerFloatSetting("Speed", &speed, speed, 0.2f, 5.f);
+	registerFloatSetting("Speed", &speed, speed, 0.2f, 15.f);
+	registerFloatSetting("HiveFlyTmr", &hiveflytim, hiveflytim, 0.f, 5.f);
 	registerFloatSetting("value", &value, value, -0.15f, 0.00f);
 }
 
@@ -420,7 +421,7 @@ void Flight::onMove(C_MoveInputHandler* input) {
 		if (TimerUtil::hasTimedElapsed(0, !blink) && !dash) 
 		{
 			dash = true;
-			g_Data.getClientInstance()->minecraft->setTimerSpeed(2);
+			g_Data.getClientInstance()->minecraft->setTimerSpeed(hiveflytim);
 			float calcYaw = (player->yaw + 90) * (PI / 180);
 			vec2_t moveVec2d = { input->forwardMovement, -input->sideMovement };
 			bool pressed = moveVec2d.magnitude() > 0.01f;
