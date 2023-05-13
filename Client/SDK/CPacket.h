@@ -35,19 +35,24 @@ public:
 };
 
 class PlayerAuthInputPacket : public C_Packet {
-private:
-	char pad_0x0000[0x18];  //0x0008
 public:
-	__int64 entityRuntimeId;  //0x0020
-	float pitch;              //0x0028
-	float yaw;                //0x002C
-	vec3_t pos;               //0x0030
-	float yawUnused;          //0x003C
+	//uint64_t entityRuntimeId; //0x0020
+	float pitch;  //0x0028
+	float yaw;
+	vec3_t pos;       //0x0030
+	float yawUnused;  //0x0038
+	vec3_t velocity;
+	float InputAD;  // 1 for A, -1 for D, multiply by sqrt(2)/2 if mixed with InputWS
+	float InputWS;  // 1 for W, -1 for S, multiply by sqrt(2)/2 if mixed with InputAD
 private:
-	char pad_0x0040[0x20];  //0x0040
+	uint8_t padshit[12];
+public:
+	uint32_t inputKeys;
+	char padding[0x256];
+
 public:
 	PlayerAuthInputPacket();
-	PlayerAuthInputPacket(__int64 entityRuntimeId, vec3_t pos, float pitch, float yaw, float yawUnused);
+	PlayerAuthInputPacket(vec3_t pos, float pitch, float yaw, float yawUnused);
 };
 
 /*class C_ActorFallPacket : public C_Packet {
