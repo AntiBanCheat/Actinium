@@ -34,7 +34,7 @@ public:
 	LevelSoundEventPacket();
 };
 
-class PlayerAuthInputPacket : public Packet {
+class PlayerAuthInputPacket : public C_Packet {
 public:
 	//uint64_t entityRuntimeId; //0x0020
 	float pitch;  //0x0028
