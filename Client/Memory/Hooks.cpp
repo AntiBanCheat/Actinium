@@ -1142,12 +1142,18 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 		if (disabler->mode.getSelectedValue() == 5)
 		{
 			NetworkLatencyPacket* netStack = reinterpret_cast<NetworkLatencyPacket*>(packet);
+			LevelSoundEventPacket* levelSound = reinterpret_cast<LevelSoundEventPacket*>(packet);
 			//NetworkLatencyPacket* pkt = (NetworkLatencyPacket*)packet;
 			if (packet->isInstanceOf<NetworkLatencyPacket>() && g_Data.isInGame()) {
 				return;
 			}
-
+			if (packet->isInstanceOf<LevelSoundEventPacket>() && g_Data.isInGame()) {
+				return;
+			}
 			if (packet->isInstanceOf<C_InteractPacket>() && g_Data.isInGame()) {
+				return;
+			}
+			if (packet->isInstanceOf<C_MovePlayerPacket>() && g_Data.isInGame()) {
 				return;
 			}
 		}
