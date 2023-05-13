@@ -34,7 +34,7 @@ PlayerAuthInputPacket::PlayerAuthInputPacket() {
 	memset(this, 0, sizeof(PlayerAuthInputPacket));  // Avoid overwriting vtable
 	vTable = PlayerAuthInputPacketVtable;
 }
-PlayerAuthInputPacket::PlayerAuthInputPacket(Vec3 pos, float pitch, float yaw, float yawUnused) {
+PlayerAuthInputPacket::PlayerAuthInputPacket(vec3_t pos, float pitch, float yaw, float yawUnused) {
 	static uintptr_t** PlayerAuthInputPacketVtable = 0x0;
 	if (PlayerAuthInputPacketVtable == 0x0) {
 		uintptr_t sigOffset = FindSignature("48 8D 0D ? ? ? ? 0F 57 C0 0F 11 00 C7 40 ? ? ? ? ? C7 40 ? ? ? ? ? 48 8D 05 ? ? ? ? 48 89 02 33 C0 48 89 42");
