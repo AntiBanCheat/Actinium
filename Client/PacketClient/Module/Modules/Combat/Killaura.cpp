@@ -369,19 +369,19 @@ void Killaura::onSendPacket(C_Packet* packet) {
 			auto* authPacket = reinterpret_cast<PlayerAuthInputPacket*>(packet);
 
 			if (rotations.getSelectedValue() == 2 || rotations.getSelectedValue() == 3) {
-				authPacket->pitch = animPitch + yRandom;
-				authPacket->yaw = animYaw + xRandom;
-				authPacket->yawUnused = animYaw + xRandom;
+				authPacket->pitch = angle.x + yRandom;
+				authPacket->yaw = angle.y + xRandom;
+				authPacket->yawUnused = angle.y + xRandom;
 			}
 			else if (rotations.getSelectedValue() == 7) {
-				authPacket->pitch = animPitch + yRandom;
+				authPacket->pitch = angle.x + yRandom;
 				authPacket->pos.y = angle.y + xRandom;
 			}
 			else
 			{
 				authPacket->pitch = angle.x + yRandom;
-				authPacket->yaw = animYaw + xRandom;
-				authPacket->yawUnused = animYaw + xRandom;
+				authPacket->yaw = angle.y + xRandom;
+				authPacket->yawUnused = angle.y + xRandom;
 			}
 		}
 	}
