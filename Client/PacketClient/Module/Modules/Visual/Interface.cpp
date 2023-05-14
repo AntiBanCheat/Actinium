@@ -45,7 +45,7 @@ void Interface::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 	auto player = g_Data.getLocalPlayer();
 	if (player == nullptr) return;
-	versionStr = "Beta Build 1";
+	versionStr = "Beta Build 2";
 	auto clickGUI = moduleMgr->getModule<ClickGUIMod>();
 
 	static int index = 0;
