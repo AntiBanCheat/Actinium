@@ -11,6 +11,7 @@ Killsults::Killsults() : IModule(0, Category::OTHER, "Insults people you kill lo
 	mode.addEntry("UwUSpeak", 5);
 	mode.addEntry("Health", 6);
 	mode.addEntry(u8"おにまい", 7);
+	mode.addEntry(u8"おみくじ", 8);
 	registerBoolSetting("Sound", &sound, sound);
 	registerBoolSetting("Notification", &notification, notification);
 }
@@ -28,6 +29,7 @@ const char* Killsults::getModuleName() {
 	if (mode.getSelectedValue() == 5) name = string("Killsults ") + string(GRAY) + string("UwUSpeak");
 	if (mode.getSelectedValue() == 6) name = string("Killsults ") + string(GRAY) + string("Health");
 	if (mode.getSelectedValue() == 7) name = string("Killsults ") + string(GRAY) + string(u8"おにまい");
+	if (mode.getSelectedValue() == 8) name = string("Killsults ") + string(GRAY) + string(u8"おみくじ");
 	return name.c_str();
 }
 
@@ -163,6 +165,15 @@ string onimai[8] = {
 	u8"はうぅ.."
 };
 
+string omikuziMessage[7] = {
+	u8"大凶",
+	u8"凶",
+	u8"末吉",
+	u8"小吉",
+	u8"中吉",
+	u8"吉",
+	u8"大吉"
+};
 void Killsults::onEnable() {
 	killed = false;
 }
@@ -215,6 +226,11 @@ void Killsults::onPlayerTick(C_Player* plr) {
 		case 7: // おにまい
 			randomVal = rand() % 7;
 			textPacket.message.setText(onimai[randomVal] + u8" | お兄ちゃんはおしまい！");
+			break;
+		case 8:
+			randomVal = rand() % 6;
+			int randomVal2 = random(0, 13);
+			textPacket.message.setText(u8"あなたの運勢は " + omikuziMessage[randomVal] + " | " + japaneseMessages[randomVal2]);
 			break;
 		}
 		textPacket.sourceName.setText(player->getNameTag()->getText());
