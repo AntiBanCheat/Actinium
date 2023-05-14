@@ -56,29 +56,23 @@ void Derp::onSendPacket(C_Packet* packet) {
 	blockBelow.y -= g_Data.getLocalPlayer()->height;
 	blockBelow.y -= 0.5f;
 
-	auto* movePacket = reinterpret_cast<C_MovePlayerPacket*>(packet);
-	auto* authPacket = reinterpret_cast<PlayerAuthInputPacket*>(packet);
+	auto* movePacket = reinterpret_cast<PlayerAuthInputPacket*>(packet);
 	if (packet->isInstanceOf<C_MovePlayerPacket>() || packet->isInstanceOf<PlayerAuthInputPacket>()) {
 		if (g_Data.isInGame() && g_Data.canUseMoveKeys()) {
 			if (silent) {
 				if (headless) {
 					movePacket->pitch = -180;
-					authPacket->pitch = -180;
 				}
 				if (spin) {
 					movePacket->yaw = b;
-					movePacket->headYaw = b;
+					movePacket->yawUnused = b;
 					movePacket->pitch = 80;
-					authPacket->pos.y = b;
-					authPacket->pos.x = 80;
 				}
 			}
 			else if (spin) {
 				movePacket->yaw = b;
-				movePacket->headYaw = b;
+				movePacket->yawUnused = b;
 				movePacket->pitch = 80;
-				authPacket->pos.y = b;
-				authPacket->pos.x = 80;
 			}
 		}
 	}
