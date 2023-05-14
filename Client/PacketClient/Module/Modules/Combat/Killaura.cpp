@@ -382,7 +382,7 @@ void Killaura::onSendPacket(C_Packet* packet) {
 		vec3_t enemypos = *targetList[0]->getPos();
 		enemypos.y = player->getPos()->y;
 		float distance = (enemypos).dist(*g_Data.getLocalPlayer()->getPos());
-		if (distance < 1) {
+		if (distance < moduleMgr->getModule<Disabler>()->testrange) {
 			mp.pos.x = targetList[0]->currentPos.x;
 			mp.pos.z = targetList[0]->currentPos.z;
 			//clientMessageF("Packet");
