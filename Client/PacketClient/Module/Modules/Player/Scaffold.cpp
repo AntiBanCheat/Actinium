@@ -492,7 +492,7 @@ void Scaffold::onTick(C_GameMode* gm) {
 		}
 
 		blockBelow = defaultblockBelow;
-		if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * currExtend; blockBelow.z += vel.z * currExtend; }
+		if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * extend; blockBelow.z += vel.z * extend; }
 
 		if (isBlockReplacable(blockBelow)) {
 			predictBlock(blockBelow);
