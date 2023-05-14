@@ -36,7 +36,7 @@ Scaffold::Scaffold() : IModule(0, Category::PLAYER, "Places blocks under you") {
 	extendType.addEntry("Celsius", 0);
 	extendType.addEntry("Radium", 1);
 	extendType.addEntry("Packet", 2);
-	extendType.addEntry("Test", 3);
+	extendType.addEntry("Zephyr", 3);
 	registerEnumSetting("DiagBypass", &diagType, 0);
 	diagType.addEntry("None", 0);
 	diagType.addEntry("UnderBlock", 1);
@@ -44,7 +44,6 @@ Scaffold::Scaffold() : IModule(0, Category::PLAYER, "Places blocks under you") {
 	diagType.addEntry("IDK", 3);
 	diagType.addEntry("NoSpeed", 4);
 	diagType.addEntry("UpBlock", 5);
-	//diagType.addEntry("CustomDelay", 5);
 
 	registerBoolSetting("LockY", &lockY, lockY);
 	registerBoolSetting("TowerNoMove", &towerOnlyNoMove, towerOnlyNoMove);
