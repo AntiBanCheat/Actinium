@@ -141,7 +141,7 @@ IModule::IModule(int key, Category c, const char* tooltip) {
 	this->ModulePos = vec2_t(0.f, 0.f);
 }
 
-void IModule::registerFloatSetting(std::string name, float* floatPtr, float defaultValue, float minValue, float maxValue) {
+void IModule::registerFloatSetting(std::string name, float* floatPtr, float defaultValue, float minValue, float maxValue, float step) {
 #ifdef DEBUG
 	if (minValue > maxValue)
 		__debugbreak();  // Minimum value is bigger than maximum value
@@ -149,7 +149,7 @@ void IModule::registerFloatSetting(std::string name, float* floatPtr, float defa
 
 	SettingEntry* setting = new SettingEntry();
 	setting->valueType = ValueType::FLOAT_T;
-
+	setting->step = step;
 	setting->value = reinterpret_cast<SettingValue*>(floatPtr);
 
 	// Default Value

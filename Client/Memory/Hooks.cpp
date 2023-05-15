@@ -343,8 +343,10 @@ int Hooks::ForceThirdPersonLol(__int64 a1) {
 
 bool Hooks::playerCallBack(C_Player* lp, __int64 a2, __int64 a3) {
 	static auto oTick = g_Hooks.playerCallBack_Hook->GetFastcall<bool, C_Player*, __int64, __int64>();
-	if (lp == g_Data.getLocalPlayer())
+	if (lp == g_Data.getLocalPlayer()) {
+		g_Data.countSpeeds.push_back(lp->getBlocksPerSecond());
 		moduleMgr->onPlayerTick(lp);
+	}
 	if (g_Data.getLocalPlayer() != nullptr && lp == g_Data.getLocalPlayer()) {
 		if (!g_Data.getLocalPlayer() || !g_Data.getLocalPlayer()->pointingStruct || !*(&g_Data.getLocalPlayer()->region + 1))
 			g_Hooks.entityList.clear();
@@ -725,7 +727,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 					DrawUtils::drawText(vec2_t(textPos.x, textPos.y), &textStr, MC_Color(255, 255, 255), 0.8, 1, true);
 					auto n = moduleMgr->getModule<Notifications>();
 					DrawUtils::fillRoundRectangle(rect, MC_Color(notification->colorR, notification->colorG, notification->colorB, notificationsMod->opacity), false);
-					DrawUtils::drawBottomLine(vec4_t{ rect.x + 1.5f, rect.y, rect.z - duration, rect.w + 0.5f }, MC_Color(255,255,255), 1);
+					DrawUtils::drawBottomLine(vec4_t{ rect.x + 1.5f, rect.y, rect.z - duration, rect.w + 0.5f }, MC_Color(255, 255, 255), 1);
 
 
 				}
@@ -1050,7 +1052,7 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 
 	if (noPacket->isEnabled() && g_Data.isInGame())
 		return;
-	
+
 	//FakeSpoof
 	if (scaffold->isEnabled() && scaffold->canspoof) {
 		if (packet->isInstanceOf<C_MobEquipmentPacket>()) {
@@ -1100,7 +1102,7 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 			return;
 		}
 	}
-	
+
 	else {
 		oFunc(a, packet);
 	}
@@ -1166,7 +1168,7 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 				}
 			}
 		}
-		
+
 		//Sentinel
 		if (disabler->mode.getSelectedValue() == 7) {
 			if (packet->isInstanceOf<NetworkLatencyPacket>()) {
@@ -1356,7 +1358,7 @@ void Hooks::ClickFunc(__int64 a1, char mouseButton, char isDown, __int16 mouseX,
 		if (mouseButton == 4) ClickGui::onWheelScroll(isDown > 0);
 		if (mouseButton != 0) return; // Mouse click event
 	}
-	
+
 	if (cfgMgr->isEnabled()) {
 		if (mouseButton == 4) ConfigManagerMenu::onWheelScroll(isDown > 0);
 		if (mouseButton != 0) return; // Mouse click event

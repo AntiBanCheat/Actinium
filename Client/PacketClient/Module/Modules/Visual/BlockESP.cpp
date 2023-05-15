@@ -11,6 +11,7 @@ BlockESP::BlockESP() : IModule(0, Category::VISUAL, "Outlines Blocks") {
 	registerBoolSetting("Coal", &cOre, cOre);
 	registerIntSetting("Range", &range, range, 1, 15);
 	registerFloatSetting("Width", &width, width, 0.3, 1);
+	registerBoolSetting("AirCheck", &airCheck, airCheck);
 }
 
 const char* BlockESP::getModuleName() {
@@ -39,39 +40,44 @@ void BlockESP::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 					bool rRender = false;
 					bool gRender = false;
 					bool iRender = false;
-					
-					vec3_ti AirCheckPos;
-					bool isSafe = false;
-					AirCheckPos = blockPos;
-					if (player->region->getBlock(AirCheckPos.add(0, 1, 0))->toLegacy()->material->isReplaceable) isSafe = true;
-					if (player->region->getBlock(AirCheckPos.add(0, -1, 0))->toLegacy()->blockId == 0) isSafe = true;
-					if (player->region->getBlock(AirCheckPos.add(1, 0, 0))->toLegacy()->blockId == 0) isSafe = true;
-					if (player->region->getBlock(AirCheckPos.add(-1, 0, 0))->toLegacy()->blockId == 0) isSafe = true;
-					if (player->region->getBlock(AirCheckPos.add(0, 0, 1))->toLegacy()->blockId == 0) isSafe = true;
-					if (player->region->getBlock(AirCheckPos.add(0, 0, -1))->toLegacy()->blockId == 0) isSafe = true;
-					
+
 					if (id == 56 && dOre) dRender = true;   // Diamond
 					if (id == 129 && eOre) eRender = true;  // Emerald
-					if (id == 73 && rOre && isSafe) rRender = true;   // Redstone
-					if (id == 74 && rOre && isSafe) rRender = true;   // Redstone
+					if (id == 73 && rOre) rRender = true;   // Redstone
+					if (id == 74 && rOre) rRender = true;   // Redstone
 					if (id == 14 && gOre) gRender = true;   // Gold
 					if (id == 15 && iOre) iRender = true;   // Iron
 
 					if (dRender) {
 						DrawUtils::setColor(0.2, 0.9, 1, 1);
 						DrawUtils::drawBox(blockPos, angle, width, 1);
-					} else if (eRender) {
+					}
+					else if (eRender) {
 						DrawUtils::setColor(0, 0.7, 0, 1);
 						DrawUtils::drawBox(blockPos, angle, width, 1);
-					} else if (rRender) {
+					}
+					else if (rRender) {
 						DrawUtils::setColor(0.8, 0, 0, 1);
 						DrawUtils::drawBox(blockPos, angle, width, 1);
-					} else if (gRender) {
+					}
+					else if (gRender) {
 						DrawUtils::setColor(1, 0.7, 0, 1);
 						DrawUtils::drawBox(blockPos, angle, width, 1);
-					} else if (iRender) {
+					}
+					else if (iRender) {
 						DrawUtils::setColor(1, 0.9, 0.8, 1);
 						DrawUtils::drawBox(blockPos, angle, width, 1);
+					}
+					if (airCheck && (dRender || eRender || rRender || gRender || iRender)) {
+						if (player->region->getBlock(vec3_t(blockPos.x, blockPos.y - 1, blockPos.z))->toLegacy()->blockId == 0) {
+							vec3_t angle2 = blockPos;
+							angle2 = angle2.floor();
+							angle2.x += 1.f;
+							angle2.y += 0.1f;
+							angle2.z += 1.f;
+							DrawUtils::setColor(0, 0, 0, 1);
+							DrawUtils::drawBox(blockPos, angle2, 1.f);
+						}
 					}
 				}
 			}

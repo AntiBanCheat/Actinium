@@ -26,7 +26,7 @@ void Derp::onTick(C_GameMode* gm) {
 
 	if (spin) {
 		b += speed;
-		if (b >= 3600000000) b = 0;
+		if (b >= 360) b -= 360;
 	}
 
 	if (player == nullptr) return;
@@ -45,7 +45,7 @@ void Derp::onPlayerTick(C_Player* plr) {
 	if (spin) {
 		plr->bodyYaw = b;
 		plr->yawUnused1 = b;
-		plr->pitch = 80;
+		//plr->pitch = 80;
 	}
 }
 

@@ -12,6 +12,7 @@ private:
 	bool gOre = false;
 	bool iOre = false;
 	bool cOre = false;
+	bool airCheck = false;
 	float width = 0.5;
 	int range = 5;
 public:

@@ -230,7 +230,7 @@ void Killsults::onPlayerTick(C_Player* plr) {
 		case 8:
 			randomVal = rand() % 6;
 			int randomVal2 = random(0, 13);
-			textPacket.message.setText(u8"あなたの運勢は " + omikuziMessage[randomVal] + " | " + japaneseMessages[randomVal2]);
+			textPacket.message.setText(u8"あなたの運勢は " + omikuziMessage[randomVal] + " - " + japaneseMessages[randomVal2]);
 			break;
 		}
 		textPacket.sourceName.setText(player->getNameTag()->getText());

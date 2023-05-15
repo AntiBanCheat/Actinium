@@ -4,13 +4,13 @@
 
 class DebugMenu : public IModule {
 public:
-    DebugMenu();
+	DebugMenu();
 
-    std::string name = "DebugMenu";
-    SettingEnum mode = this;
+	std::string name = "DebugMenu";
+	SettingEnum mode = this;
 
-    virtual void onPostRender(C_MinecraftUIRenderContext* renderCtx);
-    virtual const char* getRawModuleName();
-    virtual void onTick(C_GameMode* gm);
-    virtual const char* getModuleName();
+	virtual void onPostRender(C_MinecraftUIRenderContext* renderCtx);
+	virtual const char* getRawModuleName();
+	virtual void onTick(C_GameMode* gm);
+	virtual const char* getModuleName();
 };

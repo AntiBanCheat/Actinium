@@ -141,7 +141,7 @@ struct SettingEntry {
 
 	// ClickGui Data
 	bool isDragging = false;  // This is incredibly hacky and i wanted to avoid this as much as possible but i want to get this clickgui done
-
+	float step = 1;
 	void makeSureTheValueIsAGoodBoiAndTheUserHasntScrewedWithIt();
 
 	SettingEntry* addSettingGroup(int _enum, SettingGroup* group);
@@ -203,7 +203,7 @@ private:
 protected:
 	IModule(int key, Category c, const char* tooltip);
 
-	void registerFloatSetting(std::string name, float* floatPtr, float defaultValue, float minValue, float maxValue);
+	void registerFloatSetting(std::string name, float* floatPtr, float defaultValue, float minValue, float maxValue, float step = 0.01);
 	SettingEntry* registerIntSetting(std::string name, int* intpTr, int defaultValue, int minValue, int maxValue);
 	void registerEnumSetting(std::string name, SettingEnum* intPtr, int defaultValue);
 	SettingEntry* registerEnumSettingGroup(std::string name, SettingEnum* enumPtr, int defaultValue);

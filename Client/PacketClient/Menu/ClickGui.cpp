@@ -10,6 +10,9 @@ bool isLeftClickDown = false;
 bool isRightClickDown = false;
 bool shouldToggleLeftClick = false;  // If true, toggle the focused module
 bool shouldToggleRightClick = false;
+int isKeyDown = false;
+int shouldToggleKeyDown = false;
+int pressedKey = 0;
 bool resetStartPos = true;
 bool initialised = false;
 int scrollingDirection = 0;
@@ -374,20 +377,21 @@ void ClickGui::renderONECONFIG() {
 				}
 				else if (setting->valueType == ValueType::INT_T || setting->valueType == ValueType::FLOAT_T) {
 					int width = 170;
-					float step;
+					float step = setting->step;
 					float currentValue;
 					float maxValue;
+					float minValue;
 					switch (setting->valueType)
 					{
 					case ValueType::FLOAT_T:
-						step = 0.01;
 						currentValue = setting->value->_float;
 						maxValue = setting->maxValue->_float;
+						minValue = setting->minValue->_float;
 						break;
 					case ValueType::INT_T:
-						step = 1;
 						currentValue = setting->value->_int;
 						maxValue = setting->maxValue->_int;
+						minValue = setting->minValue->_int;
 						break;
 					}
 					int sliderOffsetX = rightOffset - padding - 50 - width;
@@ -400,13 +404,35 @@ void ClickGui::renderONECONFIG() {
 					DrawUtils::drawRoundRectangle(vec4_t(sliderOffsetX + width + 10, topOffset - 2, sliderOffsetX + width + 33, topOffset + 2), MC_Color(28, 31, 32), 1.0f);
 
 					std::stringstream ss;
-					ss << std::fixed << std::setprecision(2) << currentValue;
+					ss << std::fixed << std::setprecision(3) << currentValue;
 					std::string s = ss.str();
 					s.erase(s.find_last_not_of('0') + 1, std::string::npos);
 					s.erase(s.find_last_not_of('.') + 1, std::string::npos);
 					if (!skipDrawText)
 						DrawUtils::drawCenteredString(vec2_t(sliderOffsetX + width + 21.5f, topOffset + 2.6f), &s, 0.6f, MC_Color(120, 123, 124), true);
 					vec4_t clickRect = vec4_t(sliderOffsetX - 5, topOffset - 5, sliderOffsetX + width + 5, topOffset + 5);
+					if (clickRect.contains(&mousePos) && shouldToggleKeyDown) {
+						float newValue = currentValue;
+						if (pressedKey == VK_LEFT) {
+							newValue -= step;
+							if (newValue < minValue)
+								newValue = minValue;
+						}
+						else if (pressedKey == VK_RIGHT) {
+							newValue += step;
+							if (newValue > maxValue)
+								newValue = maxValue;
+						}
+						switch (setting->valueType)
+						{
+						case ValueType::FLOAT_T:
+							setting->value->_float = newValue;
+							break;
+						case ValueType::INT_T:
+							setting->value->_int = (int)newValue;
+							break;
+						}
+					}
 					if (!skipMouse && clickRect.contains(&mousePos) && isLeftClickDown) {
 						float val = (mousePos.x - sliderOffsetX) / width * maxValue;
 						float newValue = floor(val / step) * step;
@@ -743,20 +769,21 @@ void ClickGui::renderLunarCategory() {
 			if (setting->valueType == ValueType::FLOAT_T || setting->valueType == ValueType::INT_T) {
 				int width = 150;
 				int offsetX = rightOffset - width - 10;
-				float step;
+				float step = setting->step;
 				float currentValue;
 				float maxValue;
+				float minValue;
 				switch (setting->valueType)
 				{
 				case ValueType::FLOAT_T:
-					step = 0.01;
 					currentValue = setting->value->_float;
 					maxValue = setting->maxValue->_float;
+					minValue = setting->minValue->_float;
 					break;
 				case ValueType::INT_T:
-					step = 1;
 					currentValue = setting->value->_int;
 					maxValue = setting->maxValue->_int;
+					minValue = setting->minValue->_int;
 					break;
 				}
 
@@ -770,6 +797,28 @@ void ClickGui::renderLunarCategory() {
 				vec4_t rect1 = vec4_t(offsetX, topOffset + 0.5f, offsetX + width, topOffset + 4);
 				DrawUtils::fillRectangle(rect1, MC_Color(46, 47, 47), 1.f);
 				vec4_t clickRect = vec4_t(rect1.x - 5, rect1.y - 3, rect1.z + 5, rect1.w + 3);
+				if (clickRect.contains(&mousePos) && shouldToggleKeyDown) {
+					float newValue = currentValue;
+					if (pressedKey == VK_LEFT) {
+						newValue -= step;
+						if (newValue < minValue)
+							newValue = minValue;
+					}
+					else if (pressedKey == VK_RIGHT) {
+						newValue += step;
+						if (newValue > maxValue)
+							newValue = maxValue;
+					}
+					switch (setting->valueType)
+					{
+					case ValueType::FLOAT_T:
+						setting->value->_float = newValue;
+						break;
+					case ValueType::INT_T:
+						setting->value->_int = (int)newValue;
+						break;
+					}
+				}
 				if (clickRect.contains(&mousePos) && isLeftClickDown) {
 					float val = (mousePos.x - rect1.x) / width * maxValue;
 					float newValue = floor(val / step) * step;
@@ -8469,6 +8518,7 @@ void ClickGui::render() {
 
 	shouldToggleLeftClick = false;
 	shouldToggleRightClick = false;
+	shouldToggleKeyDown = false;
 	resetStartPos = false;
 	DrawUtils::flush();
 }
@@ -8540,7 +8590,11 @@ void ClickGui::onKeyUpdate(int key, bool isDown) {
 
 	if (isCapturingKey)
 		return;
-
+	isKeyDown = isDown;
+	if (isDown) {
+		pressedKey = key;
+		shouldToggleKeyDown = true;
+	}
 	switch (key) {
 	case VK_ESCAPE:
 		clickGUI->setEnabled(false);

@@ -21,7 +21,7 @@ Speed::Speed() : IModule(0, Category::MOVEMENT, "Increases your speed") {
 	registerFloatSetting("Speed", &speed, speed, 0.2f, 2.f);
 	registerIntSetting("Timer", &timer, timer, 10, 40);
 	registerFloatSetting("Random", &random2, random2, 0.f, 0.5f);
-	registerFloatSetting("Duration", &duration, duration, 0.5f, 1.05f);
+	registerFloatSetting("Duration", &duration, duration, 0.5f, 1.05f, 0.001f);
 	registerBoolSetting("NoSlabs", &noslabs, noslabs);
 	registerBoolSetting("DamageBoost", &dmgboost, dmgboost);
 	registerIntSetting("BypassTime", &bypasstime, bypasstime, 1, 20);

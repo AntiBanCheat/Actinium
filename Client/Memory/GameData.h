@@ -118,7 +118,10 @@ public:
 	int cpsRight = 0;
 	int leftclickCount = 0;
 	int rightclickCount = 0;
-
+	float maxSpeed = 0;
+	float minSpeed = 0;
+	float avgSpeed = 0;
+	std::vector<float> countSpeeds;
 
 
 	void clearChestList() {
@@ -176,7 +179,7 @@ public:
 	inline auto getCustomTextureOverride() {
 		return std::make_tuple(this->customTextureActive, this->customTexture);
 	}
-	
+
 	inline void setAllowWIPFeatures(bool enable = false) { isAllowingWIPFeatures = enable; };
 	inline bool isInjectorConnectionActive() { return injectorConnectionActive; };
 	inline void* getDllModule() { return hDllInst; };
