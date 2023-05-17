@@ -15,6 +15,7 @@ AutoHive::AutoHive() : IModule(0, Category::OTHER, "Automates things on The Hive
 	registerBoolSetting("AutoQueue", &autoQueue, autoQueue);
 	registerBoolSetting("AutoSnow", &autosb, autosb);
 	registerBoolSetting("AutoBridgeWin", &autoBridgeWin, autoBridgeWin);
+	registerIntSetting("SBDelay", &sbDelay, sbDelay, 0, 5);
 }
 
 const char* AutoHive::getRawModuleName() {
@@ -131,7 +132,7 @@ void AutoHive::onTick(C_GameMode* gm) {
 					if (prevSlot != n) {
 						supplies->selectedHotbarSlot = n;
 						Odelay++;
-						if (Odelay >= 3) {
+						if (Odelay >= sbDelay) {
 							gm->useItem(*stack);
 							Odelay = 0;
 						}

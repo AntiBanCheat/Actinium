@@ -15,6 +15,7 @@ public:
 	bool doLerp = true;
 	bool autosb = false;
 	bool sendcommand = false;
+	int sbDelay = 3;
 
 	virtual void onSendPacket(C_Packet* packet) override;
 	virtual void onPlayerTick(C_Player* plr) override;

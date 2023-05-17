@@ -1153,7 +1153,9 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 				return;
 			}
 			if (packet->isInstanceOf<C_InteractPacket>() && g_Data.isInGame()) {
-				return;
+				auto pk = reinterpret_cast<C_InteractPacket*>(packet);
+				if (pk->action != 6)
+					return;
 			}
 			if (packet->isInstanceOf<C_MovePlayerPacket>() && g_Data.isInGame()) {
 				return;
