@@ -1,9 +1,9 @@
-#include "HiveSurround.h"
+﻿#include "HiveSurround.h"
 #include "../../../../Utils/TimerUtil.h"
 #include "../pch.h"
 using namespace std;
 
-HiveSurround::HiveSurround() : IModule(0, Category::OTHER, u8"自動的に宝守るやつ by rasky1") {
+HiveSurround::HiveSurround() : IModule(0, Category::OTHER, u8"宝戦争で自動的に宝をブロックで囲います") {
 }
 const char* HiveSurround::getModuleName() {
 	return ("TreasureProtect");
