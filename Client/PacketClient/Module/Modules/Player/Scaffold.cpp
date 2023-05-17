@@ -226,14 +226,16 @@ void Scaffold::onTick(C_GameMode* gm) {
 
 	//Under Up Place 
 	if (diagType.getSelectedValue() == 1) {
-		if (rundown > 0)
-		{
-			blockBelow.y -= 1;
-			buildBlock(blockBelow);
-			blockBelow.y += 1;
-			rundown = 0;
+		if ((player->velocity.x > 0.06 || player->velocity.x < -0.06) && (player->velocity.z > 0.06 || player->velocity.z < -0.06)) {
+			if (rundown > 0)
+			{
+				blockBelow.y -= 1;
+				buildBlock(blockBelow);
+				blockBelow.y += 1;
+				rundown = 0;
+			}
+			else rundown++;
 		}
-		else rundown++;
 	}
 	if (diagType.getSelectedValue() == 5) {
 		if (rundown > 0)
