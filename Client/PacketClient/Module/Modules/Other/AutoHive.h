@@ -16,6 +16,7 @@ public:
 	bool autosb = false;
 	bool sendcommand = false;
 	int sbDelay = 3;
+	float sbRange = 6;
 
 	virtual void onSendPacket(C_Packet* packet) override;
 	virtual void onPlayerTick(C_Player* plr) override;

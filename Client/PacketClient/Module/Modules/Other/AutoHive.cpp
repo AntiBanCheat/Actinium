@@ -16,6 +16,7 @@ AutoHive::AutoHive() : IModule(0, Category::OTHER, "Automates things on The Hive
 	registerBoolSetting("AutoSnow", &autosb, autosb);
 	registerBoolSetting("AutoBridgeWin", &autoBridgeWin, autoBridgeWin);
 	registerIntSetting("SBDelay", &sbDelay, sbDelay, 0, 5);
+	registerFloatSetting("SBRange", &sbRange, sbRange, 0, 8);
 }
 
 const char* AutoHive::getRawModuleName() {
@@ -80,7 +81,7 @@ void findEntity_AH2(C_Entity* currentEntity, bool isRegularEntity) {
 		}
 
 		float dist = (*currentEntity->getPos()).dist(*g_Data.getLocalPlayer()->getPos());
-		if (dist < killaura->range) entityList2.push_back(currentEntity);
+		if (dist < autoHive->sbRange) entityList2.push_back(currentEntity);
 	}
 }
 
