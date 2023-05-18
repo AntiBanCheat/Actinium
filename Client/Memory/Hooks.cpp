@@ -611,7 +611,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 			string changeLog = (gray + bold + string("ActiniumClient-Release") + ": \n" + RESET +
 				gray + bold + "Beta Build 2: \n" + RESET +
 				gray + bold + "Credits \n" + RESET +
-				fix + "Packet(dead) \n" +
+				fix + "Packet \n" +
 				fix + "Deq \n" +
 				fix + "Founder \n" +
 				fix + "Steve's Noob#2585 \n" +
@@ -619,14 +619,15 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 				fix + "z98#3636 \n" +
 				"\n" +
 				gray + bold + "Developers(Actinium) \n" + RESET +
-				fix + "DarkNBTHax(cool) \n" +
-				fix + "KaeruClient() \n" +
+				fix + "DarkNBTHax \n" +
+				fix + "KaeruClient \n" +
 				fix + "AntiBanCheat \n" +
 				fix + "As4r1 \n" +
 				fix + "giyo000 \n" +
 				fix + "SBreality \n" +
 				fix + "Ika286 \n" +
-				fix + "Rasky1 \n"
+				fix + "Rasky1 \n" +
+				fix + "ffffffff \n"	    
 				);
 
 			//float size = g_Data.getClientInstance()->getGuiData()->widthGame / g_Data.getClientInstance()->getGuiData()->heightGame - 1.7769f; // interesting
