@@ -297,7 +297,6 @@
     <ClCompile Include="PacketClient\Module\Modules\Combat\AutoPot.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Player\AutoTotem.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Visual\BlockESP.cpp" />
-    <ClCompile Include="PacketClient\Module\Modules\Visual\SwingSpeed.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Visual\BlockOutline.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Visual\BreadCrumbs.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Other\ClickTP.cpp" />
@@ -483,6 +482,7 @@
     <ClInclude Include="PacketClient\Module\Modules\Other\HiveSurround.h" />
     <ClInclude Include="PacketClient\Module\Modules\Player\AutoTool.h" />
     <ClInclude Include="PacketClient\Notifications\NotificationManager.h" />
+    <ClInclude Include="SDK\CItemUseInventoryTransaction.h" />
     <ClInclude Include="Utils\ColorUtil.h" />
     <ClInclude Include="Utils\DrawUtils.h" />
     <ClInclude Include="PacketClient\FriendList\FriendList.h" />
@@ -507,7 +507,6 @@
     <ClInclude Include="PacketClient\Module\Modules\Player\AutoTotem.h" />
     <ClInclude Include="PacketClient\Module\Modules\Visual\BlockESP.h" />
     <ClInclude Include="PacketClient\Module\Modules\Visual\BlockOutline.h" />
-    <ClCompile Include="PacketClient\Module\Modules\Visual\SwingSpeed.h" />
     <ClInclude Include="PacketClient\Module\Modules\Visual\BreadCrumbs.h" />
     <ClInclude Include="PacketClient\Module\Modules\Other\ClickTP.h" />
     <ClInclude Include="PacketClient\Module\Modules\Other\ChatSuffix.h" />

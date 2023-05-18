@@ -22,6 +22,7 @@
 #include "../SDK/CRakNetInstance.h"
 #include "../SDK/CUIScene.h"
 #include "../SDK/TextHolder.h"
+#include "../SDK/CItemUseInventoryTransaction.h"
 #include "../Utils/SkinUtil.h"
 #include "../Utils/TextFormat.h"
 #include "GameData.h"
@@ -131,6 +132,7 @@ private:
 	static void LevelRendererPlayer__renderNameTags(__int64 a1, __int64 a2, TextHolder* name, __int64 a4);
 	static void Actor_rotation(C_Entity* _this, vec2_t& angle);
 	static int ForceThirdPersonLol(__int64 a1);
+	static void ItemUseInventoryTransaction__write(CItemUseInventoryTransaction* a1, __int64 a2);
 
 	std::unique_ptr<FuncHook> setPosHook;
 	std::unique_ptr<FuncHook> Actor__baseTick; 
@@ -180,6 +182,7 @@ private:
 	std::unique_ptr<FuncHook> Mob__isImmobileHook;
 	std::unique_ptr<FuncHook> InventoryTransactionManager__addActionHook;
 	std::unique_ptr<FuncHook> LevelRendererPlayer__renderNameTagsHook;
+	std::unique_ptr<FuncHook> ItemUseInventoryTransaction__writeHook;
 };
 
 extern Hooks g_Hooks;
