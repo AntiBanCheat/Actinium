@@ -489,7 +489,20 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 		}
 	}
 }
-
+void DrawUtils::drawGlow(const vec4_t& pos, const MC_Color& col, float alpha, int layers, float blurRadius) {
+	float dAlpha = alpha / layers;  // kakureiya- no alpha
+	for (int i = 0; i < layers; i++) {
+		float layerAlpha = alpha - dAlpha * i;                   //alpha
+		float layerRadius = blurRadius + (blurRadius / layers) * i;  //range
+		DrawUtils::setColor(col.r, col.g, col.b, layerAlpha);
+		Vec4 layerPos = pos;//kakudai draw
+		layerPos.x -= layerRadius;
+		layerPos.y -= layerRadius;
+		layerPos.z += layerRadius;
+		layerPos.w += layerRadius;
+		DrawUtils::drawQuad({layerPos.x, layerPos.w}, {layerPos.z, layerPos.w}, {layerPos.z, layerPos.y}, {layerPos.x, layerPos.y});
+	}
+}
 void DrawUtils::drawSteve(vec4_t(pos)) {
 	// line 1
 	DrawUtils::fillRectangleA(vec4_t(pos.x, pos.y, pos.x + 3.5f, pos.y + 3.5f), MC_Color(39, 27, 11, 255));
