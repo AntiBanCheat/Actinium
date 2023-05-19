@@ -1420,17 +1420,20 @@ void Hooks::chatLogHookFunc(__int64 a1, TextHolder* msg, uint32_t a2) {
 			// other servers
 		}
 
-		// Teams
-		if (teams->isEnabled()) {
-			switch (teams->mode.getSelectedValue()) {
-			case 0: // Normal
-				//None
-				break;
-			case 1: //Hive
-				if (textStr.find("You are on the") != string::npos) teams->SearchTeams = true;
-				break;
+		// Teams and AutoVClip
+		if (teams->isEnabled() || autoHive->avclip) {
+			if (textStr.find("You are on the") != string::npos)
+			{
+				autoHive->doavclip = true;
+				switch (teams->mode.getSelectedValue()) {
+				case 0: // Normal
+					//None
+					break;
+				case 1: //Hive
+					teams->SearchTeams = true;
+					break;
+				}
 			}
-			// other servers
 		}
 
 		// AutoQueue
