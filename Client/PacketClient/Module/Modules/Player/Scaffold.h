@@ -2,6 +2,8 @@
 #include "../../ModuleManager.h"
 #include "../Module.h"
 
+#
+
 class Scaffold : public IModule {
 private:
 	int offGroundTicks = 0;
@@ -85,6 +87,7 @@ public:
 	bool lockY = false;
 	bool canspoof = false;
 	bool downmode = false;
+	bool spoof = true;
 
 	std::vector<vec3_t> placed;
 	std::vector<vec3_ti> highlightCity;

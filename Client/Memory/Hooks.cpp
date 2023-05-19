@@ -121,6 +121,15 @@ void Hooks::Init() {
 			g_Hooks.SkinRepository___checkSignatureFileInPack = make_unique<FuncHook>(FindSignature("48 89 5C 24 ? 57 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 44 24 ? 48 8B 79"), Hooks::ReturnTrue);
 
 		}
+
+		// ItemUseInventoryTransaction::vtable
+		{
+			uintptr_t sigOffset = FindSignature("48 8D 05 ?? ?? ?? ?? 48 89 45 F0 48 8D 8D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 0F BE 85");
+			int offset = *reinterpret_cast<int*>(sigOffset + 3);
+			uintptr_t** vtable = reinterpret_cast<uintptr_t**>(sigOffset + offset + 7);
+
+			g_Hooks.ItemUseInventoryTransaction__writeHook = make_unique<FuncHook>(vtable[2], Hooks::ItemUseInventoryTransaction__write);
+		}
 	}
 
 	// Signatures
@@ -1876,4 +1885,17 @@ void Hooks::LevelRendererPlayer__renderNameTags(__int64 a1, __int64 a2, TextHold
 	}
 
 	return func(a1, a2, a3, a4);
+}
+
+void Hooks::ItemUseInventoryTransaction__write(CItemUseInventoryTransaction* a1, __int64 a2) {
+	static auto scaffold = moduleMgr->getModule<Scaffold>();
+	if (scaffold->isEnabled() && scaffold->spoof) {
+		// spooffnfnfn
+		a1->clickPosition.x = 0.5f;
+		a1->clickPosition.y = 1.f;
+		a1->clickPosition.z = 0.5f;
+	}
+
+	static auto func = g_Hooks.ItemUseInventoryTransaction__writeHook->GetFastcall<void, CItemUseInventoryTransaction*, __int64>();
+	func(a1, a2);
 }
