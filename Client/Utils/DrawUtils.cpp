@@ -284,7 +284,7 @@ void DrawUtils::drawGradientText(vec2_t pos, std::string* textStr, float textSiz
 		ind++;
 		int curIndex = -ind * interface->spacing;
 		auto interfaceColor = ColorUtil::interfaceColor(curIndex);
-		std::string testHave = std::string(&c).substr(0,1);
+		std::string testHave = std::string(&c).substr(0, 1);
 		int charWidth = DrawUtils::getTextWidth(&std::string(testHave), textSize);
 
 
@@ -495,12 +495,12 @@ void DrawUtils::drawGlow(const vec4_t& pos, const MC_Color& col, float alpha, in
 		float layerAlpha = alpha - dAlpha * i;                   //alpha
 		float layerRadius = blurRadius + (blurRadius / layers) * i;  //range
 		DrawUtils::setColor(col.r, col.g, col.b, layerAlpha);
-		Vec4 layerPos = pos;//kakudai draw
+		vec4_t layerPos = pos;//kakudai draw
 		layerPos.x -= layerRadius;
 		layerPos.y -= layerRadius;
 		layerPos.z += layerRadius;
 		layerPos.w += layerRadius;
-		DrawUtils::drawQuad({layerPos.x, layerPos.w}, {layerPos.z, layerPos.w}, {layerPos.z, layerPos.y}, {layerPos.x, layerPos.y});
+		DrawUtils::drawQuad({ layerPos.x, layerPos.w }, { layerPos.z, layerPos.w }, { layerPos.z, layerPos.y }, { layerPos.x, layerPos.y });
 	}
 }
 void DrawUtils::drawSteve(vec4_t(pos)) {
