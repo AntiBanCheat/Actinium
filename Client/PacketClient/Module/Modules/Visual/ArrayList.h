@@ -14,6 +14,11 @@ public:
 	int opacity = 150;
 	int arraycoloropa = 150;
 	int whiteopacity = 0;
+	float opacity2 = 0.f;
+	float arraycoloropa2 = 0.05;
+	float whiteopacity2 = 0.f;
+	int layers = 5;
+	float radius = 5;
 	bool focused = false;
 	bool invert = false;
 	bool modes = true;
