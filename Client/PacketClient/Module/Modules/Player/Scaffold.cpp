@@ -813,12 +813,16 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			if (totalCount > 99)
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 61 + scX, scY + 16 - county);
-				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), false);
+				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 2, (61 + scX) - 4, (scY + 16 - county) - 2);
+				DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0, countopa), 0.05, 15, 4);
+				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), true);
 			}
 			else
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 56 + scX, scY + 16 - county);
-				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), false);
+				vec4_t testRect3 = vec4_t((scX) + 4, (scY - county) + 2, (56 + scX) - 4, (scY + 16 - county) - 2);
+				DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0, countopa), 0.05, 15, 4);
+				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), true);
 			}
 			for (int s = 0; s < 9; s++) {
 				C_ItemStack* stack = inv->getItemStack(s);
@@ -865,11 +869,15 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			if (totalCount > 99)
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 76 + scX, scY + 16 - county);
+				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 2, (76 + scX) - 4, (scY + 16 - county) - 2);
+				DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0, countopa), 0.05, 15, 4);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), false);
 			}
 			else
 			{
-				vec4_t testRect2 = vec4_t(scX, scY - county, 70 + scX, scY + 16 - county);
+				vec4_t testRect2 = vec4_t(scX, scY - county, 76 + scX, scY + 16 - county);
+				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 2, (76 + scX) - 4, (scY + 16 - county) - 2);
+				DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0, countopa), 0.05, 15, 4);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), false);
 			}
 			for (int s = 0; s < 9; s++) {
