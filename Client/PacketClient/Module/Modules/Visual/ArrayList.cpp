@@ -20,6 +20,11 @@ ArrayList::ArrayList() : IModule(0, Category::VISUAL, "Displays enabled modules"
 	registerIntSetting("ColorOpacity", &arraycoloropa, arraycoloropa, 0, 255);
 	registerIntSetting("WhiteOpacity", &whiteopacity, whiteopacity, 0, 255);
 	registerFloatSetting("Spacing", &spacing, spacing, 0.f, 1.f);
+	registerFloatSetting("Opacity2", &opacity2, opacity2, 0.f, 0.5);
+	registerFloatSetting("ColorOpacity2", &arraycoloropa2, arraycoloropa2, 0.f, 0.5);
+	registerFloatSetting("WhiteOpacity2", &whiteopacity2, whiteopacity2, 0.f, 0.5);
+	registerIntSetting("Layers", &layers, layers, 0, 20);
+	registerFloatSetting("Radius", &radius, radius, 0.f, 20.f);
 	shouldHide = true;
 }
 
@@ -171,8 +176,12 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			#pragma endregion
 
 			// Drawing
+			vec4_t rectPos2 = vec4_t(rectPos.x + 4, rectPos.y + 2, rectPos.z - 4, rectPos.w - 2);
 			auto interfaceColor = ColorUtil::interfaceColor(curIndex);
 			auto interfaceColortwo = ColorUtil::interfaceColortwo(curIndex);
+			if (arraycoloropa2 > 0) DrawUtils::drawGlow(rectPos2, MC_Color(interfaceColortwo), arraycoloropa2, layers, radius);
+			if (opacity2 > 0) DrawUtils::drawGlow(rectPos2, MC_Color(0, 0, 0), opacity2, layers, radius);
+			if (whiteopacity2 > 0) DrawUtils::drawGlow(rectPos2, MC_Color(255, 255, 255), whiteopacity2, layers, radius);
 			if (arraycoloropa > 0) DrawUtils::fillRectangleA(rectPos, MC_Color(interfaceColortwo));
 			if (opacity > 0) DrawUtils::fillRectangleA(rectPos, MC_Color(0, 0, 0, opacity));
 			if (whiteopacity > 0) DrawUtils::fillRectangleA(rectPos, MC_Color(255, 255, 255, whiteopacity));
