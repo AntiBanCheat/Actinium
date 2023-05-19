@@ -14,6 +14,7 @@ AutoHive::AutoHive() : IModule(0, Category::OTHER, "Automates things on The Hive
 	registerBoolSetting("AutoLootBox", &autoLootBox, autoLootBox);
 	registerBoolSetting("AutoQueue", &autoQueue, autoQueue);
 	registerBoolSetting("AutoSnow", &autosb, autosb);
+	registerBoolSetting("AutoVClip", &avclip, avclip);
 	registerBoolSetting("AutoBridgeWin", &autoBridgeWin, autoBridgeWin);
 	registerIntSetting("SBDelay", &sbDelay, sbDelay, 0, 5);
 	registerFloatSetting("SBRange", &sbRange, sbRange, 0, 8);
@@ -97,6 +98,7 @@ void AutoHive::onEnable() {
 	entityList2.clear();
 	if (autoBridgeWin) doLerp = true;
 	Odelay = 0;
+	doavclip = false;
 }
 
 vector<string> snowball = {
@@ -123,7 +125,19 @@ void AutoHive::onTick(C_GameMode* gm) {
 
 	C_Inventory* inv = supplies->inventory;
 	auto prevSlot = supplies->selectedHotbarSlot;
-
+	if (doavclip) {
+		vec3_t mypos = *player->getPos();
+		for (int i = 0; i < 20; i++)
+		{
+			if (player->region->getBlock(mypos.add(0, -1, 0))->toLegacy()->blockId != 0) {
+				g_Data.getLocalPlayer()->setPos(mypos.add(0, 1, 0));
+				doavclip = false;
+				return;
+			}
+			mypos.y -= 1.f;
+		}
+		doavclip = false;
+	}
 	if (autosb && !entityList2.empty() && !moduleMgr->getModule<Regen>()->isregen) {
 		for (int n = 0; n < 36; n++) {
 			C_ItemStack* stack = inv->getItemStack(n);
@@ -146,13 +160,13 @@ void AutoHive::onTick(C_GameMode* gm) {
 	}
 
 	if (autoQueue) {
+		Odelay2++;
 		for (int n = 0; n < 36; n++) {
 			C_ItemStack* stack = inv->getItemStack(n);
 			if (stack->item != nullptr) {
 				string ItemName2 = stack->getItem()->name.getText();
 				if (ItemName2.find("heart_of_the_sea") != string::npos) {
 					if (prevSlot != n) {
-						Odelay2++;
 						if (Odelay2 >= 17) {
 							supplies->selectedHotbarSlot = n;
 							gm->useItem(*stack);
