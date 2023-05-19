@@ -736,6 +736,8 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 
 					DrawUtils::drawText(vec2_t(textPos.x, textPos.y), &textStr, MC_Color(255, 255, 255), 0.8, 1, true);
 					auto n = moduleMgr->getModule<Notifications>();
+					vec4_t testRect3 = vec4_t((rect.x) + 4, (rect.y) + 2, (rect.z) - 4, (rect.w) - 2);
+					DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0), 0.05, 15, 4);
 					DrawUtils::fillRoundRectangle(rect, MC_Color(notification->colorR, notification->colorG, notification->colorB, notificationsMod->opacity), false);
 					DrawUtils::drawBottomLine(vec4_t{ rect.x + 1.5f, rect.y, rect.z - duration, rect.w + 0.5f }, MC_Color(255, 255, 255), 1);
 
@@ -821,6 +823,10 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 					vec2_t textPos = vec2_t(rect.x + 11, rect.y + 5.5);
 
 					DrawUtils::drawText(vec2_t(textPos.x, textPos.y), &substring, MC_Color(255, 255, 255), 1, 1, 1);
+					vec4_t testRect3 = vec4_t((rect.x)+4, (rect.y) + 2, (rect.z + duration) - 4, (rect.w) - 2);
+					DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0), 0.05, 15, 4);
+					vec4_t testRect4 = vec4_t((rect.x) + 4, (rect.y) + 2, (rect.z - duration) - 4, (rect.w) - 2);
+					DrawUtils::drawGlow(testRect4, rainbow, 0.05, 15, 4);
 					DrawUtils::fillRoundRectangle(rect, MC_Color(0.f, 0.f, 0.f, notificationsMod->opacity), true);
 					DrawUtils::fillRoundRectangle(vec4_t{ rect.x, rect.y, rect.z - duration, rect.w }, rainbow, true);
 				}
@@ -1424,6 +1430,7 @@ void Hooks::chatLogHookFunc(__int64 a1, TextHolder* msg, uint32_t a2) {
 		if (teams->isEnabled() || autoHive->avclip) {
 			if (textStr.find("You are on the") != string::npos)
 			{
+				autoHive->sendcommand = true;
 				autoHive->doavclip = true;
 				switch (teams->mode.getSelectedValue()) {
 				case 0: // Normal
