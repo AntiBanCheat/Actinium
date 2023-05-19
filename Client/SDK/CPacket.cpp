@@ -297,7 +297,7 @@ NetworkLatencyPacket::NetworkLatencyPacket(long timestamp, bool sendback) {
 CommandRequestPacket::CommandRequestPacket() {
 	static uintptr_t** commandRequestPacketVtable = 0x0;
 	if (commandRequestPacketVtable == 0x0) {
-		uintptr_t sigOffset = FindSignature("48 8D 0D ?? ?? ?? ?? 0F 11 00 C7 40 ?? ?? ?? ?? ?? C7 40 ?? ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 02 33 C0 48 89 42 28 48 89 42 30 89 42 38 48 89 42 40 48 89 42 50 88 42 60");
+		uintptr_t sigOffset = FindSignature("48 8D 0D ?? ?? ?? ?? 0F 11 00 C7 40 ?? ?? ?? ?? ?? C7 40 ?? ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 02 33 C0 48 89 42 ?? 48 89 42 ?? 89 42 ?? 48 89 42 ?? 48 89 42 ?? 88 42");
 		int offset = *reinterpret_cast<int*>(sigOffset + 3);
 		commandRequestPacketVtable = reinterpret_cast<uintptr_t**>(sigOffset + offset + 7);
 #ifdef _DEBUG
