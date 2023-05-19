@@ -78,6 +78,7 @@ public:
 	static void drawBox3d(vec3_t lower, vec3_t upper);
 	static void fillRectangle(vec4_t pos, const MC_Color col, float alpha);
 	static void fillRectangleA(vec4_t pos, MC_Color col);
+	static void drawGlow(const vec4_t& pos, const MC_Color& col, float alpha, int layers, float blurRadius);
 	static void drawWarning(vec4_t pos, const MC_Color col, float alpha);
 	static void drawRoundRectangle(vec4_t pos, const MC_Color col, bool rounder);
 	static void drawRoundRectangle2(vec4_t pos, const MC_Color col);
