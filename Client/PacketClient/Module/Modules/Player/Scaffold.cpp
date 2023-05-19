@@ -875,8 +875,8 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			}
 			else
 			{
-				vec4_t testRect2 = vec4_t(scX, scY - county, 76 + scX, scY + 16 - county);
-				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 2, (76 + scX) - 4, (scY + 16 - county) - 2);
+				vec4_t testRect2 = vec4_t(scX, scY - county, 70 + scX, scY + 16 - county);
+				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 2, (70 + scX) - 4, (scY + 16 - county) - 2);
 				DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0, countopa), 0.05, 15, 4);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), false);
 			}
