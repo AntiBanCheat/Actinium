@@ -98,10 +98,32 @@ DWORD WINAPI keyThread(LPVOID lpParam) {
 #define _MSC_VER "unk"
 #endif
 
+DWORD WINAPI uninjectorThread(LPVOID lpParam) {
+	unsigned char magicValues[16] = { 0x00,0x4e,0x49,0x4e,0x4a,0x45,0x43,0x54,0x41,0x43,0x54,0x49,0x4e,0x49,0x55,0x4d };
+	unsigned char* uninjectMemory = new unsigned char[sizeof(magicValues) + sizeof(bool)];
+	memcpy(uninjectMemory, magicValues, sizeof(magicValues));
+	uninjectMemory[0] = 0x55;
+	bool* uninject = reinterpret_cast<bool*>(uninjectMemory + sizeof(magicValues));
+	*uninject = false;
+	while (true) {
+		if (*uninject) {
+			GameData::terminate();
+			break;
+		}
+
+		Sleep(20);
+	}
+	delete[] uninjectMemory;
+	ExitThread(0);
+}
+
 DWORD WINAPI start(LPVOID lpParam) {
 	logF("Starting up...");
 	logF("MSC v%i at %s", _MSC_VER, __TIMESTAMP__);
 	init();
+
+	DWORD uninjectorThreadId;
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)uninjectorThread, lpParam, NULL, &uninjectorThreadId);
 
 	DWORD procId = GetCurrentProcessId();
 	if (!mem.Open(procId, SlimUtils::ProcessAccess::Full)) {
