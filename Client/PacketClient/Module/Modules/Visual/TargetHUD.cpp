@@ -517,7 +517,9 @@ void TargetHUD::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 						if (rawName.length() < distance.length()) targetLen = DrawUtils::getTextWidth(&distance, 1) + 10.5;
 						else targetLen = DrawUtils::getTextWidth(&rawName, 1) + 6.5;
 						vec4_t testRect = vec4_t(positionX, positionY, targetLen + positionX, positionY + defaultRectHeight - 11);
-						DrawUtils::fillRoundRectangle(testRect, MC_Color(33, 33, 33, opacity), true);
+						vec4_t testRect2 = vec4_t((positionX)+4, (positionY) + 2, (targetLen + positionX) - 4, (positionY + defaultRectHeight - 11) - 2);
+						DrawUtils::drawGlow(testRect2, MC_Color(0, 0, 0), 0.05, 15, 4);
+						DrawUtils::fillRoundRectangle(testRect, MC_Color(0, 0, 0, opacity), true);
 						DrawUtils::fillRoundRectangle(testRect, MC_Color(33, 0, 0, steveOpacity), true);
 						//		DrawUtils::drawRoundRectangle(testRect, MC_Color(33, 33, 33, opacity), false);
 						vec4_t healthRect = vec4_t(testRect.x + 38, testRect.y + 27, testRect.x + 38 + ((targetLen + 10.5) / 18) * displayhealth2, testRect.y + 30);
@@ -552,7 +554,9 @@ void TargetHUD::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 						if (rawName.length() < distance.length()) targetLen = DrawUtils::getTextWidth(&distance, 1) + 10.5;
 						else targetLen = DrawUtils::getTextWidth(&rawName, 1) + 6.5;
 						vec4_t testRect = vec4_t(positionX, positionY, targetLen + positionX, positionY + defaultRectHeight + 1);
-						DrawUtils::fillRoundRectangle(testRect, MC_Color(33, 33, 33, opacity), true);
+						vec4_t testRect2 = vec4_t((positionX)+4, (positionY)+2, (targetLen + positionX) - 4, (positionY + defaultRectHeight + 1) - 2);
+						DrawUtils::drawGlow(testRect2, MC_Color(0, 0, 0), 0.05, 15, 4);
+						DrawUtils::fillRoundRectangle(testRect, MC_Color(0, 0, 0, opacity), true);
 						DrawUtils::fillRoundRectangle(testRect, MC_Color(33, 0, 0, steveOpacity), true);
 						//		DrawUtils::drawRoundRectangle(testRect, MC_Color(33, 33, 33, opacity), false);
 						vec4_t healthRect = vec4_t(testRect.x + 38, testRect.y + 27, testRect.x + 38 + ((targetLen + 10.5) / 18) * displayhealth2, testRect.y + 30);
