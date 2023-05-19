@@ -14,6 +14,8 @@ public:
 	bool autoQueue = true;
 	bool doLerp = true;
 	bool autosb = false;
+	bool avclip = true;
+	bool doavclip = false;
 	bool sendcommand = false;
 	int sbDelay = 3;
 	float sbRange = 6;
