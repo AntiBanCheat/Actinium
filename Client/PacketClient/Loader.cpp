@@ -105,7 +105,7 @@ DWORD WINAPI uninjectorThread(LPVOID lpParam) {
 	uninjectMemory[0] = 0x55;
 	bool* uninject = reinterpret_cast<bool*>(uninjectMemory + sizeof(magicValues));
 	*uninject = false;
-	while (true) {
+	while (isRunning) {
 		if (*uninject) {
 			GameData::terminate();
 			break;
@@ -122,8 +122,6 @@ DWORD WINAPI start(LPVOID lpParam) {
 	logF("MSC v%i at %s", _MSC_VER, __TIMESTAMP__);
 	init();
 
-	DWORD uninjectorThreadId;
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)uninjectorThread, lpParam, NULL, &uninjectorThreadId);
 
 	DWORD procId = GetCurrentProcessId();
 	if (!mem.Open(procId, SlimUtils::ProcessAccess::Full)) {
@@ -132,6 +130,8 @@ DWORD WINAPI start(LPVOID lpParam) {
 	}
 	gameModule = mem.GetModule(L"Minecraft.Windows.exe");  // Get Module for Base Address
 
+	DWORD uninjectorThreadId;
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)uninjectorThread, lpParam, NULL, &uninjectorThreadId);
 	MH_Initialize();
 	GameData::initGameData(gameModule, &mem, (HMODULE)lpParam);
 	TargetUtil::init(g_Data.getPtrLocalPlayer());
