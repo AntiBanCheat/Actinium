@@ -618,7 +618,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 			string fix = gray + "[*] " + string(RESET);
 
 			string changeLog = (gray + bold + string("ActiniumClient-Release") + ": \n" + RESET +
-				gray + bold + "Beta Build 2: \n" + RESET +
+				gray + bold + "Beta Build 3: \n" + RESET +
 				gray + bold + "Credits \n" + RESET +
 				fix + "Packet \n" +
 				fix + "Deq \n" +
