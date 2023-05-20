@@ -1,6 +1,7 @@
 #include "ArrayList.h"
 #include "../pch.h"
-
+float test = 4;
+float test2 = 2;
 using namespace std;
 ArrayList::ArrayList() : IModule(0, Category::VISUAL, "Displays enabled modules") {
 	registerEnumSetting("Mode", &mode, 0);
@@ -24,7 +25,9 @@ ArrayList::ArrayList() : IModule(0, Category::VISUAL, "Displays enabled modules"
 	registerFloatSetting("ColorOpacity2", &arraycoloropa2, arraycoloropa2, 0.f, 0.5);
 	registerFloatSetting("WhiteOpacity2", &whiteopacity2, whiteopacity2, 0.f, 0.5);
 	registerIntSetting("Layers", &layers, layers, 0, 20);
-	registerFloatSetting("Radius", &radius, radius, 0.f, 20.f);
+	registerFloatSetting("GlowRadius", &radius, radius, 0.f, 20.f);
+	registerFloatSetting("RadiusX", &test, test, 0.f, 20.f);
+	registerFloatSetting("RadiusY", &test2, test2, 0.f, 5.f);
 	shouldHide = true;
 }
 
@@ -178,7 +181,7 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 #pragma endregion
 
 			// Drawing
-			vec4_t rectPos2 = vec4_t(rectPos.x + 4, rectPos.y + 2, rectPos.z - 4, rectPos.w - 2);
+			auto rectPos2 = vec4_t(xOffset + test, yOffset + test2, windowSize.x - test, yOffset - test2 + textHeight);//test = -17.83    test2=15.65
 			auto interfaceColor = ColorUtil::interfaceColor(curIndex);
 			auto interfaceColortwo = ColorUtil::interfaceColortwo(curIndex);
 			if (arraycoloropa2 > 0) DrawUtils::drawGlow(rectPos2, MC_Color(interfaceColortwo), arraycoloropa2, layers, radius);
