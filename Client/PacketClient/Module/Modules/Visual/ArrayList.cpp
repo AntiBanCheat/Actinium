@@ -54,7 +54,7 @@ struct IModuleContainer {
 				moduleName = moduleName + "[" + Utils::getKeybindName(keycode) + "]";
 			}
 		}
-		
+
 
 		enabled = mod->isEnabled();
 		backingModule = mod;
@@ -115,6 +115,8 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 
 		vec4_t selectableSurface;
 
+		vector<function<void()>> drawBackgrounds = {};
+
 		for (std::set<IModuleContainer>::iterator mod = moduleList.begin(); mod != moduleList.end(); ++mod) {
 			if (!mod->shouldRender) continue;
 			index++; int curIndex = -index * interfaceMod->spacing;
@@ -128,7 +130,7 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			if (mode.getSelectedValue() == 1 || mode.getSelectedValue() == 3 || mode.getSelectedValue() == 4) textWidth = DrawUtils::getTextWidth(&textStr, textSize) + 4.f;
 			if (index == 1) selectableSurface = vec4_t(windowSize.x - textWidth, windowSize.y, windowSize.x, windowSize.y + 10);
 
-			#pragma region Animations
+#pragma region Animations
 			// Animations
 			float xOffsetOri = windowSize.x - textWidth - (textPadding * 2);
 			float xOffset = windowSize.x - mod->pos->x;
@@ -151,21 +153,21 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 				else yOffset += mod->pos->y / (textHeight + (textPadding * 2) * 0.1f);
 			}
 			if (!mod->enabled && xOffset > windowSize.x) { mod->pos->x = 0.f; mod->pos->y = 0.f; }
-			#pragma endregion
+#pragma endregion
 
-            #pragma region Math
+#pragma region Math
 			vec4_t rectPos = vec4_t(xOffset - 3, yOffset, windowSize.x + (textPadding * 2), yOffset + textPadding * 2 + textHeight);
 			vec4_t bar = vec4_t(rectPos.z - 1.f, rectPos.y, rectPos.z, rectPos.w);
 			if (mode.getSelectedValue() == 4) bar = vec4_t(rectPos.z - 1.f, rectPos.y - 2.f, rectPos.z, rectPos.w);
 			if (mode.getSelectedValue() == 4 && invert) bar = vec4_t(rectPos.z - 1.f, rectPos.y, rectPos.z, rectPos.w + 2.f);
 			vec4_t topLine = vec4_t(rectPos.x - 1.f, rectPos.y - 1.f, rectPos.z, rectPos.y);
 			vec4_t topLine2 = vec4_t(rectPos.x, rectPos.y - 2, rectPos.z, rectPos.y);
-			if (invert) topLine2 = vec4_t(rectPos.x, rectPos.y + (textPadding * 2) + textHeight, rectPos.z, rectPos.y+ (textPadding * 2) + textHeight + 2);
+			if (invert) topLine2 = vec4_t(rectPos.x, rectPos.y + (textPadding * 2) + textHeight, rectPos.z, rectPos.y + (textPadding * 2) + textHeight + 2);
 			vec4_t topLine3 = vec4_t(rectPos.x, rectPos.y - 3.f, rectPos.z, rectPos.y - 2);
 			if (invert) topLine3 = vec4_t(rectPos.x, rectPos.y + (textPadding * 2) + textHeight + 2, rectPos.z, rectPos.y + (textPadding * 2) + textHeight + 3);
 			if (invert) topLine = vec4_t(rectPos.x, rectPos.y + (textPadding * 2) + textHeight - 1, rectPos.z + 1.f, rectPos.y + (textPadding * 2) + textHeight);
 			vec4_t leftRect = vec4_t(xOffset - 4, yOffset, xOffset - 3, yOffset + textPadding * 2 + textHeight);
-			vec2_t textPos = vec2_t(rectPos.x + 4.f, rectPos.y);
+			vec2_t textPos = vec2_t(rectPos.x + 4.f, rectPos.y + 0.6f);
 			if (mode.getSelectedValue() == 1) textPos = vec2_t(rectPos.x + 4.f, rectPos.y + 1.f);
 			if (invert) textPos = vec2_t(rectPos.x + 3.5f, rectPos.y + 2.f);
 			underline = vec4_t(windowSize.x - (lastModuleLength + 4.f + (textPadding * 2.f)), leftRect.y, leftRect.x, leftRect.y + 1.f);
@@ -173,7 +175,7 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 
 			if (selectableSurface.contains(&mousePos)) focused = true;
 			else focused = false;
-			#pragma endregion
+#pragma endregion
 
 			// Drawing
 			vec4_t rectPos2 = vec4_t(rectPos.x + 4, rectPos.y + 2, rectPos.z - 4, rectPos.w - 2);
@@ -182,9 +184,12 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			if (arraycoloropa2 > 0) DrawUtils::drawGlow(rectPos2, MC_Color(interfaceColortwo), arraycoloropa2, layers, radius);
 			if (opacity2 > 0) DrawUtils::drawGlow(rectPos2, MC_Color(0, 0, 0), opacity2, layers, radius);
 			if (whiteopacity2 > 0) DrawUtils::drawGlow(rectPos2, MC_Color(255, 255, 255), whiteopacity2, layers, radius);
-			if (arraycoloropa > 0) DrawUtils::fillRectangleA(rectPos, MC_Color(interfaceColortwo));
-			if (opacity > 0) DrawUtils::fillRectangleA(rectPos, MC_Color(0, 0, 0, opacity));
-			if (whiteopacity > 0) DrawUtils::fillRectangleA(rectPos, MC_Color(255, 255, 255, whiteopacity));
+
+			drawBackgrounds.push_back([=]() {
+				if (arraycoloropa > 0) DrawUtils::fillRectangleA(rectPos, MC_Color(interfaceColortwo));
+				if (opacity > 0) DrawUtils::fillRectangleA(rectPos, MC_Color(0, 0, 0, opacity));
+				if (whiteopacity > 0) DrawUtils::fillRectangleA(rectPos, MC_Color(255, 255, 255, whiteopacity));
+				});
 
 			switch (mode.getSelectedValue()) {
 			case 0:
@@ -216,13 +221,17 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			case 5: DrawUtils::drawText(textPos, &textStr, MC_Color(interfaceColor), textSize, 1.f, true); break;
 			}
 			//bottom
-			if (invert) yOffset-= textHeight + (textPadding * 2);
+			if (invert) yOffset -= textHeight + (textPadding * 2);
 			else yOffset += textHeight + (textPadding * 2);
 			//test
 
 			lastModuleLength = textWidth;
 			underline = vec4_t(leftRect.x, leftRect.w, windowSize.x, leftRect.w + 1.f);
 			if (invert) underline = vec4_t(leftRect.z, leftRect.y, windowSize.x, leftRect.y + 1.f);
+		}
+
+		for (auto drawBackground : drawBackgrounds) {
+			drawBackground();
 		}
 
 		index++; int curIndex = -index * interfaceMod->spacing;
