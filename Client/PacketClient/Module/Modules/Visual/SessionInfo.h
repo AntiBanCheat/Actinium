@@ -22,6 +22,7 @@ public:
 	int hour = 0;
 
 	SettingEnum mode = this;
+	SettingEnum glowmode = this;
 
 	virtual void onPostRender(C_MinecraftUIRenderContext* renderCtx);
 	virtual const char* getModuleName();
