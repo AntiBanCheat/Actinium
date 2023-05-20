@@ -167,14 +167,14 @@ void AutoHive::onTick(C_GameMode* gm) {
 				string ItemName2 = stack->getItem()->name.getText();
 				if (ItemName2.find("heart_of_the_sea") != string::npos) {
 					if (prevSlot != n) {
-						if (Odelay2 >= 17) {
+						if (Odelay2 >= 30) {
+							Odelay2 = 0;
 							supplies->selectedHotbarSlot = n;
 							gm->useItem(*stack);
 							supplies->selectedHotbarSlot = prevSlot;
 							auto notififcation = g_Data.addNotification("", "Queueing");
 							notififcation->duration = 5;
 							break;
-							Odelay2 = 0;
 						}
 					}
 				}
