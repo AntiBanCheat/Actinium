@@ -781,7 +781,7 @@ void DrawUtils::drawBetter2D(C_Entity* ent, float lineWidth) {
 		refdef->OWorldToScreen(origin, corners[3], corners2d[3], fov, screenSize)) {
 		float length = (corners2d[1].x - corners2d[0].x) / 10.f;
 
-		float t = 0.3f;
+		float t = 0.2f;
 		DrawUtils::drawLine(corners2d[0], corners2d[1], t);
 		DrawUtils::drawLine(corners2d[0], corners2d[2], t);
 		DrawUtils::drawLine(corners2d[3], corners2d[1], t);
