@@ -44,7 +44,7 @@ void DebugMenu::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 	string pitch = "Pitch: " + to_string(player->pitch);
 	string position = "XYZ: " + to_string((int)floorf(pos->x)) + " / " + to_string((int)floorf(pos->y)) + " / " + to_string((int)floorf(pos->z));
 	string fps = to_string(g_Data.getFPS()) + " fps";
-
+	string timer = "Timer: " + to_string(*g_Data.getClientInstance()->minecraft->timer);
 	string speedStr = "Speed: " + float2str(g_Data.maxSpeed, 3) + " / " + float2str(g_Data.minSpeed, 3) + " avg " + float2str(g_Data.avgSpeed, 3);
 	string textStr[] = {
 		"Minecraft 1.18.12 (" + (interfaceMod->versionStr + " / Actinium)"),
@@ -57,7 +57,8 @@ void DebugMenu::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 		bodyyaw,
 		size,
 		realSize,
-		speedStr
+		speedStr,
+		timer
 	};
 	int yOffset = 0;
 	for (string str : textStr) {
