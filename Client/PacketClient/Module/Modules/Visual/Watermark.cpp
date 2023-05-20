@@ -69,8 +69,10 @@ void Watermark::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 		float flaot = DrawUtils::getTextWidth(&idk, scale) + 8.F;
 		float te = DrawUtils::getTextWidth(&sense, scale) + 8.f;
 		vec4_t skeetRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
+		vec4_t skeetRect2 = vec4_t(skeetRect.x + 3, skeetRect.y + 1, skeetRect.z - 3, skeetRect.w - 1);
 		vec4_t simpleRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
 		vec4_t newRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
+		vec4_t newRect2 = vec4_t(newRect.x + 3, newRect.y + 1, newRect.z - 3, newRect.w - 1);
 		vec4_t idkRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
 		vec4_t newRectTop = vec4_t(newRect.x, newRect.y - 2, newRect.z, newRect.y);
 		vec4_t RadiumRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + (textHeight * 2) + (textPadding * 4));
@@ -87,6 +89,7 @@ void Watermark::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 		case 1: // New
 			DrawUtils::fillRoundRectangle(newRect, MC_Color(0, 0, 0, opacity), false);
 			DrawUtils::fillRectangleA(newRectTop, interfaceColor);
+			DrawUtils::drawGlow(newRect2, MC_Color(0, 0, 0), 0.05, 15, 4);
 			DrawUtils::drawText(vec2_t(newRect.x + (textPadding * 3), newRect.y + (textPadding * 3)), &newText, interfaceColor, scale, 1, true);
 			break;
 		case 2: // Weird
@@ -98,6 +101,7 @@ void Watermark::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			DrawUtils::fillRectangle(skeetRect, MC_Color(27, 27, 27), 1);
 			DrawUtils::drawRectangle(skeetRect, MC_Color(57, 57, 57), 1, 2);
 			DrawUtils::drawText(vec2_t(skeetRect.x + (textPadding * 2) + 4.f, skeetRect.y + (textPadding * 2)), &t, MC_Color(255, 255, 255), scale, 1, true);
+			DrawUtils::drawGlow(skeetRect2, MC_Color(0, 0, 0), 0.05, 15, 4);
 			DrawUtils::drawGradientText(vec2_t(skeetRect.x + te + (textPadding * 2) + 4.f, skeetRect.y + (textPadding * 2)), &sense, scale, 1, true);
 			break;
 		}
