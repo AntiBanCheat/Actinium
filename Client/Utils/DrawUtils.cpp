@@ -463,7 +463,7 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 		fillRoundRectangle(rectPos, MC_Color(0, 0, 0, nametagsMod->opacity), false);
 		if (nametagsMod->health) {
 			float health = ent->getHealth();
-			subRectPos.z = (textPos.x + ((textWidth) / 20) * health) * 1.01;
+			subRectPos.z = textPos.x + ((textWidth) / 20) * health;
 			fillRectangle(subRectPos, i, 1.f);
 		}
 		drawText(textPos, &text, MC_Color(255, 255, 255), textSize, 1.f, true);
