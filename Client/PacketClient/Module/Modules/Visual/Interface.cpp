@@ -45,7 +45,7 @@ void Interface::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 	auto player = g_Data.getLocalPlayer();
 	if (player == nullptr) return;
-	versionStr = "Beta Build 2";
+	versionStr = "Beta Build 3";
 	auto clickGUI = moduleMgr->getModule<ClickGUIMod>();
 
 	static int index = 0;
@@ -80,6 +80,8 @@ void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 
 			float len = DrawUtils::getTextWidth(&releaseStr, 1) + 6.5;
 			vec4_t fpsRectPos = vec4_t(releaseX, releaseY + 7, len + releaseX, releaseY + 20);
+			vec4_t fpsRectPos2 = vec4_t(fpsRectPos.x + 4, fpsRectPos.y + 2, fpsRectPos.z - 4, fpsRectPos.w - 2);
+			if (opacity > 0) DrawUtils::drawGlow(fpsRectPos2, MC_Color(0, 0, 0), 0.05, 15, 4);
 			DrawUtils::fillRoundRectangle(fpsRectPos, MC_Color(0, 0, 0, opacity), false);
 			DrawUtils::drawGradientText(vec2_t(fpsRectPos.x + 3, fpsRectPos.y + 3.5), &releaseStr, 1, 1, true);
 		}
@@ -104,6 +106,8 @@ void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 				float lFPS = DrawUtils::getTextWidth(&fpsText, 1) + 6.5;
 				vec4_t fpsRectPos = vec4_t(fpsX, fpsY + 7, lFPS + fpsX, fpsY + 20);
 				vec2_t fpsTextPos = vec2_t(fpsRectPos.x + 3, fpsRectPos.y + 3.5);
+				vec4_t fpsRectPos2 = vec4_t(fpsRectPos.x + 4, fpsRectPos.y + 2, fpsRectPos.z - 4, fpsRectPos.w - 2);
+				if (opacity > 0) DrawUtils::drawGlow(fpsRectPos2, MC_Color(0, 0, 0), 0.05, 15, 4);
 				DrawUtils::drawGradientText(fpsTextPos, &fpsText, 1, 1, true);
 				DrawUtils::fillRoundRectangle(fpsRectPos, MC_Color(0, 0, 0, opacity), false);
 			}
@@ -115,6 +119,8 @@ void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 				float lSpeed = DrawUtils::getTextWidth(&speedText, 1) + 6.5;
 				vec4_t speedRectPos = vec4_t(bpsX, bpsY + 6, lSpeed + bpsX, bpsY + 20);
 				vec2_t speedPos = vec2_t(speedRectPos.x + 3, speedRectPos.y + 3.5);
+				vec4_t speedRectPos2 = vec4_t(speedRectPos.x + 4, speedRectPos.y + 2, speedRectPos.z - 4, speedRectPos.w - 2);
+				if (opacity > 0) DrawUtils::drawGlow(speedRectPos2, MC_Color(0, 0, 0), 0.05, 15, 4);
 				DrawUtils::drawGradientText(speedPos, &speedText, 1, 1, true);
 				DrawUtils::fillRoundRectangle(speedRectPos, MC_Color(0, 0, 0, opacity), false);
 			}
@@ -123,10 +129,12 @@ void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			if (position)
 			{
 				vec3_t* currPos = g_Data.getLocalPlayer()->getPos();
-				std::string position = "Position: " + std::to_string((int)floorf(currPos->x)) + " " + std::to_string((int)floorf(currPos->y)) + " " + std::to_string((int)floorf(currPos->z));
+				std::string position = "XYZ: " + std::to_string((int)floorf(currPos->x)) + " " + std::to_string((int)floorf(currPos->y)) + " " + std::to_string((int)floorf(currPos->z));
 				float lPos = DrawUtils::getTextWidth(&position, 1) + 6.5;
 				vec4_t rectPos = vec4_t(posX, posY + 6, lPos + posX, posY + 20);
 				vec2_t textPos = vec2_t(rectPos.x + 3, rectPos.y + 3);
+				vec4_t rectPos2 = vec4_t(rectPos.x + 4, rectPos.y + 2, rectPos.z - 4, rectPos.w - 2);
+				if (opacity > 0) DrawUtils::drawGlow(rectPos2, MC_Color(0, 0, 0), 0.05, 15, 4);
 				DrawUtils::drawGradientText(textPos, &position, 1, 1, true);
 				DrawUtils::fillRoundRectangle(vec4_t(posX, posY + 6, lPos + posX, posY + 20), MC_Color(0, 0, 0, opacity), false);
 			}
