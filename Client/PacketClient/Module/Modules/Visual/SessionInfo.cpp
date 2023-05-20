@@ -7,6 +7,10 @@ SessionInfo::SessionInfo() : IModule(0, Category::VISUAL, "Displays the SessionI
 	registerEnumSetting("Theme", &mode, 0);
 	mode.addEntry("Packet", 0);
 	mode.addEntry("Tenacity", 1);
+	registerEnumSetting("Glow", &glowmode, 0);
+	glowmode.addEntry("Shadow", 0);
+	glowmode.addEntry("Color", 1);
+	glowmode.addEntry("None", 2);
 	registerBoolSetting("Outline", &outline, outline);
 	registerIntSetting("Opacity", &opacity, opacity, 0, 255);
 	shouldHide = true;
@@ -39,14 +43,24 @@ void SessionInfo::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 	if (player == nullptr) return;
 
 	static auto clickGUI = moduleMgr->getModule<ClickGUIMod>();
+	static auto inter = moduleMgr->getModule<Interface>();
 
 	if (g_Data.canUseMoveKeys() && !clickGUI->hasOpenedGUI) {
 		auto interfaceColor = ColorUtil::interfaceColor(1);
 		string title = "Statistics";
 		string title2 = string(BOLD) + "Statistics";
 		aidsLen = DrawUtils::getTextWidth(&string("Games Played: 0          "));
-		vec4_t rectPos = vec4_t(siX, siY, siX + aidsLen, siY + 55);
+		vec4_t rectPos;
+		if (inter->Fonts.selected == 1)
+		{
+			rectPos = vec4_t(siX, siY, siX + aidsLen + 35, siY + 55);
+		}
+		else
+		{
+			rectPos = vec4_t(siX, siY, siX + aidsLen, siY + 55);
+		}
 		vec4_t rectPos2 = vec4_t(20, 20, 30, 30);
+		vec4_t rectPos3 = vec4_t(rectPos.x + 3, rectPos.y + 1, rectPos.z - 3, rectPos.w - 1);
 		vec4_t linePos = vec4_t(rectPos.x + 5, rectPos.y + 10, rectPos.z - 5, rectPos.y + 10.5);
 		string test = to_string(min) + "m " + to_string(sec) + "s";
 		if (hour >= 1) test = to_string(hour) + "h " + test ;
@@ -73,6 +87,16 @@ void SessionInfo::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			DrawUtils::fillRoundRectangle(rectPos, MC_Color(0, 0, 0, opacity), false);
 			if (outline) DrawUtils::drawRoundRectangle(rectPos, interfaceColor, false);
 			DrawUtils::fillRectangleA(linePos, MC_Color(255, 255, 255, 255));
+			switch (glowmode.getSelectedValue()) {
+			case 0:
+				DrawUtils::drawGlow(rectPos3, MC_Color(0, 0, 0), 0.05, 15, 4);
+				break;
+			case 1:
+				DrawUtils::drawGlow(rectPos3, interfaceColor, 0.05, 15, 4);
+				break;
+			case 2:
+				break;
+			}
 			break;
 		case 1: // Tenacity
 			DrawUtils::drawText(vec2_t(rectPos.x + 4, rectPos.y + 44), &kdStr, MC_Color(255, 255, 255), 1, 1, true);
@@ -85,6 +109,16 @@ void SessionInfo::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			DrawUtils::fillRoundRectangle(rectPos, MC_Color(0, 0, 0, opacity), true);
 			if (outline) DrawUtils::drawRoundRectangle(rectPos, !clickGUI->hasOpenedGUI ? interfaceColor : MC_Color(255, 255, 255), true);
 			DrawUtils::fillRectangleA(linePos, MC_Color(255, 255, 255, 255));
+			switch (glowmode.getSelectedValue()) {
+			case 0:
+				DrawUtils::drawGlow(rectPos3, MC_Color(0, 0, 0), 0.05, 15, 4);
+				break;
+			case 1:
+				DrawUtils::drawGlow(rectPos3, interfaceColor, 0.05, 15, 4);
+				break;
+			case 2:
+				break;
+			}
 			break;
 		}
 	}
