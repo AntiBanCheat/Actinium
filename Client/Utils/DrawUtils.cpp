@@ -455,6 +455,7 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 		rectPos.z = textPos.x + textWidth + 1.f * textSize;
 		rectPos.w = textPos.y + textHeight + 2.f * textSize;
 		vec4_t subRectPos = rectPos;
+		subRectPos.w = rectPos.w + 1.f;
 		subRectPos.y = subRectPos.w - 1.f * textSize;
 		vec4_t rectPos2 = vec4_t(rectPos.x + 4, rectPos.y + 2, rectPos.z - 4, rectPos.w - 2);
 		auto nametagsMod = moduleMgr->getModule<NameTags>();
@@ -462,7 +463,7 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 		fillRoundRectangle(rectPos, MC_Color(0, 0, 0, nametagsMod->opacity), false);
 		if (nametagsMod->health) {
 			float health = ent->getHealth();
-			subRectPos.z = textPos.x + ((textWidth) / 20) * health;
+			subRectPos.z = (textPos.x + ((textWidth) / 20) * health) * 1.01;
 			fillRectangle(subRectPos, i, 1.f);
 		}
 		drawText(textPos, &text, MC_Color(255, 255, 255), textSize, 1.f, true);
