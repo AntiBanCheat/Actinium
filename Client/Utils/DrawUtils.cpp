@@ -503,7 +503,26 @@ void DrawUtils::drawGlow(const vec4_t& pos, const MC_Color& col, float alpha, in
 		layerPos.y -= layerRadius;
 		layerPos.z += layerRadius;
 		layerPos.w += layerRadius;
+		//DrawUtils::fillRoundRectangle(layerPos, MC_Color(col), false);
 		DrawUtils::drawQuad({ layerPos.x, layerPos.w }, { layerPos.z, layerPos.w }, { layerPos.z, layerPos.y }, { layerPos.x, layerPos.y });
+	}
+}
+
+void DrawUtils::drawRoundGlow(const vec4_t& pos, const MC_Color& col, int layers, float blurRadius, bool rounder) {
+	float dAlpha = col.a / layers;  // kakureiya- no alpha
+	for (int i = 0; i < layers; i++) {
+		float layerAlpha = col.a - dAlpha * i;                   //alpha
+		float layerRadius = blurRadius + (blurRadius / layers) * i;  //range
+		//DrawUtils::setColor(col.r, col.g, col.b, layerAlpha);
+		vec4_t layerPos = pos;//kakudai draw
+		layerPos.x -= layerRadius;
+		layerPos.y -= layerRadius;
+		layerPos.z += layerRadius;
+		layerPos.w += layerRadius;
+		MC_Color layerColor = col;
+		layerColor.a = layerAlpha;
+		DrawUtils::fillRoundRectangle(layerPos, MC_Color(layerColor), rounder);
+		//DrawUtils::drawQuad({ layerPos.x, layerPos.w }, { layerPos.z, layerPos.w }, { layerPos.z, layerPos.y }, { layerPos.x, layerPos.y });
 	}
 }
 void DrawUtils::drawSteve(vec4_t(pos)) {
