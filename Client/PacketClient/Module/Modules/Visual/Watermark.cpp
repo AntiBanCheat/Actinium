@@ -69,10 +69,10 @@ void Watermark::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 		float flaot = DrawUtils::getTextWidth(&idk, scale) + 8.F;
 		float te = DrawUtils::getTextWidth(&sense, scale) + 8.f;
 		vec4_t skeetRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
-		vec4_t skeetRect2 = vec4_t(skeetRect.x + 3, skeetRect.y + 1, skeetRect.z - 3, skeetRect.w - 1);
+		vec4_t skeetRect2 = vec4_t(skeetRect.x + 4, skeetRect.y + 2, skeetRect.z - 4, skeetRect.w - 2);
 		vec4_t simpleRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
 		vec4_t newRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
-		vec4_t newRect2 = vec4_t(newRect.x + 3, newRect.y + 1, newRect.z - 3, newRect.w - 1);
+		vec4_t newRect2 = vec4_t(newRect.x + 4, newRect.y + 2, newRect.z - 4, newRect.w - 2);
 		vec4_t idkRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
 		vec4_t newRectTop = vec4_t(newRect.x, newRect.y - 2, newRect.z, newRect.y);
 		vec4_t RadiumRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + (textHeight * 2) + (textPadding * 4));
