@@ -79,6 +79,7 @@ public:
 	static void fillRectangle(vec4_t pos, const MC_Color col, float alpha);
 	static void fillRectangleA(vec4_t pos, MC_Color col);
 	static void drawGlow(const vec4_t& pos, const MC_Color& col, float alpha, int layers, float blurRadius);
+	static void drawRoundGlow(const vec4_t& pos, const MC_Color& col, int layers, float blurRadius, bool rounder = false);
 	static void drawWarning(vec4_t pos, const MC_Color col, float alpha);
 	static void drawRoundRectangle(vec4_t pos, const MC_Color col, bool rounder);
 	static void drawRoundRectangle2(vec4_t pos, const MC_Color col);
