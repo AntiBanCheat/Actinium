@@ -230,7 +230,7 @@ void Scaffold::onTick(C_GameMode* gm) {
 		if (rundown > 0)
 		{
 			blockBelow.y -= 1;
-			if ((player->velocity.x > 0.06 || player->velocity.x < -0.06) && (player->velocity.z > 0.06 || player->velocity.z < -0.06))
+			//if ((player->velocity.x > 0.06 || player->velocity.x < -0.06) && (player->velocity.z > 0.06 || player->velocity.z < -0.06))
 				buildBlock(blockBelow);
 			blockBelow.y += 1;
 			rundown = 0;
@@ -813,15 +813,15 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			if (totalCount > 99)
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 61 + scX, scY + 16 - county);
-				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 2, (61 + scX) - 4, (scY + 16 - county) - 2);
-				DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0, countopa), 0.05, 15, 4);
+				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (61 + scX) - 4, (scY + 16 - county) - 4);
+				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, true);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), true);
 			}
 			else
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 56 + scX, scY + 16 - county);
-				vec4_t testRect3 = vec4_t((scX) + 4, (scY - county) + 2, (56 + scX) - 4, (scY + 16 - county) - 2);
-				DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0, countopa), 0.05, 15, 4);
+				vec4_t testRect3 = vec4_t((scX) + 4, (scY - county) + 4, (56 + scX) - 4, (scY + 16 - county) - 4);
+				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa/15), 15, 4, true);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), true);
 			}
 			for (int s = 0; s < 9; s++) {
@@ -869,15 +869,15 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			if (totalCount > 99)
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 76 + scX, scY + 16 - county);
-				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 2, (76 + scX) - 4, (scY + 16 - county) - 2);
-				DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0, countopa), 0.05, 15, 4);
+				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (76 + scX) - 4, (scY + 16 - county) - 4);
+				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa/15), 15, 4, false);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), false);
 			}
 			else
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 70 + scX, scY + 16 - county);
-				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 2, (70 + scX) - 4, (scY + 16 - county) - 2);
-				DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0, countopa), 0.05, 15, 4);
+				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (70 + scX) - 4, (scY + 16 - county) - 4);
+				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, false);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), false);
 			}
 			for (int s = 0; s < 9; s++) {
