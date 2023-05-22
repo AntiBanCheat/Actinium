@@ -306,21 +306,18 @@ void Scaffold::onTick(C_GameMode* gm) {
 		}
 	}
 
-	//Celsius
+		//Celsius
 	if (extendType.getSelectedValue() == 0)
 	{
 		currExtend = extend;
 		if (((diagType.getSelectedValue() == 0 || diagType.getSelectedValue() == 1 || diagType.getSelectedValue() == 3 || diagType.getSelectedValue() == 4 || diagType.getSelectedValue() == 5) && !jumping && velocityxz >= 0.01) || groundtime >= 10 || groundtime2 >= 10 || (diagType.getSelectedValue() == 2 && !jumping && velocityxz >= 0.01 && telly2))
 		{
-			//extend
 			int extend2 = currExtend;
 			vec3_t defaultblockBelow = blockBelow;
 			for (int i = 0; i < extend2; i++) {
-				Odelay++;
 				if (Odelay > delay)
 				{
 					if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * i; blockBelow.z += vel.z * i; }
-
 					if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
 					else if (!buildBlock(blockBelow)) {
 						if (velocityxz > 0.f) {  // Are we actually walking?
@@ -336,21 +333,13 @@ void Scaffold::onTick(C_GameMode* gm) {
 				}
 			}
 			blockBelow = defaultblockBelow;
-
 			if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * currExtend; blockBelow.z += vel.z * currExtend; }
-			if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
-			else if (!buildBlock(blockBelow)) {
-				if (velocityxz > 0.f) {  // Are we actually walking?
-					blockBelow.x -= vel.x;
-					blockBelow.z -= vel.z;
-					if (!buildBlock(blockBelow) && g_Data.getLocalPlayer()->isSprinting()) {
-						blockBelow.x += vel.x;
-						blockBelow.z += vel.z;
-						buildBlock(blockBelow);
-					}
-				}
+			if (delay > 0)
+			{
+				if (Odelay < 6 - delay) { if (isBlockReplacable(blockBelow)) predictBlock(blockBelow); }
+				else Odelay = 0;
 			}
-
+			else if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
 		}
 		else
 		{
@@ -360,25 +349,21 @@ void Scaffold::onTick(C_GameMode* gm) {
 				else buildBlock(blockBelow);
 			}
 		}
-
 		oldpos = blockBelow.floor();
 	}
 
 	//Radium
 	if (extendType.getSelectedValue() == 1)
 	{
-		currExtend = extend;
-
+		currExtend = extend + 1.2;
 		if (((diagType.getSelectedValue() == 0 || diagType.getSelectedValue() == 1 || diagType.getSelectedValue() == 3 || diagType.getSelectedValue() == 4 || diagType.getSelectedValue() == 5) && !jumping && velocityxz >= 0.01) || groundtime >= 10 || groundtime2 >= 10 || (diagType.getSelectedValue() == 2 && !jumping && velocityxz >= 0.01 && telly2))
 		{
 			for (int i = 0; i <= currExtend; i++)
 			{
-				Odelay++;
 				if (Odelay > delay)
 				{
 					int tempx = vel.x * i;
 					int tempz = vel.z * i;
-
 					vec3_t temp = blockBelow;
 					temp.x += tempx;
 					temp.z += tempz;
@@ -392,7 +377,6 @@ void Scaffold::onTick(C_GameMode* gm) {
 								skip = true;
 							}
 						}
-
 						if (skip)
 						{
 							clientMessageF("Skipped due same block");
@@ -409,7 +393,6 @@ void Scaffold::onTick(C_GameMode* gm) {
 					Odelay = 0;
 				}
 			}
-
 			placed.clear();
 		}
 		else
@@ -443,29 +426,15 @@ void Scaffold::onTick(C_GameMode* gm) {
 	if (extendType.getSelectedValue() == 2)
 	{
 		currExtend = extend;
-
 		if (((diagType.getSelectedValue() == 0 || diagType.getSelectedValue() == 1 || diagType.getSelectedValue() == 3 || diagType.getSelectedValue() == 4 || diagType.getSelectedValue() == 5) && !jumping && velocityxz >= 0.01) || groundtime >= 10 || groundtime2 >= 10 || (diagType.getSelectedValue() == 2 && !jumping && velocityxz >= 0.01 && telly2))
 		{
-			Odelay++;
-			if (Odelay > delay)
+			if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * currExtend; blockBelow.z += vel.z * currExtend; }
+			if (delay > 0)
 			{
-				if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * currExtend; blockBelow.z += vel.z * currExtend; }
-
-
-				if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
-				else if (!buildBlock(blockBelow)) {
-					if (velocityxz > 0.f) {  // Are we actually walking?
-						blockBelow.x -= vel.x;
-						blockBelow.z -= vel.z;
-						if (!buildBlock(blockBelow) && g_Data.getLocalPlayer()->isSprinting()) {
-							blockBelow.x += vel.x;
-							blockBelow.z += vel.z;
-							buildBlock(blockBelow);
-						}
-					}
-				}
-				Odelay = 0;
+				if (Odelay < 6 - delay) { if (isBlockReplacable(blockBelow)) predictBlock(blockBelow); }
+				else Odelay = 0;
 			}
+			else if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
 		}
 		else
 		{
@@ -475,7 +444,6 @@ void Scaffold::onTick(C_GameMode* gm) {
 				else buildBlock(blockBelow);
 			}
 		}
-
 		oldpos = blockBelow.floor();
 	}
 
@@ -486,16 +454,14 @@ void Scaffold::onTick(C_GameMode* gm) {
 		vec3_t defaultblockBelow = blockBelow;
 		for (int i = 0; i < extend2; i++) {
 			if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * i; blockBelow.z += vel.z * i; }
-
-			if (isBlockReplacable(blockBelow))
+			if (delay > 0)
 			{
-				predictBlock(blockBelow);
+				if (Odelay < 6 - delay) { if (isBlockReplacable(blockBelow)) predictBlock(blockBelow); }
+				else Odelay = 0;
 			}
 		}
-
 		blockBelow = defaultblockBelow;
 		if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * extend; blockBelow.z += vel.z * extend; }
-
 		if (isBlockReplacable(blockBelow)) {
 			predictBlock(blockBelow);
 		}
@@ -815,14 +781,14 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 61 + scX, scY + 16 - county);
 				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (61 + scX) - 4, (scY + 16 - county) - 4);
-				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, true);
+				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, false);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), true);
 			}
 			else
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 56 + scX, scY + 16 - county);
 				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (56 + scX) - 4, (scY + 16 - county) - 4);
-				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, true);
+				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, false);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), true);
 			}
 			for (int s = 0; s < 9; s++) {
