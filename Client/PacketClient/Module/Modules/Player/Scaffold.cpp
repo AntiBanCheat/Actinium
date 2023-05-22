@@ -49,6 +49,7 @@ Scaffold::Scaffold() : IModule(0, Category::PLAYER, "Places blocks under you") {
 	registerBoolSetting("TowerNoMove", &towerOnlyNoMove, towerOnlyNoMove);
 	registerBoolSetting("NoSpeed", &preventkicks, preventkicks);
 	registerBoolSetting("Downwards", &downmode, downmode);
+	registerBoolSetting("AlwaysUnderPlace", &alwaysUnderPlace, alwaysUnderPlace);
 	registerBoolSetting("Spoof", &spoof, spoof);
 	registerIntSetting("Extend", &extend, extend, 0, 15);
 	registerIntSetting("ExtendDelay", &delay, delay, 0, 5);
@@ -230,7 +231,7 @@ void Scaffold::onTick(C_GameMode* gm) {
 		if (rundown > 0)
 		{
 			blockBelow.y -= 1;
-			//if ((player->velocity.x > 0.06 || player->velocity.x < -0.06) && (player->velocity.z > 0.06 || player->velocity.z < -0.06))
+			if (alwaysUnderPlace || ((player->velocity.x > 0.06 || player->velocity.x < -0.06) && (player->velocity.z > 0.06 || player->velocity.z < -0.06)))
 				buildBlock(blockBelow);
 			blockBelow.y += 1;
 			rundown = 0;
@@ -820,8 +821,8 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			else
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 56 + scX, scY + 16 - county);
-				vec4_t testRect3 = vec4_t((scX) + 4, (scY - county) + 4, (56 + scX) - 4, (scY + 16 - county) - 4);
-				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa/15), 15, 4, true);
+				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (56 + scX) - 4, (scY + 16 - county) - 4);
+				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, true);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), true);
 			}
 			for (int s = 0; s < 9; s++) {
@@ -870,7 +871,7 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 76 + scX, scY + 16 - county);
 				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (76 + scX) - 4, (scY + 16 - county) - 4);
-				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa/15), 15, 4, false);
+				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, false);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), false);
 			}
 			else

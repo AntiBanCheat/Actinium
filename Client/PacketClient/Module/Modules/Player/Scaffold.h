@@ -87,6 +87,7 @@ public:
 	bool lockY = false;
 	bool canspoof = false;
 	bool downmode = false;
+	bool alwaysUnderPlace = true;
 	bool spoof = true;
 
 	std::vector<vec3_t> placed;
