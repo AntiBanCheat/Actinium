@@ -5937,7 +5937,7 @@ void ClickGui::renderNewCategory(Category category) {
 	//DrawUtils::drawRoundRectangle(vec4_t(windowSize2.x / 2 - (35 * yoko), windowSize2.y / 2 - (8 * tate), windowSize2.x / 2 - (35 * yoko) + 1 + DrawUtils::getTextWidth(&ltx, 1.f, Fonts::SMOOTH), windowSize2.y / 2 + (8 * tate)), MC_Color(255, 255, 255),true);
 	zrs = 25;
 	zrsx = 4;
-	DrawUtils::drawText(vec2_t(windowSize2.x / 2 - (35 * yoko) + 1 + zrsx - 1, windowSize2.y / 2 - (8 * tate) + 05), &string("Radium"), MC_Color(0, 170, 0), 2.f, 1.f, true);
+	DrawUtils::drawText(vec2_t(windowSize2.x / 2 - (35 * yoko) + 1 + zrsx - 1, windowSize2.y / 2 - (8 * tate) + 05), &string("Actinium"), MC_Color(0, 170, 0), 2.f, 1.f, true);
 	DrawUtils::drawText(vec2_t(windowSize2.x / 2 - (35 * yoko) + 1 + zrsx, windowSize2.y / 2 - (8 * tate) + 00 + zrs), &string("   Combat"), MC_Color(255, 255, 255));
 	DrawUtils::drawText(vec2_t(windowSize2.x / 2 - (35 * yoko) + 1 + zrsx, windowSize2.y / 2 - (8 * tate) + 10 + zrs), &string("   Render"), MC_Color(255, 255, 255));
 	DrawUtils::drawText(vec2_t(windowSize2.x / 2 - (35 * yoko) + 1 + zrsx, windowSize2.y / 2 - (8 * tate) + 20 + zrs), &string("   Movement"), MC_Color(255, 255, 255));
