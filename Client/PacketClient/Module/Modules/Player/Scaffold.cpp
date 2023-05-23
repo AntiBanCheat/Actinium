@@ -314,56 +314,32 @@ void Scaffold::onTick(C_GameMode* gm) {
 		{
 			int extend2 = currExtend;
 			vec3_t defaultblockBelow = blockBelow;
+			for (int i = 0; i < extend2; i++) {
+				if (Odelay > delay)
+				{
+					if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * i; blockBelow.z += vel.z * i; }
+					if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
+					else if (!buildBlock(blockBelow)) {
+						if (velocityxz > 0.f) {  // Are we actually walking?
+							blockBelow.x -= vel.x;
+							blockBelow.z -= vel.z;
+							if (!buildBlock(blockBelow) && g_Data.getLocalPlayer()->isSprinting()) {
+								blockBelow.x += vel.x;
+								blockBelow.z += vel.z;
+								buildBlock(blockBelow);
+							}
+						}
+					}
+				}
+			}
 			blockBelow = defaultblockBelow;
 			if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * currExtend; blockBelow.z += vel.z * currExtend; }
 			if (delay > 0)
 			{
-				if (Odelay < 6 - delay)
-				{
-					for (int i = 0; i < extend2; i++) {
-						if (Odelay > delay)
-						{
-							if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * i; blockBelow.z += vel.z * i; }
-							if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
-							else if (!buildBlock(blockBelow)) {
-								if (velocityxz > 0.f) {  // Are we actually walking?
-									blockBelow.x -= vel.x;
-									blockBelow.z -= vel.z;
-									if (!buildBlock(blockBelow) && g_Data.getLocalPlayer()->isSprinting()) {
-										blockBelow.x += vel.x;
-										blockBelow.z += vel.z;
-										buildBlock(blockBelow);
-									}
-								}
-							}
-						}
-					}
-					if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
-				}
+				if (Odelay < 6 - delay) { if (isBlockReplacable(blockBelow)) predictBlock(blockBelow); }
 				else Odelay = 0;
 			}
-			else
-			{
-				for (int i = 0; i < extend2; i++) {
-					if (Odelay > delay)
-					{
-						if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * i; blockBelow.z += vel.z * i; }
-						if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
-						else if (!buildBlock(blockBelow)) {
-							if (velocityxz > 0.f) {  // Are we actually walking?
-								blockBelow.x -= vel.x;
-								blockBelow.z -= vel.z;
-								if (!buildBlock(blockBelow) && g_Data.getLocalPlayer()->isSprinting()) {
-									blockBelow.x += vel.x;
-									blockBelow.z += vel.z;
-									buildBlock(blockBelow);
-								}
-							}
-						}
-					}
-				}
-				if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
-			}
+			else if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
 		}
 		else
 		{
