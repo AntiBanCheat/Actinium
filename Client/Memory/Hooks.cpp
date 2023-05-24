@@ -618,7 +618,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 			string fix = gray + "[*] " + string(RESET);
 
 			string changeLog = (gray + bold + string("ActiniumClient-Release") + ": \n" + RESET +
-				gray + bold + "Beta Build 3: \n" + RESET +
+				gray + bold + "Beta Build 4: \n" + RESET +
 				gray + bold + "Credits \n" + RESET +
 				fix + "Packet \n" +
 				fix + "Deq \n" +
@@ -737,7 +737,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 					DrawUtils::drawText(vec2_t(textPos.x, textPos.y), &textStr, MC_Color(255, 255, 255), 0.8, 1, true);
 					auto n = moduleMgr->getModule<Notifications>();
 					vec4_t testRect3 = vec4_t((rect.x) + 4, (rect.y) + 2, (rect.z) - 4, (rect.w) - 2);
-					DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0), 0.05, 15, 4);
+					if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
 					DrawUtils::fillRoundRectangle(rect, MC_Color(notification->colorR, notification->colorG, notification->colorB, notificationsMod->opacity), false);
 					DrawUtils::drawBottomLine(vec4_t{ rect.x + 1.5f, rect.y, rect.z - duration, rect.w + 0.5f }, MC_Color(255, 255, 255), 1);
 
@@ -824,9 +824,9 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 
 					DrawUtils::drawText(vec2_t(textPos.x, textPos.y), &substring, MC_Color(255, 255, 255), 1, 1, 1);
 					vec4_t testRect3 = vec4_t((rect.x)+4, (rect.y) + 2, (rect.z + duration) - 4, (rect.w) - 2);
-					DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0), 0.05, 15, 4);
+					if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
 					vec4_t testRect4 = vec4_t((rect.x) + 4, (rect.y) + 2, (rect.z - duration) - 4, (rect.w) - 2);
-					DrawUtils::drawGlow(testRect4, rainbow, 0.05, 15, 4);
+					if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(testRect4, rainbow, 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
 					DrawUtils::fillRoundRectangle(rect, MC_Color(0.f, 0.f, 0.f, notificationsMod->opacity), true);
 					DrawUtils::fillRoundRectangle(vec4_t{ rect.x, rect.y, rect.z - duration, rect.w }, rainbow, true);
 				}
