@@ -41,10 +41,20 @@ void BlockESP::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 					bool gRender = false;
 					bool iRender = false;
 
+					vec3_ti AirCheckPos;
+					bool isSafe = false;
+					AirCheckPos = blockPos;
+					if (player->region->getBlock(AirCheckPos.add(0, 1, 0))->toLegacy()->material->isReplaceable) isSafe = true;
+					if (player->region->getBlock(AirCheckPos.add(0, -1, 0))->toLegacy()->blockId == 0) isSafe = true;
+					if (player->region->getBlock(AirCheckPos.add(1, 0, 0))->toLegacy()->blockId == 0) isSafe = true;
+					if (player->region->getBlock(AirCheckPos.add(-1, 0, 0))->toLegacy()->blockId == 0) isSafe = true;
+					if (player->region->getBlock(AirCheckPos.add(0, 0, 1))->toLegacy()->blockId == 0) isSafe = true;
+					if (player->region->getBlock(AirCheckPos.add(0, 0, -1))->toLegacy()->blockId == 0) isSafe = true;
+
 					if (id == 56 && dOre) dRender = true;   // Diamond
 					if (id == 129 && eOre) eRender = true;  // Emerald
-					if (id == 73 && rOre) rRender = true;   // Redstone
-					if (id == 74 && rOre) rRender = true;   // Redstone
+					if (id == 73 && rOre && isSafe) rRender = true;   // Redstone
+					if (id == 74 && rOre && isSafe) rRender = true;   // Redstone
 					if (id == 14 && gOre) gRender = true;   // Gold
 					if (id == 15 && iOre) iRender = true;   // Iron
 
