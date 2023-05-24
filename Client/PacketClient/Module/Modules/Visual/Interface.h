@@ -19,6 +19,7 @@ public:
 	bool tabGUI = false;
 	int opacity = 150;
 	int coloropacity = 255;
+	int glowlayers = 12;
 	bool info = true;
 	bool ping = true;
 	bool fps = true;
