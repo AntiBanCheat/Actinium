@@ -14,14 +14,14 @@ Interface::Interface() : IModule(0, Category::VISUAL, "Displays the HUD") {
 	registerBoolSetting("ArmorHUD", &armorHUD, armorHUD);
 	registerBoolSetting("Release", &release, release);
 	registerBoolSetting("Info", &info, info);
-	//registerBoolSetting("Ping", &ping, ping);
 	registerBoolSetting("FPS", &fps, fps);
 	registerBoolSetting("Speed", &speed, speed);
 	registerBoolSetting("Position", &position, position);
 	registerIntSetting("Opacity", &opacity, opacity, 0, 255);
+	registerIntSetting("ColorOpacity", &coloropacity, coloropacity, 0, 255);
+	registerIntSetting("GlowQuality", &glowlayers, glowlayers, 0, 30);
 	registerFloatSetting("Saturation", &saturation, saturation, 0.f, 1.f);
 	registerIntSetting("Seperation", &spacing, spacing, 5, 500);
-
 	registerFloatSetting("Red", &r, r, 0.f, 255.f);
 	registerFloatSetting("Green", &g, g, 0.f, 255.f);
 	registerFloatSetting("Blue", &b, b, 0.f, 255.f);
@@ -45,7 +45,7 @@ void Interface::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 	auto player = g_Data.getLocalPlayer();
 	if (player == nullptr) return;
-	versionStr = "Beta Build 3";
+	versionStr = "Beta Build 4";
 	auto clickGUI = moduleMgr->getModule<ClickGUIMod>();
 
 	static int index = 0;
@@ -81,7 +81,7 @@ void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			float len = DrawUtils::getTextWidth(&releaseStr, 1) + 6.5;
 			vec4_t fpsRectPos = vec4_t(releaseX, releaseY + 7, len + releaseX, releaseY + 20);
 			vec4_t fpsRectPos2 = vec4_t(fpsRectPos.x + 4, fpsRectPos.y + 2, fpsRectPos.z - 4, fpsRectPos.w - 2);
-			if (opacity > 0) DrawUtils::drawRoundGlow(fpsRectPos2, MC_Color(0, 0, 0, 100 / 15), 15, 4);
+			if (glowlayers > 0 && opacity > 0) DrawUtils::drawRoundGlow(fpsRectPos2, MC_Color(0, 0, 0, 100 / glowlayers), glowlayers, 4);
 			DrawUtils::fillRoundRectangle(fpsRectPos, MC_Color(0, 0, 0, opacity), false);
 			DrawUtils::drawGradientText(vec2_t(fpsRectPos.x + 3, fpsRectPos.y + 3.5), &releaseStr, 1, 1, true);
 		}
@@ -107,7 +107,7 @@ void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 				vec4_t fpsRectPos = vec4_t(fpsX, fpsY + 7, lFPS + fpsX, fpsY + 20);
 				vec2_t fpsTextPos = vec2_t(fpsRectPos.x + 3, fpsRectPos.y + 3.5);
 				vec4_t fpsRectPos2 = vec4_t(fpsRectPos.x + 4, fpsRectPos.y + 2, fpsRectPos.z - 4, fpsRectPos.w - 2);
-				if (opacity > 0) DrawUtils::drawRoundGlow(fpsRectPos2, MC_Color(0, 0, 0, 100 / 15), 15, 4);
+				if (glowlayers > 0 && opacity > 0) DrawUtils::drawRoundGlow(fpsRectPos2, MC_Color(0, 0, 0, 100 / glowlayers), glowlayers, 4);
 				DrawUtils::drawGradientText(fpsTextPos, &fpsText, 1, 1, true);
 				DrawUtils::fillRoundRectangle(fpsRectPos, MC_Color(0, 0, 0, opacity), false);
 			}
@@ -120,7 +120,7 @@ void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 				vec4_t speedRectPos = vec4_t(bpsX, bpsY + 6, lSpeed + bpsX, bpsY + 20);
 				vec2_t speedPos = vec2_t(speedRectPos.x + 3, speedRectPos.y + 3.5);
 				vec4_t speedRectPos2 = vec4_t(speedRectPos.x + 4, speedRectPos.y + 2, speedRectPos.z - 4, speedRectPos.w - 2);
-				if (opacity > 0) DrawUtils::drawRoundGlow(speedRectPos2, MC_Color(0, 0, 0, 100/15), 15, 4);
+				if (glowlayers > 0 && opacity > 0) DrawUtils::drawRoundGlow(speedRectPos2, MC_Color(0, 0, 0, 100 / glowlayers), glowlayers, 4);
 				DrawUtils::drawGradientText(speedPos, &speedText, 1, 1, true);
 				DrawUtils::fillRoundRectangle(speedRectPos, MC_Color(0, 0, 0, opacity), false);
 			}
@@ -134,7 +134,7 @@ void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 				vec4_t rectPos = vec4_t(posX, posY + 6, lPos + posX, posY + 20);
 				vec2_t textPos = vec2_t(rectPos.x + 3, rectPos.y + 3);
 				vec4_t rectPos2 = vec4_t(rectPos.x + 4, rectPos.y + 2, rectPos.z - 4, rectPos.w - 2);
-				if (opacity > 0) DrawUtils::drawRoundGlow(rectPos2, MC_Color(0, 0, 0, 100 / 15), 15, 4);
+				if (glowlayers > 0 && opacity > 0) DrawUtils::drawRoundGlow(rectPos2, MC_Color(0, 0, 0, 100 / glowlayers), glowlayers, 4);
 				DrawUtils::drawGradientText(textPos, &position, 1, 1, true);
 				DrawUtils::fillRoundRectangle(vec4_t(posX, posY + 6, lPos + posX, posY + 20), MC_Color(0, 0, 0, opacity), false);
 			}
