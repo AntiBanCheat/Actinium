@@ -781,14 +781,14 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 61 + scX, scY + 16 - county);
 				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (61 + scX) - 4, (scY + 16 - county) - 4);
-				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, false);
+				if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, 100 / moduleMgr->getModule<Interface>()->glowlayers), moduleMgr->getModule<Interface>()->glowlayers, 4);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), true);
 			}
 			else
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 56 + scX, scY + 16 - county);
 				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (56 + scX) - 4, (scY + 16 - county) - 4);
-				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, false);
+				if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, 100 / moduleMgr->getModule<Interface>()->glowlayers), moduleMgr->getModule<Interface>()->glowlayers, 4);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), true);
 			}
 			for (int s = 0; s < 9; s++) {
@@ -837,14 +837,14 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 76 + scX, scY + 16 - county);
 				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (76 + scX) - 4, (scY + 16 - county) - 4);
-				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, false);
+				if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, 100 / moduleMgr->getModule<Interface>()->glowlayers), moduleMgr->getModule<Interface>()->glowlayers, 4);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), false);
 			}
 			else
 			{
 				vec4_t testRect2 = vec4_t(scX, scY - county, 70 + scX, scY + 16 - county);
 				vec4_t testRect3 = vec4_t((scX)+4, (scY - county) + 4, (70 + scX) - 4, (scY + 16 - county) - 4);
-				DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, countopa / 15), 15, 4, false);
+				if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawRoundGlow(testRect3, MC_Color(0, 0, 0, 100 / moduleMgr->getModule<Interface>()->glowlayers), moduleMgr->getModule<Interface>()->glowlayers, 4);
 				DrawUtils::fillRoundRectangle(testRect2, MC_Color(0, 0, 0, countopa), false);
 			}
 			for (int s = 0; s < 9; s++) {
