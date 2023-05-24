@@ -54,7 +54,6 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new Interface()));
 		moduleList.push_back(std::shared_ptr<IModule>(new TargetHUD()));
 		moduleList.push_back(std::shared_ptr<IModule>(new Watermark()));
-		//moduleList.push_back(std::shared_ptr<IModule>(new SlowSwing())); mazide kore tukuttayatu sine koitunoseide birudo dekinai
 		moduleList.push_back(std::shared_ptr<IModule>(new Ambience()));
 		moduleList.push_back(std::shared_ptr<IModule>(new BlockESP()));
 		moduleList.push_back(std::shared_ptr<IModule>(new ChestESP()));
@@ -110,6 +109,7 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new XP()));
 
 		// Exploit
+		moduleList.push_back(std::shared_ptr<IModule>(new DeviceSpoofer()));
 		moduleList.push_back(std::shared_ptr<IModule>(new PacketMine()));
 		moduleList.push_back(std::shared_ptr<IModule>(new PacketMultiplier()));
 		moduleList.push_back(std::shared_ptr<IModule>(new HiveOnGround()));

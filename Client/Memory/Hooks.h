@@ -133,6 +133,7 @@ private:
 	static void Actor_rotation(C_Entity* _this, vec2_t& angle);
 	static int ForceThirdPersonLol(__int64 a1);
 	static void ItemUseInventoryTransaction__write(CItemUseInventoryTransaction* a1, __int64 a2);
+	static __int64 ClientInstance__getRandomClientId(C_ClientInstance*);
 
 	std::unique_ptr<FuncHook> setPosHook;
 	std::unique_ptr<FuncHook> Actor__baseTick; 
@@ -183,6 +184,7 @@ private:
 	std::unique_ptr<FuncHook> InventoryTransactionManager__addActionHook;
 	std::unique_ptr<FuncHook> LevelRendererPlayer__renderNameTagsHook;
 	std::unique_ptr<FuncHook> ItemUseInventoryTransaction__writeHook;
+	std::unique_ptr<FuncHook> ClientInstance__getRandomClientIdHook;
 };
 
 extern Hooks g_Hooks;

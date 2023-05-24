@@ -260,6 +260,7 @@
     <ClCompile Include="PacketClient\Config\SettingManager.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Combat\Wtap.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Combat\AutoAim.cpp" />
+    <ClCompile Include="PacketClient\Module\Modules\Exploit\DeviceSpoofer.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Exploit\FastUse.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Exploit\NoLagBack.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Exploit\HiveOnGround.cpp" />
@@ -467,6 +468,7 @@
     <ClInclude Include="PacketClient\Config\SettingManager.h" />
     <ClInclude Include="PacketClient\Module\Modules\Combat\Wtap.h" />
     <ClInclude Include="PacketClient\Module\Modules\Combat\AutoAim.h" />
+    <ClInclude Include="PacketClient\Module\Modules\Exploit\DeviceSpoofer.h" />
     <ClInclude Include="PacketClient\Module\Modules\Exploit\FastUse.h" />
     <ClInclude Include="PacketClient\Module\Modules\Exploit\FastXPTwo.h" />
     <ClInclude Include="PacketClient\Module\Modules\Exploit\NoLagBack.h" />

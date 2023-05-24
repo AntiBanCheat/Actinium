@@ -130,6 +130,15 @@ void Hooks::Init() {
 
 			g_Hooks.ItemUseInventoryTransaction__writeHook = make_unique<FuncHook>(vtable[2], Hooks::ItemUseInventoryTransaction__write);
 		}
+
+		// ClientInstance::vtable
+		{
+			uintptr_t sigOffset = FindSignature("48 8D 05 ?? ?? ?? ?? 48 89 06 48 8D 05 ?? ?? ?? ?? 48 89 46 ?? 48 8D 05 ?? ?? ?? ?? 48 89 86");
+			int offset = *reinterpret_cast<int*>(sigOffset + 3);
+			uintptr_t** vtable = reinterpret_cast<uintptr_t**>(sigOffset + offset + 7);
+
+			g_Hooks.ClientInstance__getRandomClientIdHook = make_unique<FuncHook>(vtable[130], Hooks::ClientInstance__getRandomClientId);
+		}
 	}
 
 	// Signatures
@@ -1908,4 +1917,12 @@ void Hooks::ItemUseInventoryTransaction__write(CItemUseInventoryTransaction* a1,
 
 	static auto func = g_Hooks.ItemUseInventoryTransaction__writeHook->GetFastcall<void, CItemUseInventoryTransaction*, __int64>();
 	func(a1, a2);
+}
+
+__int64 Hooks::ClientInstance__getRandomClientId(C_ClientInstance* ci) {
+	static auto spoofer = moduleMgr->getModule<DeviceSpoofer>();
+	if (spoofer->isEnabled())
+		return std::rand();
+	static auto func = g_Hooks.ClientInstance__getRandomClientIdHook->GetFastcall<__int64, C_ClientInstance*>();
+	return func(ci);
 }
