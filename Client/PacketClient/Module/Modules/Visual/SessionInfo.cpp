@@ -111,10 +111,10 @@ void SessionInfo::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			DrawUtils::fillRectangleA(linePos, MC_Color(255, 255, 255, 255));
 			switch (glowmode.getSelectedValue()) {
 			case 0:
-				DrawUtils::drawGlow(rectPos3, MC_Color(0, 0, 0), 0.05, 15, 4);
+				if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(rectPos3, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
 				break;
 			case 1:
-				DrawUtils::drawGlow(rectPos3, interfaceColor, 0.05, 15, 4);
+				if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(rectPos3, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
 				break;
 			case 2:
 				break;
