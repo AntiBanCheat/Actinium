@@ -88,7 +88,7 @@ public:
 	bool canspoof = false;
 	bool downmode = false;
 	bool alwaysUnderPlace = true;
-	bool spoof = true;
+	bool spoof = false;
 
 	std::vector<vec3_t> placed;
 	std::vector<vec3_ti> highlightCity;
