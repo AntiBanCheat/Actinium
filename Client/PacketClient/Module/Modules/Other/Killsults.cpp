@@ -108,11 +108,11 @@ string sigmaMessages[2] = {
 };
 
 string japaneseMessages[14] = {
-	u8"Aeolus勢ざぁーこ♡ ",
+	u8"Nexus勢ざぁーこ♡ ",
 	u8"ざぁーーこ！♡ ",
-	u8"Zephyrとか使ってる情弱居るんだぁ♡ ",
+	u8"Nexusとか使ってる情弱居るんだぁ♡ ",
 	u8"ざぁこ♡ ",
-	u8"Aeolus使ってるとか情けないね〜♡ ",
+	u8"Nexus使ってるとか情けないね〜♡ ",
 	u8"レポートしてやってもいいのよ？ ",
 	u8"すく死んじゃったね♡ ",
 	u8"Hiveのざぁこ♡ ",
