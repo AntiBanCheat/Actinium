@@ -159,7 +159,7 @@ void Scaffold::onTick(C_GameMode* gm) {
 		fakespoofticks++;
 		if (1 < fakespoofticks) canspoof = true;
 	}
-
+        Odelay++;
 	if (!jumping || !foundBlock)
 		g_Data.getClientInstance()->minecraft->setTimerSpeed(timer);
 
