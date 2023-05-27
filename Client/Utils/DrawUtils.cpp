@@ -438,6 +438,7 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 	static auto nameTagsMod = moduleMgr->getModule<NameTags>();
 	vec2_t textPos;
 	vec4_t rectPos;
+	vec4_t rectPos2;
 	std::string text = ent->getNameTag()->getText();
 	text = Utils::sanitize(text);
 	text = text.substr(0, text.find('\n'));
@@ -454,10 +455,13 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 		rectPos.y = textPos.y - 1.f * textSize;
 		rectPos.z = textPos.x + textWidth + 1.f * textSize;
 		rectPos.w = textPos.y + textHeight + 2.f * textSize;
+		rectPos2.x = (textPos.x - 1.f * textSize) + 4;
+		rectPos2.y = (textPos.y - 1.f * textSize) + 2;
+		rectPos2.z = (textPos.x + textWidth + 1.f * textSize) - 4;
+		rectPos2.w = (textPos.y + textHeight + 2.f * textSize) - 2;
 		vec4_t subRectPos = rectPos;
 		subRectPos.w = rectPos.w + 1.f;
 		subRectPos.y = subRectPos.w - 1.f * textSize;
-		vec4_t rectPos2 = vec4_t(rectPos.x + 4, rectPos.y + 2, rectPos.z - 4, rectPos.w - 2);
 		auto nametagsMod = moduleMgr->getModule<NameTags>();
 		if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(rectPos2, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
 		fillRoundRectangle(rectPos, MC_Color(0, 0, 0, nametagsMod->opacity), false);

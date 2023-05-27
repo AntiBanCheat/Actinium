@@ -737,6 +737,11 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 						notification->animate.y - margin - textHeight - 4,
 						(notification->animate.x + margin + fullTextLength + 2 + borderPadding * 2) + margin - borderPadding - 2,
 						notification->animate.y - margin);
+					vec4_t rect2 = vec4_t(
+						notification->animate.x + 4,
+						notification->animate.y - margin - textHeight - 2,
+						(notification->animate.x + margin + fullTextLength + 2 + borderPadding * 2) + margin - borderPadding - 6,
+						notification->animate.y - margin - 2);
 
 					float duration = (rect.z - rect.x) * (notification->duration / notification->maxDuration);
 					if (duration < 1) duration = 1;
@@ -745,8 +750,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 
 					DrawUtils::drawText(vec2_t(textPos.x, textPos.y), &textStr, MC_Color(255, 255, 255), 0.8, 1, true);
 					auto n = moduleMgr->getModule<Notifications>();
-					vec4_t testRect3 = vec4_t((rect.x) + 4, (rect.y) + 2, (rect.z) - 4, (rect.w) - 2);
-					if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
+					if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(rect2, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
 					DrawUtils::fillRoundRectangle(rect, MC_Color(notification->colorR, notification->colorG, notification->colorB, notificationsMod->opacity), false);
 					DrawUtils::drawBottomLine(vec4_t{ rect.x + 1.5f, rect.y, rect.z - duration, rect.w + 0.5f }, MC_Color(255, 255, 255), 1);
 
@@ -826,14 +830,23 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 						notification->animate.y - margin - textHeight - 4,
 						(notification->animate.x + margin + fullTextLength + 2 + borderPadding * 2) + margin - borderPadding - 2,
 						notification->animate.y - margin);
+					vec4_t rect2 = vec4_t(
+						notification->animate.x + 4,
+						notification->animate.y - margin - textHeight - 2,
+						(notification->animate.x + margin + fullTextLength + 2 + borderPadding * 2) + margin - borderPadding - 6,
+						notification->animate.y - margin - 2);
+					vec4_t rect3 = vec4_t(
+						notification->animate.x + 4,
+						notification->animate.y - margin - textHeight - 2,
+						((notification->animate.x + margin + fullTextLength + 2 + borderPadding * 2) + margin - borderPadding - 6) - (rect.z - rect.x) * (notification->duration / notification->maxDuration),
+						notification->animate.y - margin - 2);
 
 					float duration = (rect.z - rect.x) * (notification->duration / notification->maxDuration);
 					if (duration < 1) duration = 1;
 					vec2_t textPos = vec2_t(rect.x + 11, rect.y + 5.5);
 
 					DrawUtils::drawText(vec2_t(textPos.x, textPos.y), &substring, MC_Color(255, 255, 255), 1, 1, 1);
-					vec4_t testRect3 = vec4_t((rect.x)+4, (rect.y) + 2, (rect.z + duration) - 4, (rect.w) - 2);
-					if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(testRect3, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
+					if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(rect2, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
 					vec4_t testRect4 = vec4_t((rect.x) + 4, (rect.y) + 2, (rect.z - duration) - 4, (rect.w) - 2);
 					if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(testRect4, rainbow, 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
 					DrawUtils::fillRoundRectangle(rect, MC_Color(0.f, 0.f, 0.f, notificationsMod->opacity), true);

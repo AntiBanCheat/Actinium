@@ -49,7 +49,7 @@ Scaffold::Scaffold() : IModule(0, Category::PLAYER, "Places blocks under you") {
 	registerBoolSetting("TowerNoMove", &towerOnlyNoMove, towerOnlyNoMove);
 	registerBoolSetting("NoSpeed", &preventkicks, preventkicks);
 	registerBoolSetting("Downwards", &downmode, downmode);
-	registerBoolSetting("AlwaysUnderPlace", &alwaysUnderPlace, alwaysUnderPlace);
+	registerBoolSetting("AlwaysUnder", &alwaysUnderPlace, alwaysUnderPlace);
 	registerBoolSetting("Spoof", &spoof, spoof);
 	registerIntSetting("Extend", &extend, extend, 0, 15);
 	registerIntSetting("ExtendDelay", &delay, delay, 0, 5);
