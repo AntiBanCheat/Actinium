@@ -1,6 +1,7 @@
 #include "ChatSuffix.h"
 #include <locale>
 #include <codecvt>
+#include "../../ModuleManager.h"
 ChatSuffix::ChatSuffix() : IModule(0, Category::OTHER, "Adds the client suffix") {
 	registerBoolSetting("Bypass", &bypass, bypass);
 }
@@ -17,7 +18,7 @@ void ChatSuffix::onSendPacket(C_Packet* packet) {
 		C_TextPacket* funy = reinterpret_cast<C_TextPacket*>(packet);
 		std::string Sentence;
 		std::string end;
-		int i = randomFloat(1, 40);
+		int i = random(1, 40);
 		if (i == 1) end = " | Aceolus";
 		if (i == 2) end = " | Skidders V3";
 		if (i == 3) end = " | Radium V2";
@@ -26,13 +27,15 @@ void ChatSuffix::onSendPacket(C_Packet* packet) {
 #ifdef _DEBUG
 		end += " Beta";
 #endif // _DEBUG
-		if (bypass) {
-			int utf8Value = random(262144, 917503);
+		std::string start;
+		if (bypass && !moduleMgr->getModule<ChatBypass>()->isEnabled()) {
 			std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> converter;
-			std::string bypassStr = converter.to_bytes(static_cast<char32_t>(utf8Value));
-			end += bypassStr;
+			std::string bypassStr = converter.to_bytes(static_cast<char32_t>(random(262144, 917503)));
+			start += bypassStr;
+			std::string bypassStr2 = converter.to_bytes(static_cast<char32_t>(random(262144, 917503)));
+			end += bypassStr2;
 		}
-		Sentence = funy->message.getText() + end;
+		Sentence = start + funy->message.getText() + end;
 		funy->message.resetWithoutDelete();
 		funy->message = Sentence;
 	}
