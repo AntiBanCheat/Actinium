@@ -228,7 +228,7 @@ void Scaffold::onTick(C_GameMode* gm) {
 
 	//Under Up Place 
 	if (diagType.getSelectedValue() == 1) {
-		if (rundown > 0)
+		if (rundown >= underplacedelay)
 		{
 			blockBelow.y -= 1;
 			if (alwaysUnderPlace || ((player->velocity.x > 0.06 || player->velocity.x < -0.06) && (player->velocity.z > 0.06 || player->velocity.z < -0.06)))
@@ -239,7 +239,7 @@ void Scaffold::onTick(C_GameMode* gm) {
 		else rundown++;
 	}
 	if (diagType.getSelectedValue() == 5) {
-		if (rundown > 0)
+		if (rundown >= underplacedelay)
 		{
 			blockBelow.y += 1;
 			buildBlock(blockBelow);
