@@ -45,7 +45,7 @@ public:
 		oldValue = val;
 		currentValue = val;
 	};
-	T reset() {
+	void reset() {
 		forceSet(defaultValue);
 	}
 	AnimationValue(T defaultVal, float(*ease)(float) = [](float time) {
