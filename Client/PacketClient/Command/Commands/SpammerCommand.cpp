@@ -23,13 +23,13 @@ bool SpammerCommand::execute(std::vector<std::string>* args) {
 		}
 		std::string text = os.str().substr(1);
 		spammer->getMessage() = text;
-		clientMessageF("[Packet] %sSpammer message set to %s%s%s!", GREEN, GRAY, text.c_str(), GREEN);
+		clientMessageF("[Actinium] %sSpammer message set to %s%s%s!", GREEN, GRAY, text.c_str(), GREEN);
 		return true;
 	}
 	else if (option == "delay") {
 		int delay = assertInt(args->at(2));
 		if (delay < 1) {
-			clientMessageF("[Packet] %sDelay needs to be 1 or more!", RED);
+			clientMessageF("[Actinium] %sDelay needs to be 1 or more!", RED);
 			return true;
 		}
 		else {
