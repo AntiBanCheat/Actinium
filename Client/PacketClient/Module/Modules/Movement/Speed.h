@@ -8,7 +8,7 @@ private:
 	int offGroundTicks = 0;
 	int groundTicks = 0;
 	int boosttimer = 35;
-	int bypasstime = 7;
+	int damagetime = 7;
 	int damagespeed = 2;
 	bool groundcheck;
 	bool rotate;

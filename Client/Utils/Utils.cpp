@@ -36,6 +36,30 @@
 #pragma comment(lib, "wininet.lib")
 using namespace std;
 
+void Utils::createConsole() {
+	HWND consoleWnd = GetConsoleWindow();
+	if (!consoleWnd)
+	{
+		AllocConsole();
+		freopen_s(&f, "CONOUT$", "w", stdout);
+		freopen_s(&f, "CONIN$", "r", stdin);
+		SetConsoleTitleA("Debug");
+	}
+	else
+	{
+		ShowWindow(GetConsoleWindow(), SW_SHOW);
+	}
+}
+
+void Utils::closeConsole() {
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
+	clearConsole();
+}
+
+void Utils::clearConsole() {
+	system("cls");
+}
+
 void Utils::ApplySystemTime(std::stringstream* ss) {
 	using namespace std::chrono;
 #ifdef _DEBUG
@@ -123,10 +147,12 @@ std::string Utils::sanitize(std::string text) {
 		if (wasValid) {
 			if (!isValid) {
 				wasValid = false;
-			} else {
+			}
+			else {
 				out += c;
 			}
-		} else {
+		}
+		else {
 			wasValid = isValid;
 		}
 	}
@@ -193,7 +219,8 @@ std::string Utils::getRttiBaseClassName(void* ptr) {
 std::string Utils::getClipboardText() {
 	if (!OpenClipboard(nullptr)) {
 		return "";
-	} else {
+	}
+	else {
 		HANDLE hData = GetClipboardData(CF_TEXT);
 		char* pszText = static_cast<char*>(GlobalLock(hData));
 		if (pszText == nullptr)
@@ -260,7 +287,8 @@ uintptr_t Utils::FindSignatureModule(const char* szModule, const char* szSignatu
 
 			//else
 			pattern += 2;
-		} else {
+		}
+		else {
 			pattern = szSignature;
 			firstMatch = 0;
 		}
@@ -329,7 +357,8 @@ uintptr_t Utils::FindSignatureModule(volatile char* szModule, volatile char* szS
 
 			//else
 			pattern += 2;
-		} else {
+		}
+		else {
 			pattern = szSignature;
 			firstMatch = 0;
 		}

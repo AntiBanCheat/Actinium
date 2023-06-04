@@ -52,6 +52,8 @@ void Derp::onPlayerTick(C_Player* plr) {
 void Derp::onSendPacket(C_Packet* packet) {
 	C_GameSettingsInput* input = g_Data.getClientInstance()->getGameSettingsInput();
 	auto player = g_Data.getLocalPlayer();
+	if (player == nullptr)
+		return;
 	vec3_t blockBelow = g_Data.getLocalPlayer()->eyePos0;
 	blockBelow.y -= g_Data.getLocalPlayer()->height;
 	blockBelow.y -= 0.5f;

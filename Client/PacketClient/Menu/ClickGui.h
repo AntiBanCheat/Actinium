@@ -33,6 +33,9 @@ struct ClickWindow {
 struct ClickModule2 {
 	bool isExtended = false;
 };
+struct ClickModule3 {
+	bool isExtended = false;
+};
 
 struct ClickWindow2 {
 	ClickWindow2() {
@@ -65,6 +68,7 @@ private:
 
 	static void renderLabel(const char* text);
 	static void renderTooltip(std::string* text);
+	static void renderTenacityNew();
 	static void renderONECONFIG();
 	static void renderLunarCategory();
 	static void renderPacketCategory(Category category, MC_Color categoryColor);
@@ -122,6 +126,7 @@ private:
 public:
 	static void init();
 	static void render();
+	static void onOpened();
 	static void onKeyUpdate(int key, bool isDown);
 	static void onMouseClickUpdate(int key, bool isDown);
 	static void onWheelScroll(bool direction); // true = up, false = down

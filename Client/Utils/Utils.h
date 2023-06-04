@@ -225,7 +225,15 @@ static inline void ImSwap(T& a, T& b) {
 
 
 class Utils {
+private:
+	inline static FILE* f;
 public:
+	static void createConsole();
+
+	static void closeConsole();
+
+	static void clearConsole();
+
 	static inline unsigned int getCrcHash(const char* str, int seed = 0) {
 		static unsigned int crc32_lut[256] = { 0 };
 		if (!crc32_lut[1]) {

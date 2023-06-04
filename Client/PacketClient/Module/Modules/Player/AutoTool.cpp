@@ -12,6 +12,10 @@ const char* AutoTool::getModuleName() {
 
 void AutoTool::onEnable() {
 	hasClicked = false;
+	if (g_Data.getLocalPlayer() == nullptr) {
+		setEnabled(false);
+		return;
+	}
 	prevslot = g_Data.getLocalPlayer()->getSupplies()->selectedHotbarSlot;
 }
 bool attacknow = false;

@@ -6,7 +6,9 @@
 #include "Module.h"
 
 class ClickGUIMod : public IModule {
+private:
 public:
+	int openTimeOffset = 0;
 	bool showHudEditor = true;
 	bool hasOpenedGUI = false; // start with hudeditor
 	std::vector<std::filesystem::directory_entry> configs;
@@ -30,6 +32,7 @@ public:
 	bool cFont = false;
 	float animation = 1.f;
 	float openAnim = 1.f;
+	int openTime = 0;
 	int opacity = 175;
 	int t = 0;
 	float txtsize = 0.9f;

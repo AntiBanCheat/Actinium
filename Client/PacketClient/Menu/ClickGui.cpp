@@ -4,7 +4,7 @@
 #include "../../Utils/Json.hpp"
 #include "../../Utils/Logger.h"
 #include <regex>
-
+#include "../../Utils/AnimationUtils.h"
 using namespace std;
 bool isLeftClickDown = false;
 bool isRightClickDown = false;
@@ -122,6 +122,22 @@ shared_ptr<ClickModule2> ClickGui::getClickModule2(shared_ptr<ClickWindow2> wind
 		return newModule;
 	}
 }
+
+std::map<unsigned int, std::shared_ptr<ClickModule3>> moduleMap2;
+shared_ptr<ClickModule3> getClickModule3(const char* name) {
+	unsigned int id = Utils::getCrcHash(name);
+
+	auto search = moduleMap2.find(id);
+	if (search != moduleMap2.end()) {
+		return search->second;
+	}
+	else {
+		shared_ptr<ClickModule3> newModule = make_shared<ClickModule3>();
+		moduleMap2.insert(make_pair(id, newModule));
+		return newModule;
+	}
+}
+
 shared_ptr<ClickWindow2> ClickGui::getWindow2(const char* name) {
 	unsigned int id = Utils::getCrcHash(name);
 
@@ -162,13 +178,390 @@ void ClickGui::renderTooltip(string* text) {
 
 
 
-
-
 Category selectedCategory = Category::ALL;
 int selectedTab = 0;
 shared_ptr<IModule> selectedModule;
 bool focusConfigRect = false;
 int selectedList = -1;
+AnimationValue<float> selectedCategoryAnimY(0.f, easeOutExpo);
+AnimationValue<float> scrollAnim(0.f, easeOutExpo);
+std::map<Category, std::unique_ptr<AnimationValue<MC_Color>>> categoryTextColorAnim;
+void ClickGui::renderTenacityNew() {
+	auto clickGUI = moduleMgr->getModule<ClickGUIMod>();
+	auto player = g_Data.getLocalPlayer();
+	PointingStruct* level = g_Data.getLocalPlayer()->pointingStruct;
+	int guiWidth = 284;
+	int guiHeight = 190;
+	vec2_t screenSize = g_Data.getClientInstance()->getGuiData()->windowSize;
+	float animTime = min(clickGUI->openTime, 1000) / 1000.f;
+	animTime = easeOutElastic(animTime);
+	float centerX = (screenSize.x / 2.f) * animTime;
+	float centerY = (screenSize.y / 2);
+	float leftOffset = centerX - guiWidth / 2.f;
+	float topOffset = centerY - guiHeight / 2;
+	float rightOffset = centerX + guiWidth / 2;
+	float bottomOffset = centerY + guiHeight / 2;
+	auto interfaceMod = moduleMgr->getModule<Interface>();
+	vec2_t mousePos = *g_Data.getClientInstance()->getMousePos();
+	{
+		vec2_t windowSize = g_Data.getClientInstance()->getGuiData()->windowSize;
+		vec2_t windowSizeReal = g_Data.getClientInstance()->getGuiData()->windowSizeReal;
+		mousePos = mousePos.div(windowSizeReal);
+		mousePos = mousePos.mul(windowSize);
+	}
+	vec4_t guiRect = vec4_t(leftOffset, topOffset, rightOffset, bottomOffset);
+	DrawUtils::fillRectangle(guiRect, MC_Color(20, 20, 20), true);
+	vec4_t categoryRect = vec4_t(leftOffset, topOffset, leftOffset + 60, bottomOffset);
+	DrawUtils::fillRectangle(categoryRect, MC_Color(39, 39, 39), true);
+	int categoryOffsetY = topOffset + 19;
+	DrawUtils::fillRectangle(vec4_t(categoryRect.x + 4, categoryOffsetY, categoryRect.z - 4, categoryOffsetY + 1), MC_Color(62, 62, 62), 1.f);
+	DrawUtils::drawCenteredString(vec2_t((categoryRect.z + categoryRect.x) / 2, categoryRect.y + 8), &(string)"Actinium", 1.f, MC_Color(255, 255, 255), true);
+	DrawUtils::drawCenteredString(vec2_t((categoryRect.z + categoryRect.x) / 2, categoryRect.y + 17), &interfaceMod->versionStr, 0.6f, MC_Color(255, 255, 255), true);
+	categoryOffsetY += 2;
+	vector<Category> categories = { Category::COMBAT,Category::MOVEMENT,Category::VISUAL,Category::PLAYER,Category::EXPLOIT,Category::OTHER };
+	float categorycurrentY = selectedCategoryAnimY.get();
+	DrawUtils::fillRectangle(vec4_t(categoryRect.x, categorycurrentY, categoryRect.z, categorycurrentY + 20), MC_Color(27, 27, 27), 1.f);
+	if (selectedCategory == Category::ALL)
+		selectedCategory = Category::COMBAT;
+	bool skipMouse = selectedList != -1;
+	for (auto category : categories) {
+		const char* categoryName = ClickGui::catToName(category);
+		if (category == Category::VISUAL)
+			categoryName = "Render";
+		else if (category == Category::OTHER)
+			categoryName = "Misc";
+		vec4_t rect1 = vec4_t(categoryRect.x, categoryOffsetY, categoryRect.z, categoryOffsetY + 20);
+		bool selected = category == selectedCategory;
+		if (selected && selectedCategoryAnimY.get() == 0) {
+			selectedCategoryAnimY.forceSet(categoryOffsetY);
+		}
+		if (!skipMouse && rect1.contains(&mousePos) && shouldToggleLeftClick && !selected) {
+			selectedCategory = category;
+			scrollingDirection = 0;
+			scrollAnim.forceSet(0);
+			selectedCategoryAnimY.set(categoryOffsetY, 1.f);
+			if (clickGUI->sounds) {
+				level->playSound("random.click", *player->getPos(), 1, 1);
+			}
+		}
+		if (categoryTextColorAnim.find(category) == categoryTextColorAnim.end())
+			categoryTextColorAnim[category] = std::make_unique<AnimationValue<MC_Color>>(MC_Color(0, 0, 0), easeOutExpo);
+		auto& anim = categoryTextColorAnim[category];
+		if (selected)
+			anim->set(MC_Color(255, 255, 255), 1.f);
+		else
+			if (!skipMouse && rect1.contains(&mousePos))
+				anim->set(MC_Color(157, 157, 157), 0.5f);
+			else
+				anim->set(MC_Color(107, 107, 107), 0.5f);
+
+		DrawUtils::drawText(vec2_t(rect1.x + 5, rect1.y + 6.5f), &(string)categoryName, anim->get(), 0.9f, 1.0f, true);
+		categoryOffsetY += 21;
+	}
+	DrawUtils::fillRectangle(vec4_t(categoryRect.x + 4, categoryOffsetY, categoryRect.z - 4, categoryOffsetY + 1), MC_Color(62, 62, 62), 1.f);
+
+	int modulesOffsetX = leftOffset + 66;
+
+	{
+		std::vector<std::shared_ptr<IModule>> ModuleList;
+		getModuleListByCategory(selectedCategory, &ModuleList);
+		scrollAnim.set(scrollingDirection, 0.75f);
+		int index = -1;
+		float scroll = scrollAnim.get() * 20;
+		float yOffset1 = topOffset - scroll;
+		float yOffset2 = topOffset - scroll;
+		std::function drawLists = []() {};
+		vec4_t listRect = vec4_t(0, 0, 0, 0);
+		for (auto module : ModuleList) {
+			float moduleHeight = 0;
+			index++;
+			int left = modulesOffsetX + ((index % 2) * (100 + 6));
+			float top = index % 2 == 0 ? yOffset1 : yOffset2;
+			int bottom = top + 20;
+			vec4_t rect1 = vec4_t(left, top, left + 100, bottom);
+			vec4_t rect2 = vec4_t(left, top, left + 100, bottom - 10);
+			vec4_t rect3 = vec4_t(left, bottom - 9, left + 100, bottom);
+
+			std::function fillRect = [=](vec4_t vec, MC_Color color) {
+				if (vec.y < guiRect.y && vec.w < guiRect.y)
+					return;
+				if (vec.y > guiRect.w && vec.w > guiRect.w)
+					return;
+				DrawUtils::fillRectangle(vec4_t(vec.x, max(vec.y, guiRect.y), vec.z, min(vec.w, guiRect.w)), color, color.a);
+			};
+			std::function drawRect = [=](vec4_t vec, MC_Color color, float lineWidth = 1.f) {
+				if (vec.y < guiRect.y && vec.w < guiRect.y)
+					return;
+				if (vec.y > guiRect.w && vec.w > guiRect.w)
+					return;
+				DrawUtils::drawRectangle(vec4_t(vec.x, max(vec.y, guiRect.y), vec.z, min(vec.w, guiRect.w)), color, color.a, lineWidth);
+			};
+			std::function drawRoundRect = [=](vec4_t vec, MC_Color color, bool rounder) {
+				if (vec.y < guiRect.y && vec.w < guiRect.y)
+					return;
+				if (vec.y > guiRect.w && vec.w > guiRect.w)
+					return;
+				DrawUtils::fillRoundRectangle(vec4_t(vec.x, max(vec.y, guiRect.y) + 2, vec.z, min(vec.w, guiRect.w) - 2), color, rounder);
+			};
+			std::function drawTriangle = [=](vec2_t p1, vec2_t p2, vec2_t p3, MC_Color color) {
+				float maxY = max(max(p1.y, p2.y), p3.y);
+				float minY = min(min(p1.y, p2.y), p3.y);
+				if (maxY < guiRect.y)
+					return;
+				if (minY > guiRect.w)
+					return;
+				float distance1 = min(maxY - guiRect.y, 3.f);
+				float distance2 = min(guiRect.w - minY, 3.f);
+				DrawUtils::setColor(color.r * 255, color.g * 255, color.b * 255, (color.a * 255) * (distance1 / 3.f) * (distance2 / 3.f));
+				DrawUtils::drawTriangle(p1, p2, p3);
+			};
+			C_Font* font = DrawUtils::getFont(Fonts::SMOOTH);
+			auto drawText = [=, &listRect](vec2_t pos, std::string textStr, MC_Color color = MC_Color(255, 255, 255), float textSize = 1.0f, bool hasShadow = true, bool center = false, bool ignoreSkip = false) {
+				if (pos.y < guiRect.y - 2 && pos.y + font->getLineHeight() < guiRect.y - 2)
+					return 0.f;
+				if (pos.y > guiRect.w + 2 && pos.y + font->getLineHeight() > guiRect.w + 2)
+					return 0.f;
+				if (listRect.contains(&pos) && !ignoreSkip)
+					return 0.f;
+				float distance1 = min(pos.y - guiRect.y, 3.f);
+				float distance2 = min(guiRect.w - (pos.y + font->getLineHeight() - 4), 3.f);
+				if (!center)
+					DrawUtils::drawText(pos, &textStr, color, textSize, color.a * (distance1 / 3.f) * (distance2 / 3.f), hasShadow);
+				else
+					DrawUtils::drawCenteredString(pos, &textStr, textSize, MC_Color(color.r * 255, color.g * 255, color.b * 255, (color.a * 255) * (distance1 / 3.f) * (distance2 / 3.f)), hasShadow);
+				return DrawUtils::getTextWidth(&textStr, textSize);
+			};
+			auto drawImage = [=](std::string filepath, vec4_t rect, MC_Color flushColor = MC_Color(255, 255, 255)) {
+				if (rect.y < guiRect.y && rect.w < guiRect.y)
+					return;
+				if (rect.y > guiRect.w && rect.w > guiRect.w)
+					return;
+				DrawUtils::drawImage(filepath, vec2_t(rect.x, rect.y), vec2_t(rect.z - rect.x, rect.w - rect.y), vec2_t(0.f, 0.f), vec2_t(1.f, 1.f), flushColor);
+			};
+
+			fillRect(vec4_t(left, top + 3, left + 100, bottom - 3), MC_Color(30, 30, 30));
+			float keybindX = left + 6;
+			keybindX += drawText(vec2_t(left + 2.f, top + 7.f), (string)module->getRawModuleName(), MC_Color(255, 255, 255), 0.75f);
+			string str;
+			if (module->getKeybind() != 0) {
+				str = regex_replace(Utils::getKeybindName(module->getKeybind()), regex("VK_"), "");
+			}
+			else {
+				str = "NONE";
+			}
+			float textWidth = max(DrawUtils::getTextWidth(&str, 0.5f) + 5, 12.f);
+			vec4_t keybindRect = vec4_t(keybindX, top + 6, keybindX + textWidth, bottom - 6);
+			fillRect(keybindRect, MC_Color(65, 69, 77));
+
+			{ //logic from risegui
+				auto settings = *module->getSettings();
+				auto setting = *std::find_if(settings.begin(), settings.end(), [](SettingEntry* entry) {
+					return entry->valueType == ValueType::KEYBIND_T;
+					});
+				if (isCapturingKey && keybindMenuCurrent == setting)
+					str = "?";
+				bool isFocused = keybindRect.contains(&mousePos);
+
+				if (!skipMouse && isFocused && shouldToggleLeftClick && !(isCapturingKey && keybindMenuCurrent != setting)) {
+					if (clickGUI->sounds)
+						level->playSound("random.click", *player->getPos(), 1, 1);
+					keybindMenuCurrent = setting;
+					isCapturingKey = true;
+				}
+
+				if (!skipMouse && isFocused && shouldToggleRightClick && !(isCapturingKey && keybindMenuCurrent != setting)) {
+					if (clickGUI->sounds)
+						level->playSound("random.click", *player->getPos(), 1, 1);
+
+					setting->value->_int = 0x0;  // Clear
+					isCapturingKey = false;
+				}
+
+				if (shouldStopCapturing && keybindMenuCurrent == setting) {  // The user has selected a key
+					if (clickGUI->sounds)
+						level->playSound("random.click", *player->getPos(), 1, 1);
+					shouldStopCapturing = false;
+					isCapturingKey = false;
+					setting->value->_int = newKeybind;
+				}
+			}
+
+			drawText(vec2_t(keybindX + (textWidth / 2), top + 13.2), str, MC_Color(255, 255, 255), 0.5f, false, true);
+			vec4_t enableButton = vec4_t(rect1.z - 10, top + 7, rect1.z - 4, bottom - 7);
+			if (!skipMouse && rect1.contains(&mousePos) && shouldToggleLeftClick && !keybindRect.contains(&mousePos)) {
+				if (clickGUI->sounds) {
+					level->playSound("random.click", *player->getPos(), 1, 1);
+				}
+				module->setEnabled(!module->enabled);
+			}
+			drawRoundRect(enableButton,
+				module->isEnabled() ? MC_Color(52, 76, 141) : MC_Color(64, 68, 75), true);
+			if (module->isEnabled())
+				drawImage("textures/gui/newgui/check2.png", vec4_t(rect1.z - 10, top + 7, rect1.z - 3, top + 13));
+
+			auto clickMod = getClickModule3(module->getRawModuleName());
+			if (rect1.contains(&mousePos) && shouldToggleRightClick) {
+				clickMod->isExtended = !clickMod->isExtended;
+				if (clickGUI->sounds)
+					level->playSound("random.click", *player->getPos(), 1, 1);
+			}
+			moduleHeight += 20;
+			if (clickMod->isExtended) {
+				moduleHeight -= 3.5f;
+				auto settings = *module->getSettings();
+				int height = 12;
+				int index = 0;
+				for (auto setting : settings) {
+					index++;
+					if (strcmp(setting->name, "enabled") == 0 || strcmp(setting->name, "Keybind") == 0) continue;
+					float top2 = top + moduleHeight;
+					fillRect(vec4_t(rect1.x, top2, rect1.z, top2 + height), MC_Color(35, 35, 35));
+					drawText(vec2_t(left + 2.5f, top2 + 3.f), regex_replace((std::string)setting->name, regex("Hide in list"), "Drown"), MC_Color(255, 255, 255), 0.6f);
+					if (setting->valueType == ValueType::BOOL_T) {
+						vec4_t rect = vec4_t(rect1.z - 9, top2 + 3, rect1.z - 4, top2 + 8);
+						fillRect(rect, MC_Color(65, 68, 76));
+						drawRect(rect,
+							setting->value->_bool ? MC_Color(65, 89, 161) : MC_Color(73, 78, 86), 1.0f);
+						if (setting->value->_bool)
+							drawImage("textures/gui/newgui/check2.png", vec4_t(rect1.z - 8.5f, top2 + 3.5f, rect1.z - 4.5f, top2 + 7.5f));
+						if (!skipMouse && vec4_t(rect.x - 6, rect.y - 2, rect.z + 2, rect.w + 2).contains(&mousePos) && shouldToggleLeftClick) {
+							if (clickGUI->sounds)
+								level->playSound("random.click", *player->getPos(), 1, 1);
+							setting->value->_bool = !setting->value->_bool;
+						}
+					}
+					else if (setting->valueType == ValueType::FLOAT_T || setting->valueType == ValueType::INT_T) {
+						float step = setting->step;
+						float currentValue;
+						float maxValue;
+						float minValue;
+						switch (setting->valueType)
+						{
+						case ValueType::FLOAT_T:
+							currentValue = setting->value->_float;
+							maxValue = setting->maxValue->_float;
+							minValue = setting->minValue->_float;
+							break;
+						case ValueType::INT_T:
+							currentValue = setting->value->_int;
+							maxValue = setting->maxValue->_int;
+							minValue = setting->minValue->_int;
+							break;
+						}
+						std::stringstream ss;
+						ss << std::fixed << std::setprecision(3) << currentValue;
+						std::string s = ss.str();
+						s.erase(s.find_last_not_of('0') + 1, std::string::npos);
+						s.erase(s.find_last_not_of('.') + 1, std::string::npos);
+						float textWidth = 11/*DrawUtils::getTextWidth(&s, 0.45f)*/;
+						vec4_t rect = vec4_t(rect1.z - textWidth - 5, top2 + 3, rect1.z - 2, top2 + 8);
+						fillRect(rect, MC_Color(64, 68, 75));
+						drawText(vec2_t(rect1.z - textWidth / 2 - 3.65f, top2 + 8.75f), s, MC_Color(255, 255, 255), 0.45f, false, true);
+						int sliderWidth = 30;
+						float sliderOffsetX = rect.x - sliderWidth - 4;
+						fillRect(vec4_t(sliderOffsetX, top2 + 4.5f, sliderOffsetX + sliderWidth, top2 + 6.f), MC_Color(66, 70, 79));
+						float knobOffsetX = sliderOffsetX + (sliderWidth * ((currentValue - minValue) / (maxValue - minValue)));;
+						fillRect(vec4_t(sliderOffsetX, top2 + 4.5f, knobOffsetX, top2 + 6.f), MC_Color(65, 89, 161));
+						fillRect(vec4_t(knobOffsetX - 0.5f, top2 + 3.f, knobOffsetX + 0.5f, top2 + 7.5f), MC_Color(255, 255, 255));
+
+
+						vec4_t clickRect = vec4_t(sliderOffsetX - 5, top2 + 3, sliderOffsetX + sliderWidth + 5, top2 + 8);
+						if (clickRect.contains(&mousePos) && isLeftClickDown) {
+							float val = minValue + ((mousePos.x - sliderOffsetX) / sliderWidth * (maxValue - minValue));
+							float newValue = floor(val / step) * step;
+							if (newValue < minValue)
+								newValue = minValue;
+							if (newValue > maxValue)
+								newValue = maxValue;
+							switch (setting->valueType)
+							{
+							case ValueType::FLOAT_T:
+								setting->value->_float = newValue;
+								break;
+							case ValueType::INT_T:
+								setting->value->_int = (int)newValue;
+								break;
+							}
+						}
+
+					}
+					else if (setting->valueType == ValueType::ENUM_T) {
+						auto entrys = ((SettingEnum*)setting->extraData)->Entrys;
+						float width = 0;
+						for (EnumEntry entry : entrys) {
+							float textWidth = DrawUtils::getTextWidth(&entry.GetName(), 0.45f);
+							if (width < textWidth)
+								width = textWidth;
+						}
+						width += 8;
+						float left2 = rect1.z - width - 4;
+						vec4_t rect = vec4_t(left2, top2 + 2.f, left2 + width, top2 + 8.f);
+						if (selectedModule == module && selectedList == index) {
+							listRect = vec4_t(rect.x, rect.y, rect.z, rect.y + entrys.size() * 6);
+							drawLists = [=, &listRect]() {
+								float top3 = top2;
+								vec2_t mousePos2 = vec2_t(mousePos.x, mousePos.y);
+								EnumEntry selectedEntry = ((SettingEnum*)setting->extraData)->GetSelectedEntry();
+								std::vector<EnumEntry> entrys2 = entrys;
+								int index2 = selectedEntry.GetValue();
+								if (index2 < entrys2.size()) {
+									EnumEntry element = entrys2[index2];
+									entrys2.erase(entrys2.begin() + index2);
+									entrys2.insert(entrys2.begin(), element);
+								}
+
+								for (EnumEntry entry : entrys2) {
+									drawText(vec2_t(left2 + 1.5f, top3 + 2.9f), entry.GetName(), MC_Color(255, 255, 255), 0.45f, true, false, true);
+									vec4_t rect2 = vec4_t(left2, top3 + 2.f, left2 + width, top3 + 8.f);
+									fillRect(rect2,
+										rect2.contains(&mousePos2) ? MC_Color(59, 83, 146) : MC_Color(42, 42, 42));
+									if (rect2.contains(&mousePos2) && shouldToggleLeftClick) {
+										((SettingEnum*)setting->extraData)->selected = entry.GetValue();
+										if (clickGUI->sounds)
+											level->playSound("random.click", *player->getPos(), 1, 1);
+										selectedList = -1;
+									}
+									top3 += 6;
+								}
+								drawTriangle(vec2_t(rect1.z - 5, top2 + 5.5f), vec2_t(rect1.z - 7, top2 + 3.5f), vec2_t(rect1.z - 9, top2 + 5.5f), MC_Color(255, 255, 255));
+								if (!listRect.contains(&mousePos2) && shouldToggleLeftClick)
+									selectedList = -1;
+							};
+						}
+						else {
+							EnumEntry selectedEntry = ((SettingEnum*)setting->extraData)->GetSelectedEntry();
+							fillRect(rect, MC_Color(42, 42, 42));
+							drawText(vec2_t(left2 + 1.5f, top2 + 2.9f), selectedEntry.GetName(), MC_Color(255, 255, 255), 0.45f);
+							DrawUtils::setColor(255, 255, 255, 255);
+							drawTriangle(vec2_t(rect1.z - 7, top2 + 5.5f), vec2_t(rect1.z - 5, top2 + 3.5f), vec2_t(rect1.z - 9, top2 + 3.5f), MC_Color(255, 255, 255));
+							if (!skipMouse && rect.contains(&mousePos) && shouldToggleLeftClick) {
+								if (clickGUI->sounds)
+									level->playSound("random.click", *player->getPos(), 1, 1);
+								selectedModule = module;
+								selectedList = index;
+								shouldToggleLeftClick = false;
+							}
+						}
+					}
+					moduleHeight += height;
+				}
+				moduleHeight += 3;
+			}
+			if (index % 2 == 0)
+				yOffset1 += moduleHeight;
+			else
+				yOffset2 += moduleHeight;
+		}
+		drawLists();
+		float maxHeight = max(yOffset1 - topOffset + scroll, yOffset2 - topOffset + scroll) - 20;
+		if (maxHeight < scroll)
+			scrollingDirection = maxHeight / 20;
+		else if (0 > scroll)
+			scrollingDirection = 0;
+	}
+
+}
+
 
 void ClickGui::renderONECONFIG() {
 	MC_Color primaryColor = MC_Color(12, 82, 204);
@@ -397,7 +790,7 @@ void ClickGui::renderONECONFIG() {
 					int sliderOffsetX = rightOffset - padding - 50 - width;
 
 					DrawUtils::fillRectangle(vec4_t(sliderOffsetX, topOffset - 1, sliderOffsetX + width, topOffset + 1), MC_Color(72, 78, 86), 1.0f);
-					int knobX = sliderOffsetX + (width * (currentValue / maxValue));
+					int knobX = sliderOffsetX + (width * ((currentValue - minValue) / (maxValue - minValue)));
 					DrawUtils::fillRectangle(vec4_t(sliderOffsetX, topOffset - 1, knobX, topOffset + 1), primaryColor, 1.0f);
 					DrawUtils::fillRoundRectangle(vec4_t(knobX - 3, topOffset - 1, knobX + 3, topOffset + 1), MC_Color(239, 241, 245), true);
 
@@ -434,10 +827,10 @@ void ClickGui::renderONECONFIG() {
 						}
 					}
 					if (!skipMouse && clickRect.contains(&mousePos) && isLeftClickDown) {
-						float val = (mousePos.x - sliderOffsetX) / width * maxValue;
+						float val = minValue + ((mousePos.x - sliderOffsetX) / width * (maxValue - minValue));
 						float newValue = floor(val / step) * step;
-						if (newValue < 0)
-							newValue = 0;
+						if (newValue < minValue)
+							newValue = minValue;
 						if (newValue > maxValue)
 							newValue = maxValue;
 						switch (setting->valueType)
@@ -7666,7 +8059,11 @@ void ClickGui::renderNewCategory(Category category) {
 }*/
 #pragma endregion
 float spacing2 = 45.f;
-
+void ClickGui::onOpened() {
+	selectedCategoryAnimY.reset();
+	scrollAnim.reset();
+	scrollingDirection = 0;
+}
 #pragma region newBadlion
 int itemIndex = 0;
 void ClickGui::renderNewBadLion() {
@@ -8513,6 +8910,9 @@ void ClickGui::render() {
 		break;
 	case 8: // ONECONFIG
 		renderONECONFIG();
+		break;
+	case 9: //Tenacity New
+		renderTenacityNew();
 		break;
 	}
 

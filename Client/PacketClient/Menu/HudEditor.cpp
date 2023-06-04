@@ -107,6 +107,7 @@ void HudEditor::render() {
 	if (clickGUIRect.contains(&mousePos)) {
 		DrawUtils::fillRoundRectangle(clickGUIRect, MC_Color(255, 2555, 255, 100), true);
 		if (clickGUIRect.contains(&mousePos) && leftClickDown) {
+			ClickGui::onOpened();
 			clickGUI->hasOpenedGUI = true;
 			shouldToggleLeftClick1 = false;
 		}
@@ -115,7 +116,7 @@ void HudEditor::render() {
 	DrawUtils::drawCenteredString(vec2_t(windowSize.x / 2, windowSize.y / 2 - 20), &string("Actinium Client"), 1.5f, MC_Color(255, 255, 255), true);
 	DrawUtils::fillRoundRectangle(clickGUIRect, MC_Color(0, 0, 0, 100), false);
 	DrawUtils::drawRoundRectangle2(clickGUIRect, MC_Color(255, 255, 255));
-	
+
 	const bool fpsIsFocused = fpsRectPos.contains(&mousePos);
 	const bool pingIsFocused = pingRectPos.contains(&mousePos);
 	const bool regenIsFocused = regenRectPos.contains(&mousePos);
@@ -129,7 +130,7 @@ void HudEditor::render() {
 	const bool scaffoldIsFocused = scaffoldRect.contains(&mousePos);
 	const bool notificationsIsFocused = notificationRect.contains(&mousePos);
 	const bool armorHudIsFocused = armorHudRect.contains(&mousePos);
-	
+
 	// ?? 
 	/*C_PlayerInventoryProxy* supplies = g_Data.getLocalPlayer()->getSupplies();
 	C_Inventory* inv = supplies->inventory;
@@ -138,7 +139,7 @@ void HudEditor::render() {
 		if (stack->item != nullptr && stack->getItem()->isBlock() && findBlocks(stack)) {
 			if (stack->isValid()) DrawUtils::drawItem(stack, vec2_t(blockPos.x - 4, blockPos.y - 7), 1, 1, false);
 		}
-	}*/ 
+	}*/
 
 	DrawUtils::drawText(textPos, &totalCountAids, MC_Color(255, 255, 255), 1.F, 1.F, true);
 	if (interfaceMod->info) DrawUtils::drawRectangle(fpsRectPos, MC_Color(0, 0, 0), 0.5F);
@@ -179,8 +180,8 @@ void HudEditor::render() {
 	//}
 
 		//keybd_event(0x41, 0, KEYEVENTF_EXTENDEDKEY, 0);
-	
-	
+
+
 	//DrawUtils::drawText(stringPos, &aids, MC_Color(255, 255, 255), 1.f, 1.f, true);
 	//DrawUtils::fillRectangleA(t, MC_Color(0, 0, 0, 100));
 
@@ -656,7 +657,7 @@ void HudEditor::onLoadSettings(void* confVoid) {
 				if (SpeedVal.contains("client")) {
 					auto posVal = SpeedVal.at("client");
 					if (!posVal.is_null() && posVal.contains("name") && posVal["name"].is_string())
-						interfaceMod->getClientName() = {posVal["name"].get < string >()};
+						interfaceMod->getClientName() = { posVal["name"].get < string >() };
 				}
 			}
 		}

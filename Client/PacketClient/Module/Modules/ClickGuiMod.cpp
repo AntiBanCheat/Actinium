@@ -2,7 +2,7 @@
 #include "pch.h"
 
 ClickGUIMod::ClickGUIMod() : IModule(VK_INSERT, Category::VISUAL, "A GUI that displays every module") {
-	registerEnumSetting("Theme", &theme, 8);
+	registerEnumSetting("Theme", &theme, 9);
 	theme.addEntry("PacketV2", 0);
 	theme.addEntry("Vape", 1);
 	theme.addEntry("Astolfo", 2);
@@ -12,6 +12,7 @@ ClickGUIMod::ClickGUIMod() : IModule(VK_INSERT, Category::VISUAL, "A GUI that di
 	theme.addEntry("Lunar", 6); //Made by rasky1
 	theme.addEntry("Badlion", 7); //ika turai kanasii
 	theme.addEntry("ONECONFIG", 8); //ika ha turakunai kara motto tukurou! made by rasky1
+	theme.addEntry("TENACITY NEW", 9); //ika ga dev yametakara orega kawarini iroiro tukurimasu by rasky1 (watasi ha dougu deha arimasen)
 	registerEnumSetting("Color", &color, 0);
 	color.addEntry("Rainbow", 0);
 	color.addEntry("Astolfo", 1);
@@ -45,6 +46,8 @@ void ClickGUIMod::onEnable() {
 	skipClick = true;
 	g_Data.getClientInstance()->releaseMouse();
 	openAnim = -500;
+	openTimeOffset = 0;
+	openTime = 0;
 	configs.clear();
 	isSettingOpened = false;
 
@@ -55,11 +58,16 @@ void ClickGUIMod::onEnable() {
 		}
 	}
 
-	if (!showHudEditor) hasOpenedGUI = true;
+	if (!showHudEditor) {
+		hasOpenedGUI = true;
+	}
 }
 
 void ClickGUIMod::onPlayerTick(C_Player* plr) {
+	if (hasOpenedGUI && openTimeOffset == 0)
+		openTimeOffset = TimerUtil::getCurrentMs();
 	if (openAnim < 27 && hasOpenedGUI) openAnim += (28 - openAnim) * 0.09f;
+	if (hasOpenedGUI) openTime = TimerUtil::getCurrentMs() - openTimeOffset;
 }
 
 void ClickGUIMod::onTick(C_GameMode* gm) {
@@ -82,6 +90,8 @@ void ClickGUIMod::onDisable() {
 	openAnimation = false;
 	hasOpenedGUI = false;
 	animation = 1;
+	openTimeOffset = 0;
+	openTime = 0;
 	isSettingOpened = false;
 	settingOpened = false;
 

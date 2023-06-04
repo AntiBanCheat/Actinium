@@ -24,9 +24,9 @@ Speed::Speed() : IModule(0, Category::MOVEMENT, "Increases your speed") {
 	registerFloatSetting("Duration", &duration, duration, 0.5f, 1.05f, 0.001f);
 	registerBoolSetting("NoSlabs", &noslabs, noslabs);
 	registerBoolSetting("DamageBoost", &dmgboost, dmgboost);
-	registerIntSetting("BypassTime", &bypasstime, bypasstime, 1, 20);
+	registerIntSetting("DamageTime", &damagetime, damagetime, 1, 20);
 	registerIntSetting("DamageSpeed", &damagespeed, damagespeed, 0, 10); //only beta
-	registerIntSetting("DamageTimer", &dmgtimer, dmgtimer, 1, 40);
+	registerIntSetting("DamageTimer", &dmgtimer, dmgtimer, 1, 600);
 	///registerBoolSetting("FullStop", &fullstop, fullstop); // Prevents flags cause instantly stops
 	//registerBoolSetting("DesnycBoost", &dboost, dboost);
 	//registerBoolSetting("Rotate", &rotate, rotate);
@@ -120,7 +120,7 @@ void Speed::onMove(C_MoveInputHandler* input) {
 			strafeTime = 0;
 		}
 		if (MoveUtil::isMoving()) {
-			if (strafeTime <= bypasstime) {
+			if (strafeTime <= damagetime) {
 				strafeTime++;
 				g_Data.getClientInstance()->minecraft->setTimerSpeed(dmgtimer);
 				setSpeed(player->velocity.magnitudexz());

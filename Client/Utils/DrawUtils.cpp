@@ -262,7 +262,7 @@ void DrawUtils::drawText(vec2_t pos, std::string* textStr, MC_Color color, float
 }
 
 void DrawUtils::drawCenteredString(vec2_t pos, std::string* textStr, float textSize, MC_Color color, bool hasShadow) {
-	DrawUtils::drawText(vec2_t(pos.x - DrawUtils::getTextWidth(textStr, textSize) / 2.F, pos.y - DrawUtils::getFont(Fonts::SMOOTH)->getLineHeight() / 2.F), textStr, color, textSize, 1, hasShadow);
+	DrawUtils::drawText(vec2_t(pos.x - DrawUtils::getTextWidth(textStr, textSize) / 2.F, pos.y - DrawUtils::getFont(Fonts::SMOOTH)->getLineHeight() / 2.F), textStr, color, textSize, color.a, hasShadow);
 }
 
 void DrawUtils::drawRightAlignedString(std::string* textStr, vec4_t pos, MC_Color color, bool hasShadow) {

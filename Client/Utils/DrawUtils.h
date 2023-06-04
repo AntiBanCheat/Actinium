@@ -41,6 +41,15 @@ struct MC_Color {
 		this->b = b / 255.0f;
 		this->a = a / 255.0f;
 	};
+
+	MC_Color operator+(const MC_Color& other) const {
+		MC_Color result;
+		result.r = this->r + other.r;
+		result.g = this->g + other.g;
+		result.b = this->b + other.b;
+		result.a = this->a + other.a;
+		return result;
+	};
 };
 
 enum VertexFormat {

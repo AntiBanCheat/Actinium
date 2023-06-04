@@ -3,8 +3,8 @@
 
 using namespace std;
 Velocity::Velocity() : IModule(0, Category::MOVEMENT, "Modifies your velocity (knockback)") {
-	registerFloatSetting("Linear", &x, x, 0.f, 1.f);
-	registerFloatSetting("Height", &y, y, 0.f, 1.f);
+	registerFloatSetting("Linear", &x, x, -1.f, 1.f);
+	registerFloatSetting("Height", &y, y, -1.f, 1.f);
 	registerBoolSetting("JumpReset", &jumpReset, jumpReset);
 }
 
