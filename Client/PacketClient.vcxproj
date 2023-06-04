@@ -178,6 +178,8 @@
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+			<ExceptionHandling>Async</ExceptionHandling>
+			<AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link />
     <Link>
@@ -185,6 +187,12 @@
       <AdditionalDependencies>
       </AdditionalDependencies>
     </Link>
+		<PreBuildEvent>
+			<Command>if exist "$(ProjectDir)..\Uninjector.exe" "$(ProjectDir)..\Uninjector.exe"</Command>
+		</PreBuildEvent>
+		<PostBuildEvent>
+			<Command>if exist "$(ProjectDir)..\InjectDLL.exe" "$(ProjectDir)..\InjectDLL.exe" "$(TargetPath)"</Command>
+		</PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -275,6 +283,7 @@
     <ClCompile Include="PacketClient\Module\Modules\Other\HiveSurround.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Player\AutoTool.cpp" />
     <ClCompile Include="PacketClient\Notifications\NotificationManager.cpp" />
+		<ClCompile Include="Utils\AnimationUtils.h" />
     <ClCompile Include="Utils\ColorUtil.cpp" />
     <ClCompile Include="Utils\DrawUtils.cpp" />
     <ClCompile Include="PacketClient\FriendList\FriendList.cpp" />
