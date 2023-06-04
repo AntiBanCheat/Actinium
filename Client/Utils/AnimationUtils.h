@@ -41,7 +41,7 @@ public:
 			this->duration = duration;
 		}
 	};
-	T forceSet(T val) {
+	void forceSet(T val) {
 		oldValue = val;
 		currentValue = val;
 	};
