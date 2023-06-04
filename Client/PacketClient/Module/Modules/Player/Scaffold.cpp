@@ -472,10 +472,10 @@ void Scaffold::onTick(C_GameMode* gm) {
 
 	//Insane Hive Rotation
 	if (rotations.getSelectedValue() == 9) {
-		player->pointingStruct->rayHitType = 0;
-		Utils::nopBytes((unsigned char*)HiveRotations1, 3);
-		Utils::patchBytes((unsigned char*)HiveRotations2, (unsigned char*)"\xC7\x40\x18\x00\x00\x00\x00", 7);
-		Utils::patchBytes((unsigned char*)HiveRotations3, (unsigned char*)"\xA4\x60\x38\x02\x13\x86\x01\x13\x8", 11);
+		//player->pointingStruct->rayHitType = 0;
+		//Utils::nopBytes((unsigned char*)HiveRotations1, 3);
+		//Utils::patchBytes((unsigned char*)HiveRotations2, (unsigned char*)"\xC7\x40\x18\x00\x00\x00\x00", 7);
+		//Utils::patchBytes((unsigned char*)HiveRotations3, (unsigned char*)"\xA4\x60\x38\x02\x13\x86\x01\x13\x8", 11);
 	}
 
 	//digbypass (only asia)
@@ -508,9 +508,9 @@ void Scaffold::onTick(C_GameMode* gm) {
 
 	// Hive Bypass
 	if (rotations.getSelectedValue() == 1 || rotations.getSelectedValue() == 7 || rotations.getSelectedValue() == 8) {
-		player->pointingStruct->rayHitType = 0;
-		Utils::nopBytes((unsigned char*)HiveRotations1, 3);
-		Utils::patchBytes((unsigned char*)HiveRotations2, (unsigned char*)"\xC7\x40\x18\x00\x00\x00\x00", 7);
+		//player->pointingStruct->rayHitType = 0;
+		//Utils::nopBytes((unsigned char*)HiveRotations1, 3);
+		//Utils::patchBytes((unsigned char*)HiveRotations2, (unsigned char*)"\xC7\x40\x18\x00\x00\x00\x00", 7);
 		//Utils::patchBytes((unsigned char*)HiveRotations3, (unsigned char*)"\xA4\x60\x38\x02\x13\x86\x01\x13\x8", 11);
 	}
 	vec3_t eyePos = g_Data.getLocalPlayer()->eyePos0;
