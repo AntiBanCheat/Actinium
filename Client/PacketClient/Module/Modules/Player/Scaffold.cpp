@@ -53,6 +53,7 @@ Scaffold::Scaffold() : IModule(0, Category::PLAYER, "Places blocks under you") {
 	registerBoolSetting("Spoof", &spoof, spoof);
 	registerIntSetting("Extend", &extend, extend, 0, 15);
 	registerIntSetting("ExtendDelay", &delay, delay, 0, 5);
+	registerIntSetting("UnderDelay", &underplacedelay, underplacedelay, 0, 5);
 	registerIntSetting("Timer", &timer, timer, 15, 60);
 	registerIntSetting("RotSpeed", &rotspeed, rotspeed, 1, 50);
 	registerIntSetting("PlaceDelay", &tellydalay, tellydalay, 0, 20);
