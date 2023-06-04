@@ -5,7 +5,7 @@
 
 class Spammer : public IModule {
 private:
-	std::string message = u8"@here おにまい見よう！ @here";
+	std::string message = u8"@here NUKING ANTICHEAT @here";
 	int Odelay = 0;
 	int delay = 3;
 
