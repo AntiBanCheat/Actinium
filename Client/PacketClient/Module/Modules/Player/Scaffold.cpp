@@ -6,6 +6,7 @@ uintptr_t HiveRotations2 = Utils::getBase() + 0x8F87C7;
 uintptr_t HiveRotations3 = Utils::getBase() + 0x8F53B1;
 uintptr_t HiveRotations4 = Utils::getBase() + 0x98AF833C1;
 uintptr_t HiveRotations5 = Utils::getBase() + 0x173ACFA01D; //From Skidders
+int testextend = 0;
 using namespace std;
 Scaffold::Scaffold() : IModule(0, Category::PLAYER, "Places blocks under you") {
 	registerEnumSetting("Rotations", &rotations, 0);
@@ -36,7 +37,7 @@ Scaffold::Scaffold() : IModule(0, Category::PLAYER, "Places blocks under you") {
 	extendType.addEntry("Celsius", 0);
 	extendType.addEntry("Radium", 1);
 	extendType.addEntry("Packet", 2);
-	extendType.addEntry("Zephyr", 3);
+	extendType.addEntry("Actinium", 3);
 	registerEnumSetting("DiagBypass", &diagType, 0);
 	diagType.addEntry("None", 0);
 	diagType.addEntry("UnderBlock", 1);
@@ -119,6 +120,7 @@ void Scaffold::onEnable() {
 	blockBelowY = blockBelowY.floor();
 	if (diagType.getSelectedValue() == 2) tellydalay = 1;
 	fakespoofticks = 0;
+	testextend = 0;
 	canspoof = false;
 	rundown = 0;
 	countopa = 0;
@@ -200,6 +202,10 @@ void Scaffold::onTick(C_GameMode* gm) {
 	float velocityxz = g_Data.getLocalPlayer()->velocity.magnitudexz();
 	if (diagType.getSelectedValue() == 2 && !jumping && velocityxz >= 0.01 && player->velocity.y <= 0.01) groundtime2++;
 	else groundtime2 = 0;
+
+	//Extend Bypass
+	if (testextend < extend && !jumping && velocityxz >= 0.01) testextend++;
+	if (velocityxz < 0.01) testextend = 0;
 
 	// Build Block
 	vec3_t vel = g_Data.getLocalPlayer()->velocity; vel = vel.normalize();
@@ -310,12 +316,10 @@ void Scaffold::onTick(C_GameMode* gm) {
 	//Celsius
 	if (extendType.getSelectedValue() == 0)
 	{
-		currExtend = extend;
 		if (((diagType.getSelectedValue() == 0 || diagType.getSelectedValue() == 1 || diagType.getSelectedValue() == 3 || diagType.getSelectedValue() == 4 || diagType.getSelectedValue() == 5) && !jumping && velocityxz >= 0.01) || groundtime >= 10 || groundtime2 >= 10 || (diagType.getSelectedValue() == 2 && !jumping && velocityxz >= 0.01 && telly2))
 		{
-			int extend2 = currExtend;
 			vec3_t defaultblockBelow = blockBelow;
-			for (int i = 0; i < extend2; i++) {
+			for (int i = 0; i < testextend; i++) {
 				if (Odelay > delay)
 				{
 					if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * i; blockBelow.z += vel.z * i; }
@@ -334,7 +338,7 @@ void Scaffold::onTick(C_GameMode* gm) {
 				}
 			}
 			blockBelow = defaultblockBelow;
-			if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * currExtend; blockBelow.z += vel.z * currExtend; }
+			if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * testextend; blockBelow.z += vel.z * testextend; }
 			if (delay > 0)
 			{
 				if (Odelay < 6 - delay) { if (isBlockReplacable(blockBelow)) predictBlock(blockBelow); }
@@ -356,10 +360,9 @@ void Scaffold::onTick(C_GameMode* gm) {
 	//Radium
 	if (extendType.getSelectedValue() == 1)
 	{
-		currExtend = extend + 1.2;
 		if (((diagType.getSelectedValue() == 0 || diagType.getSelectedValue() == 1 || diagType.getSelectedValue() == 3 || diagType.getSelectedValue() == 4 || diagType.getSelectedValue() == 5) && !jumping && velocityxz >= 0.01) || groundtime >= 10 || groundtime2 >= 10 || (diagType.getSelectedValue() == 2 && !jumping && velocityxz >= 0.01 && telly2))
 		{
-			for (int i = 0; i <= currExtend; i++)
+			for (int i = 0; i <= testextend; i++)
 			{
 				if (Odelay > delay)
 				{
@@ -448,24 +451,28 @@ void Scaffold::onTick(C_GameMode* gm) {
 		oldpos = blockBelow.floor();
 	}
 
-	//Zephyr
+	//Actinium
 	if (extendType.getSelectedValue() == 3)
 	{
-		int extend2 = extend;
 		vec3_t defaultblockBelow = blockBelow;
-		for (int i = 0; i < extend2; i++) {
-			if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * i; blockBelow.z += vel.z * i; }
+		for (int i = 0; i < testextend; i++) {
 			if (delay > 0)
 			{
-				if (Odelay < 6 - delay) { if (isBlockReplacable(blockBelow)) predictBlock(blockBelow); }
+				if (Odelay < 6 - delay)
+				{
+					if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * i; blockBelow.z += vel.z * i; }
+					if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
+				}
 				else Odelay = 0;
 			}
+			else
+			{
+				if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * i; blockBelow.z += vel.z * i; }
+				if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
+			}
+			blockBelow = defaultblockBelow;
 		}
-		blockBelow = defaultblockBelow;
-		if (!jumping && velocityxz >= 0.01) { blockBelow.x += vel.x * extend; blockBelow.z += vel.z * extend; }
-		if (isBlockReplacable(blockBelow)) {
-			predictBlock(blockBelow);
-		}
+		oldpos = blockBelow.floor();
 	}
 
 
