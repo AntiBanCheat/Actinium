@@ -17,6 +17,8 @@ private:
 	int timer = 20;
 	int dashTime = 0;
 	int cliptimes = 4;
+	int auautesttick = 0;
+	int hivetestdelay = 0;
 	float upsped = 2;
 	vec3_t savePos;
 	int nowtimes;
