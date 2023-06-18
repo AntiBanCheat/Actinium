@@ -7,12 +7,13 @@ HiveFlytwo::HiveFlytwo() : IModule(0, Category::MOVEMENT, "How the fuck does thi
 	mode.addEntry("SlowClip2", 3);
 	mode.addEntry("JumpClip", 4);
 	mode.addEntry("SlowUp", 5);
+	mode.addEntry("Test", 6);
 	registerFloatSetting("Speed", &speed, speed, .1f, 2.f);
 	registerFloatSetting("Height", &height, height, 0.f, 1.f);
 	registerFloatSetting("Duration", &duration, duration, 0.5f, 1.f);
 	registerFloatSetting("ClipUp", &clipUp, clipUp, 0.f, 5.f);
 	registerIntSetting("Timer", &timer, timer, 1, 30);
-	registerIntSetting("DashTime", &dashTime, dashTime, 0, 2000);
+	registerIntSetting("DashTime", &dashTime, dashTime, 0, 100);
 	registerBoolSetting("Freelook", &lock, lock);
 	registerBoolSetting("ClipLimit", &cliplimit, cliplimit);
 	registerIntSetting("ClipTimes", &cliptimes, cliptimes, 1, 20);
@@ -35,10 +36,12 @@ void HiveFlytwo::onEnable() {
 	dashed = false;
 	dspeed = speed;
 	nowtimes = 0;
+	auautesttick = 0;
+	hivetestdelay = 0;
 	auto player = g_Data.getLocalPlayer();
 	savePos = *player->getPos();
 	vec3_t myPos = *player->getPos();
-	if (mode.getSelectedValue() == 0 || mode.getSelectedValue() == 5) // only jump
+	if (mode.getSelectedValue() == 0 || mode.getSelectedValue() == 5 || mode.getSelectedValue() == 6) // only jump
 	{
 		myPos.y += clipUp;
 		player->setPos(myPos);
@@ -49,7 +52,6 @@ void HiveFlytwo::onEnable() {
 		lock->setEnabled(true);
 	}
 	auto aura = moduleMgr->getModule<Killaura>();
-	auto disa = moduleMgr->getModule<Disabler>();
 	auto sped = moduleMgr->getModule<Speed>();
 	if (aura->isEnabled())
 	{
@@ -57,12 +59,6 @@ void HiveFlytwo::onEnable() {
 		aura->setEnabled(false);
 	}
 	else aurais = false;
-	if (disa->isEnabled())
-	{
-		disableris = true;
-		disa->setEnabled(false);
-	}
-	else disableris = false;
 	if (sped->isEnabled())
 	{
 		speedis = true;
@@ -79,6 +75,7 @@ void HiveFlytwo::onTick(C_GameMode* gm) {
 
 void HiveFlytwo::onMove(C_MoveInputHandler* input) {
 	auto player = g_Data.getLocalPlayer();
+	auautesttick++;
 	if (player == nullptr) return;
 	vec3_t moveVec;
 	auto sped = moduleMgr->getModule<Speed>();
@@ -142,25 +139,43 @@ void HiveFlytwo::onMove(C_MoveInputHandler* input) {
 				}
 			}
 		}
-		if (TimerUtil::hasTimedElapsed(dashTime, !blink) && !dashed) {
+		if (auautesttick > dashTime) {
+			auautesttick = 0;
 			dashed = true;
 			dspeed = dspeed * duration;
-			if(mode.getSelectedValue() == 0) // clip, slowclip, jumpclip
+			if (mode.getSelectedValue() == 6) //test
 			{
-				float calcYaw = (player->yaw + 90) * (PI / 180);
-				vec2_t moveVec2d = { input->forwardMovement, -input->sideMovement };
-				bool pressed = moveVec2d.magnitude() > 0.01f;
-				float c = cos(calcYaw);
-				float s = sin(calcYaw);
-				moveVec2d = { moveVec2d.x * c - moveVec2d.y * s, moveVec2d.x * s + moveVec2d.y * c };
+				hivetestdelay++;
+				if (hivetestdelay == 2) dashTime = 4;
+				if (hivetestdelay == 3) hivetestdelay = 0;
+				if (hivetestdelay == 1) dashTime = 1;
+			}
+			if(mode.getSelectedValue() == 0 || mode.getSelectedValue() == 6) // jump
+			{
+				if (cliplimit)
+				{
+					if (nowtimes > cliptimes)
+					{
+						dspeed = speed;
+						nowtimes = 0;
 
-				if (player->onGround && pressed)
-					player->jumpFromGround();
-				moveVec.x = moveVec2d.x * dspeed;
-				moveVec.y = height;
-				player->velocity.y;
-				moveVec.z = moveVec2d.y * dspeed;
-				if (pressed) player->lerpMotion(moveVec);
+					}
+					else nowtimes++;
+					float calcYaw = (player->yaw + 90) * (PI / 180);
+					vec2_t moveVec2d = { input->forwardMovement, -input->sideMovement };
+					bool pressed = moveVec2d.magnitude() > 0.01f;
+					float c = cos(calcYaw);
+					float s = sin(calcYaw);
+					moveVec2d = { moveVec2d.x * c - moveVec2d.y * s, moveVec2d.x * s + moveVec2d.y * c };
+
+					if (player->onGround && pressed)
+						player->jumpFromGround();
+					moveVec.x = moveVec2d.x * dspeed;
+					moveVec.y = height;
+					player->velocity.y;
+					moveVec.z = moveVec2d.y * dspeed;
+					if (pressed) player->lerpMotion(moveVec);
+				}
 			}
 			else
 			{
@@ -273,17 +288,11 @@ void HiveFlytwo::onDisable() {
 		lock->setEnabled(false);
 	}
 	auto aura = moduleMgr->getModule<Killaura>();
-	auto disa = moduleMgr->getModule<Disabler>();
 	auto sped = moduleMgr->getModule<Speed>();
 	if (aurais == true)
 	{
 		aura->setEnabled(true);
 		aurais = false;
-	}
-	if (disableris == true)
-	{
-		disa->setEnabled(true);
-		disableris = false;
 	}
 	if (speedis == true)
 	{
