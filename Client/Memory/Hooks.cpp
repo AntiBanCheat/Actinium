@@ -627,25 +627,27 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 			string fix = gray + "[*] " + string(RESET);
 
 			string changeLog = (gray + bold + string("ActiniumClient-Release") + ": \n" + RESET +
-				gray + bold + "Beta Build 4: \n" + RESET +
-				gray + bold + "Credits \n" + RESET +
-				fix + "Packet \n" +
-				fix + "Deq \n" +
-				fix + "Founder \n" +
-				fix + "Steve's Noob#2585 \n" +
-				fix + "NRG#4200 \n" +
-				fix + "z98#3636 \n" +
+				gray + bold + "Beta Build 6: \n" + RESET +
+				gray + bold + "Base Credits \n" + RESET +
+				"Packet \n" +
+				"Deq \n" +
+				"Founder \n" +
+				"Steve's Noob#2585 \n" +
+				"NRG#4200 \n" +
+				"z98#3636 \n" +
+				"\n" +
+				gray + bold + "Other Credits \n" + RESET +
+				"daydreaminq \n" +
 				"\n" +
 				gray + bold + "Developers(Actinium) \n" + RESET +
-				fix + "DarkNBTHax \n" +
-				fix + "KaeruClient \n" +
-				fix + "AntiBanCheat \n" +
-				fix + "As4r1 \n" +
-				fix + "giyo000 \n" +
-				fix + "SBreality \n" +
-				fix + "Ika286 \n" +
-				fix + "Rasky1 \n" +
-				fix + "ffffffff \n"	    
+				"DarkNBTHax \n" +
+				"KaeruClient \n" +
+				"AntiBanCheat \n" +
+				"As4r1 \n" +
+				"giyo000 \n" +
+				"SBreality \n" +
+				"Rasky1 \n" +
+				"ffffffff \n"	    
 				);
 
 			//float size = g_Data.getClientInstance()->getGuiData()->widthGame / g_Data.getClientInstance()->getGuiData()->heightGame - 1.7769f; // interesting
@@ -1198,12 +1200,38 @@ void Hooks::LoopbackPacketSender_sendToServer(C_LoopbackPacketSender* a, C_Packe
 			if (packet->isInstanceOf<C_MovePlayerPacket>() && g_Data.isInGame()) {
 				return;
 			}
+			if (packet->isInstanceOf<PlayerAuthInputPacket>()) {
+				PlayerAuthInputPacket* inputPacket = reinterpret_cast<PlayerAuthInputPacket*>(packet);
+
+				uint32_t inputKeys = inputPacket->inputKeys;
+				if ((inputKeys & (1 << 31)) == 0)
+				{
+					inputKeys |= (1 << 31);
+				}
+				if ((inputKeys & (1 << 25)) == 0)
+				{
+					inputKeys |= (1 << 25);
+				}
+				if ((inputKeys & (1 << 20)) == 0)
+				{
+					inputKeys |= (1 << 20);
+				}
+				if ((inputKeys & (1 << 10)) == 0)
+				{
+					inputKeys |= (1 << 10);
+				}
+				if ((inputKeys & (1 << 26)) != 0)
+				{
+					inputKeys &= ~(1 << 26);
+				}
+				inputPacket->inputKeys = inputKeys;
+			}
 		}
 
 		//Cancel
-		if (packet->isInstanceOf<C_MovePlayerPacket>()) {
+		if (packet->isInstanceOf<PlayerAuthInputPacket>()) {
 			if (disabler->mode.getSelectedValue() == 6) {
-				if (TimerUtil::hasTimedElapsed((1000 / (float)1), true)) {
+				if (TimerUtil::hasTimedElapsed((1000 / (float)disabler->multiplier), true)) {
 					return;
 				}
 			}
