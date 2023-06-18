@@ -398,6 +398,7 @@ void Scaffold::onTick(C_GameMode* gm) {
 				}
 			}
 			placed.clear();
+			oldpos = blockBelow.floor();
 		}
 		else
 		{
@@ -471,6 +472,11 @@ void Scaffold::onTick(C_GameMode* gm) {
 				if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
 			}
 			blockBelow = defaultblockBelow;
+		}
+		if (groundtime2 >= 5 || groundtime >= 5 || velocityxz <= 0.01 || (diagType.getSelectedValue() == 0 || diagType.getSelectedValue() == 1 || diagType.getSelectedValue() == 3 || diagType.getSelectedValue() == 4 || diagType.getSelectedValue() == 5) && player->onGround || telly2)
+		{
+			if (isBlockReplacable(blockBelow)) predictBlock(blockBelow);
+			else buildBlock(blockBelow);
 		}
 		oldpos = blockBelow.floor();
 	}
