@@ -13,7 +13,7 @@ HiveFlytwo::HiveFlytwo() : IModule(0, Category::MOVEMENT, "How the fuck does thi
 	registerFloatSetting("Duration", &duration, duration, 0.5f, 1.f);
 	registerFloatSetting("ClipUp", &clipUp, clipUp, 0.f, 5.f);
 	registerIntSetting("Timer", &timer, timer, 1, 30);
-	registerIntSetting("DashTime", &dashTime, dashTime, 0, 100);
+	registerIntSetting("DashTime", &dashTime, dashTime, 0, 40);
 	registerBoolSetting("Freelook", &lock, lock);
 	registerBoolSetting("ClipLimit", &cliplimit, cliplimit);
 	registerIntSetting("ClipTimes", &cliptimes, cliptimes, 1, 20);
