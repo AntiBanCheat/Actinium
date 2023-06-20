@@ -893,12 +893,11 @@ void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 		outline.x += 1.f;
 		outline.y += 1.f;
 		outline.z += 1.f;
-		//clientMessageF("%f %f %f %i", loc.x, loc.y, loc.z, exposee.size());
-		float r = (expR / 255.f);
-		float g = (expG / 255.f);
-		float b = (expB / 255.f);
-
-		DrawUtils::setColor(r, g, b, 1.f);
+		int index = 0;
+		auto interfaceMod = moduleMgr->getModule<Interface>();
+		index++; int curIndex = -index * interfaceMod->spacing;
+		auto interfaceColor = ColorUtil::interfaceColor(curIndex);
+		DrawUtils::setColor(interfaceColor.r, interfaceColor.g, interfaceColor.b, 1.f);
 		DrawUtils::drawBox(oldpos, outline, expT, 1.f, false);
 	}
 }
