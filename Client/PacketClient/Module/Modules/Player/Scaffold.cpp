@@ -124,7 +124,7 @@ void Scaffold::onEnable() {
 	canspoof = false;
 	rundown = 0;
 	countopa = 0;
-	county = 0;
+	county = -128;
 	auto speedMod = moduleMgr->getModule<Speed>();
 	if (speedMod->isEnabled()) {
 		speedwasenabled = true;
@@ -156,8 +156,6 @@ void Scaffold::onTick(C_GameMode* gm) {
 	C_PlayerInventoryProxy* supplies = g_Data.getLocalPlayer()->getSupplies();
 	jumping = GameData::isKeyDown(*input->spaceBarKey);
 	sneaking = GameData::isKeyDown(*input->sneakKey);
-	if (!(countopa > 149)) countopa += 30;
-	if (!(county > 7)) county += 1;
 	if (holdType.getSelectedValue() == 2) {
 		fakespoofticks++;
 		if (1 < fakespoofticks) canspoof = true;
@@ -772,6 +770,8 @@ void Scaffold::onSendPacket(C_Packet* packet) {
 }
 
 void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
+	if (!(countopa > 149)) countopa += 15;
+	if (!(county > -0.6)) county = county / 1.1;
 	auto player = g_Data.getLocalPlayer();
 	if (player == nullptr) return;
 	static auto clickGUI = moduleMgr->getModule<ClickGUIMod>();
