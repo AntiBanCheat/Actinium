@@ -499,15 +499,15 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 void DrawUtils::drawGlow(const vec4_t& pos, const MC_Color& col, float alpha, int layers, float blurRadius) {
 	float dAlpha = alpha / layers;  // kakureiya- no alpha
 	for (int i = 0; i < layers; i++) {
-		float layerAlpha = alpha - dAlpha * i;                   //alpha
-		float layerRadius = blurRadius + (blurRadius / layers) * i;  //range
+		float layerAlpha = alpha - dAlpha * i;     //alpha
+		float layerRadiusX = blurRadius + (blurRadius / layers) * (layers - (i + 1));  //X Z range
+		float layerRadiusY = blurRadius + (blurRadius / layers) * i;  //Y W range
 		DrawUtils::setColor(col.r, col.g, col.b, layerAlpha);
 		vec4_t layerPos = pos;//kakudai draw
-		layerPos.x -= layerRadius;
-		layerPos.y -= layerRadius;
-		layerPos.z += layerRadius;
-		layerPos.w += layerRadius;
-		//DrawUtils::fillRoundRectangle(layerPos, MC_Color(col), false);
+		layerPos.x -= layerRadiusX;
+		layerPos.y -= layerRadiusY;
+		layerPos.z += layerRadiusX;
+		layerPos.w += layerRadiusY;
 		DrawUtils::drawQuad({ layerPos.x, layerPos.w }, { layerPos.z, layerPos.w }, { layerPos.z, layerPos.y }, { layerPos.x, layerPos.y });
 	}
 }
