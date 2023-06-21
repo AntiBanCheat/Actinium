@@ -7,6 +7,7 @@ uintptr_t HiveRotations3 = Utils::getBase() + 0x8F53B1;
 uintptr_t HiveRotations4 = Utils::getBase() + 0x98AF833C1;
 uintptr_t HiveRotations5 = Utils::getBase() + 0x173ACFA01D; //From Skidders
 int testextend = 0;
+int radiumdelay = 0;
 using namespace std;
 Scaffold::Scaffold() : IModule(0, Category::PLAYER, "Places blocks under you") {
 	registerEnumSetting("Rotations", &rotations, 0);
@@ -123,6 +124,7 @@ void Scaffold::onEnable() {
 	testextend = 0;
 	canspoof = false;
 	rundown = 0;
+	radiumdelay = 0;
 	countopa = 0;
 	county = -128;
 	auto speedMod = moduleMgr->getModule<Speed>();
@@ -362,7 +364,43 @@ void Scaffold::onTick(C_GameMode* gm) {
 		{
 			for (int i = 0; i <= testextend; i++)
 			{
-				if (Odelay > delay)
+				if (delay > 0)
+				{
+					radiumdelay++;
+					if (radiumdelay < 6 - delay)
+					{
+						int tempx = vel.x * i;
+						int tempz = vel.z * i;
+						vec3_t temp = blockBelow;
+						temp.x += tempx;
+						temp.z += tempz;
+						if (!placed.empty())
+						{
+							bool skip = false;
+							for (auto& i : placed)
+							{
+								if (i == temp)
+								{
+									skip = true;
+								}
+							}
+							if (skip)
+							{
+								clientMessageF("Skipped due same block");
+								continue;
+							}
+						}
+						if (isBlockReplacable(temp)) predictBlock(temp);
+						else if (buildBlock(temp))
+						{
+							placed.push_back(temp);
+							clientMessageF("Breaked due placed");
+							break;
+						}
+					}
+					else radiumdelay = 0;
+				}
+				else
 				{
 					int tempx = vel.x * i;
 					int tempz = vel.z * i;
@@ -392,7 +430,6 @@ void Scaffold::onTick(C_GameMode* gm) {
 						clientMessageF("Breaked due placed");
 						break;
 					}
-					Odelay = 0;
 				}
 			}
 			placed.clear();
@@ -771,7 +808,7 @@ void Scaffold::onSendPacket(C_Packet* packet) {
 
 void Scaffold::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 	if (!(countopa > 149)) countopa += 15;
-	if (!(county > -0.6)) county = county / 1.1;
+	if (!(county > -0.6)) county = county / 1.25;
 	auto player = g_Data.getLocalPlayer();
 	if (player == nullptr) return;
 	static auto clickGUI = moduleMgr->getModule<ClickGUIMod>();
