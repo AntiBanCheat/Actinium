@@ -438,7 +438,6 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 	static auto nameTagsMod = moduleMgr->getModule<NameTags>();
 	vec2_t textPos;
 	vec4_t rectPos;
-	vec4_t rectPos2;
 	std::string text = ent->getNameTag()->getText();
 	text = Utils::sanitize(text);
 	text = text.substr(0, text.find('\n'));
@@ -455,15 +454,11 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 		rectPos.y = textPos.y - 1.f * textSize;
 		rectPos.z = textPos.x + textWidth + 1.f * textSize;
 		rectPos.w = textPos.y + textHeight + 2.f * textSize;
-		rectPos2.x = (textPos.x - 1.f * textSize) + 4;
-		rectPos2.y = (textPos.y - 1.f * textSize) + 2;
-		rectPos2.z = (textPos.x + textWidth + 1.f * textSize) - 4;
-		rectPos2.w = (textPos.y + textHeight + 2.f * textSize) - 2;
 		vec4_t subRectPos = rectPos;
 		subRectPos.w = rectPos.w + 1.f;
 		subRectPos.y = subRectPos.w - 1.f * textSize;
 		auto nametagsMod = moduleMgr->getModule<NameTags>();
-		if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(rectPos2, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
+		if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(rectPos, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
 		fillRoundRectangle(rectPos, MC_Color(0, 0, 0, nametagsMod->opacity), false);
 		if (nametagsMod->health) {
 			float health = ent->getHealth();
@@ -499,9 +494,9 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 void DrawUtils::drawGlow(const vec4_t& pos, const MC_Color& col, float alpha, int layers, float blurRadius) {
 	float dAlpha = alpha / layers;  // kakureiya- no alpha
 	for (int i = 0; i < layers; i++) {
-		float layerAlpha = alpha - dAlpha * i;     //alpha
-		float layerRadiusX = blurRadius + (blurRadius / layers) * (layers - (i + 1));  //X Z range
-		float layerRadiusY = blurRadius + (blurRadius / layers) * i;  //Y W range
+		float layerAlpha = alpha - dAlpha * (layers / 2);     //alpha
+		float layerRadiusX = (blurRadius / layers) * (layers - (i + 1));  //X Z range
+		float layerRadiusY = (blurRadius / layers) * (i + 1);  //Y W range
 		DrawUtils::setColor(col.r, col.g, col.b, layerAlpha);
 		vec4_t layerPos = pos;//kakudai draw
 		layerPos.x -= layerRadiusX;
@@ -1003,6 +998,41 @@ void DrawUtils::fillRoundRectangle(vec4_t pos, const MC_Color col, bool rounder 
 		DrawUtils::fillRectangleA(vec4_t(pos.x + 1, pos.y - 1.5f, pos.z - 1, pos.y - 1), col);
 		DrawUtils::fillRectangleA(vec4_t(pos.x + 2, pos.y - 2, pos.z - 2, pos.y - 1.5), col);
 		break;
+	}
+}
+void DrawUtils::NewfillRoundRectangle(vec4_t pos, const MC_Color col, int quality, float zrs, float rounder) {
+	DrawUtils::setColor(col.r, col.g, col.b, col.a);
+	DrawUtils::drawQuad({ pos.x, pos.w }, { pos.z, pos.w }, { pos.z, pos.y }, { pos.x, pos.y });
+	float zrsx = zrs;
+	float zrsy = zrsx * quality;
+	float savex = 0;
+	float savey = 0;
+	for (int i = 0; i < quality; i++) {
+		DrawUtils::fillRectangleA(vec4_t(pos.x + zrsx + savex, pos.y - zrsy - savey , pos.z - zrsx - savex, pos.y - savey), col);
+		savex = zrsx;
+		savey = zrsy + savey;
+		zrsx = zrsx * rounder;
+		zrsy = zrsy / rounder;
+	}
+}
+
+void DrawUtils::testRoundRectangle(vec4_t pos, const MC_Color col, int quality, float size) {
+	DrawUtils::fillRectangleA(vec4_t(pos.x - size, pos.y, pos.x, pos.w), col);
+	DrawUtils::fillRectangleA(vec4_t(pos.x, pos.y - size, pos.z, pos.y), col);
+	DrawUtils::fillRectangleA(vec4_t(pos.z, pos.y, pos.z + size, pos.w), col);
+	DrawUtils::fillRectangleA(vec4_t(pos.x, pos.y, pos.z, pos.w + size), col);
+	float savey = 0;
+	for (int i = 1; i <= quality; i++) {
+		float degree = (360 / quality) * i;
+		float xpos = cos(degree);
+		float realxpos = xpos * size;
+		float ypos = sin(degree);
+		float realypos = ypos * size;
+		//2 (x < 0, y >= 0)
+		if (xpos <= 0) DrawUtils::fillRectangleA(vec4_t(pos.x + realxpos, pos.y + realypos, pos.x, pos.y), col);
+		if (xpos >= 0) DrawUtils::fillRectangleA(vec4_t(pos.z, pos.w, pos.z + realxpos, pos.w + realypos), col);
+		if (xpos >= 0) DrawUtils::fillRectangleA(vec4_t(pos.x - realxpos, pos.w, pos.x, pos.w + realypos), col);
+		if (xpos <= 0) DrawUtils::fillRectangleA(vec4_t(pos.z - realxpos, pos.y, pos.z, pos.y + realypos), col);
 	}
 }
 
