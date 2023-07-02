@@ -10,9 +10,14 @@ private:
 	int boosttimer = 35;
 	int damagetime = 7;
 	int damagespeed = 2;
+        int strafeticks = 0;
+        int jumpticks = 0;
+        int startstrafe = 0;
+        int startjumpstrafe = 0;
 	bool groundcheck;
 	bool rotate;
 	bool fullstop;
+        bool dmgboost = false;
 	float oldx;
 	float oldz;
 	float animYaw = 0.0;
