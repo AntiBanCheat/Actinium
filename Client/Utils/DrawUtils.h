@@ -93,6 +93,8 @@ public:
 	static void drawRoundRectangle(vec4_t pos, const MC_Color col, bool rounder);
 	static void drawRoundRectangle2(vec4_t pos, const MC_Color col);
 	static void fillRoundRectangle(vec4_t pos, const MC_Color col, bool rounder);
+	static void NewfillRoundRectangle(vec4_t pos, const MC_Color col, int quality, float zrs, float rounder);
+	static void testRoundRectangle(vec4_t pos, const MC_Color col, int quality, float size);
 	static void fillRoundRectangleGradient(vec4_t pos, int quality);
 	static void drawButton(vec4_t pos, vec2_t textPos, std::string* textStr, const MC_Color color, const MC_Color hoverColor);
 
