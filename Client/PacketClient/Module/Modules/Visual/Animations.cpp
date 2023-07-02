@@ -19,7 +19,7 @@ Animations::Animations() : IModule(0, Category::VISUAL, "Changes the swing/hitti
 	type.addEntry("None", 0);
 	type.addEntry("Flux", 1);
 	type.addEntry("Tap", 2);
-	type.addEntry("Exhi", 3);
+	//type.addEntry("Exhi", 3);
 	//registerBoolSetting("TapSwing", &tapswing, tapswing);
 	registerBoolSetting("NoSwing", &noswing, noswing);
 	//registerBoolSetting("NoSwingV2", &slowSwing, slowSwing);
