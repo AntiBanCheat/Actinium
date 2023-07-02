@@ -1,6 +1,5 @@
 #include "Speed.h"
 #include "../pch.h"
-bool dmgboost = false;
 using namespace std;
 Speed::Speed() : IModule(0, Category::MOVEMENT, "Increases your speed") {
 	registerEnumSetting("Mode", &mode, 0);
@@ -16,6 +15,7 @@ Speed::Speed() : IModule(0, Category::MOVEMENT, "Increases your speed") {
 	//mode.addEntry("Packet", 9);
 	mode.addEntry("TPBoost", 9);
 	mode.addEntry("Flareon", 10);
+	mode.addEntry("HiveBoost", 11);
 
 	registerFloatSetting("Height", &height, height, 0.000001f, 0.40f);
 	registerFloatSetting("Speed", &speed, speed, 0.2f, 2.f);
@@ -27,6 +27,8 @@ Speed::Speed() : IModule(0, Category::MOVEMENT, "Increases your speed") {
 	registerIntSetting("DamageTime", &damagetime, damagetime, 1, 20);
 	registerIntSetting("DamageSpeed", &damagespeed, damagespeed, 0, 10); //only beta
 	registerIntSetting("DamageTimer", &dmgtimer, dmgtimer, 1, 600);
+	registerIntSetting("StartStrafe", &startstrafe, startstrafe, 0, 5);
+	registerIntSetting("JumpStrafe", &startjumpstrafe, startjumpstrafe, 0, 5);
 	///registerBoolSetting("FullStop", &fullstop, fullstop); // Prevents flags cause instantly stops
 	//registerBoolSetting("DesnycBoost", &dboost, dboost);
 	//registerBoolSetting("Rotate", &rotate, rotate);
@@ -52,7 +54,8 @@ void Speed::onEnable() {
 	needblink = false;
 	damageMotion = 0;
 	strafeTime = 50;
-
+	strafeticks = 0;
+	jumpticks = 0;
 	oldx = player->currentPos.x;
 	oldz = player->currentPos.z;
 	animYaw = player->yaw;
@@ -106,7 +109,7 @@ void Speed::onTick(C_GameMode* gm) {
 void Speed::onMove(C_MoveInputHandler* input) {
 	auto player = g_Data.getLocalPlayer();
 	if (player == nullptr) return;
-	if (!moduleMgr->getModule<Scaffold>()->isEnabled()) g_Data.getClientInstance()->minecraft->setTimerSpeed(timer);
+	if (!moduleMgr->getModule<Scaffold>()->isEnabled() && !(strafeTime <= damagetime)) g_Data.getClientInstance()->minecraft->setTimerSpeed(timer);
 	bool pressed = MoveUtil::keyPressed();
 	if (!pressed && fullstop) MoveUtil::stop(false);
 	if (mode.getSelectedValue() != 10) player->setSprinting(true);
@@ -127,7 +130,8 @@ void Speed::onMove(C_MoveInputHandler* input) {
 			}
 		}
 	}
-
+	strafeticks++;
+	jumpticks++;
 	float yaw = player->yaw;
 
 	if (input->forward && input->backward) {
@@ -384,11 +388,13 @@ void Speed::onMove(C_MoveInputHandler* input) {
 	if (mode.getSelectedValue() == 6) {
 		static bool useVelocity = false;
 		// eat my absctrionalie
-		if (height >= 0.385) { if (player->onGround && pressed) player->jumpFromGround(); useVelocity = false; }
+		if (height >= 0.385) { if (player->onGround && pressed) useVelocity = false; }
 		else useVelocity = true;
 		if (height <= 0.04 && !input->isJumping) { player->velocity.y += height; useVelocity = false; }
 
 		if (pressed && player->onGround) {
+			jumpticks = 0;
+			player->jumpFromGround();
 			if (useVelocity && !input->isJumping) player->velocity.y = height;
 			random3 = 0 - random2;
 			fricspeed = randomFloat(random2, random3);
@@ -420,6 +426,28 @@ void Speed::onMove(C_MoveInputHandler* input) {
 				speedFriction = randomFloat(.33f, .45f);
 			}
 			MoveUtil::setSpeed(speedFriction);
+		}
+	}
+
+	//Hive Boost
+	if (mode.getSelectedValue() == 11) {
+		static bool useVelocity = false;
+		// eat my absctrionalie
+		if (height >= 0.385) { if (player->onGround && pressed) useVelocity = false; }
+		else useVelocity = true;
+		if (height <= 0.04 && !input->isJumping) { player->velocity.y += height; useVelocity = false; }
+		if (strafeticks > startstrafe && jumpticks > startjumpstrafe)
+		{
+			strafeticks = 0;
+			if (player->fallDistance >= 0.01) setSpeed(player->velocity.magnitudexz());
+		}
+		if (pressed && player->onGround) {
+			jumpticks = 0;
+			player->jumpFromGround();
+			if (useVelocity && !input->isJumping) player->velocity.y = height;
+			random3 = 0 - random2;
+			fricspeed = randomFloat(random2, random3);
+			MoveUtil::setSpeed(speed + fricspeed);
 		}
 	}
 }
