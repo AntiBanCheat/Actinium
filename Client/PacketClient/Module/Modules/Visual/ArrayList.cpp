@@ -181,7 +181,7 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 #pragma endregion
 
 			// Drawing
-			auto rectPos2 = vec4_t(xOffset - 3 + test, yOffset + test2, windowSize.x + (textPadding * 2) - test, yOffset + textPadding * 2 + textHeight - test2);//test = -17.83    test2=15.65
+			auto rectPos2 = vec4_t(rectPos.x + test, rectPos.y + test2, rectPos.z - test, rectPos.w - test2);
 			auto interfaceColor = ColorUtil::interfaceColor(curIndex);
 			auto interfaceColortwo = ColorUtil::interfaceColortwo(curIndex);
 			if (arraycoloropa2 > 0) DrawUtils::drawGlow(rectPos2, MC_Color(interfaceColortwo), arraycoloropa2, layers, radius);
