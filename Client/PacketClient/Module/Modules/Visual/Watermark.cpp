@@ -69,10 +69,8 @@ void Watermark::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 		float flaot = DrawUtils::getTextWidth(&idk, scale) + 8.F;
 		float te = DrawUtils::getTextWidth(&sense, scale) + 8.f;
 		vec4_t skeetRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
-		vec4_t skeetRect2 = vec4_t(skeetRect.x + 4, skeetRect.y + 2, skeetRect.z - 4, skeetRect.w - 2);
 		vec4_t simpleRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
 		vec4_t newRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
-		vec4_t newRect2 = vec4_t(newRect.x + 4, newRect.y + 2, newRect.z - 4, newRect.w - 2);
 		vec4_t idkRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + textHeight + (textPadding * 2));
 		vec4_t newRectTop = vec4_t(newRect.x, newRect.y - 2, newRect.z, newRect.y);
 		vec4_t RadiumRect = vec4_t(positionX, positionY, positionX + aidsLen, positionY + (textHeight * 2) + (textPadding * 4));
@@ -81,6 +79,7 @@ void Watermark::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 		//DrawUtils::drawCircle(vec4_t(positionX + 10, positionY, positionX + 14, positionY + 2.F), MC_Color(10, 10, 10, 255));
 
 		auto interfaceColor = ColorUtil::interfaceColor(1);
+		auto interfaceMod = moduleMgr->getModule<Interface>();
 		switch (mode.getSelectedValue()) {
 		case 0:
 			if (gradient) DrawUtils::drawGradientText(vec2_t(simpleRect.x, simpleRect.y), &clientName, scale, 1, true);
@@ -89,7 +88,7 @@ void Watermark::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 		case 1: // New
 			DrawUtils::fillRoundRectangle(newRect, MC_Color(0, 0, 0, opacity), false);
 			DrawUtils::fillRectangleA(newRectTop, interfaceColor);
-			if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(newRect2, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
+			if (interfaceMod->glowlayers > 0) DrawUtils::drawGlow(newRect, MC_Color(0, 0, 0), interfaceMod->glowopacity / interfaceMod->glowlayers, interfaceMod->glowlayers, 4);
 			DrawUtils::drawText(vec2_t(newRect.x + (textPadding * 3), newRect.y + (textPadding * 3)), &newText, interfaceColor, scale, 1, true);
 			break;
 		case 2: // Weird
@@ -101,7 +100,7 @@ void Watermark::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			DrawUtils::fillRectangle(skeetRect, MC_Color(27, 27, 27), 1);
 			DrawUtils::drawRectangle(skeetRect, MC_Color(57, 57, 57), 1, 2);
 			DrawUtils::drawText(vec2_t(skeetRect.x + (textPadding * 2) + 4.f, skeetRect.y + (textPadding * 2)), &t, MC_Color(255, 255, 255), scale, 1, true);
-			if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(skeetRect2, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
+			if (interfaceMod->glowlayers > 0) DrawUtils::drawGlow(skeetRect, MC_Color(0, 0, 0), interfaceMod->glowopacity / interfaceMod->glowlayers, interfaceMod->glowlayers, 4);
 			DrawUtils::drawGradientText(vec2_t(skeetRect.x + te + (textPadding * 2) + 4.f, skeetRect.y + (textPadding * 2)), &sense, scale, 1, true);
 			break;
 		}
