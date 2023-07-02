@@ -458,7 +458,8 @@ void DrawUtils::drawNameTags(C_Entity* ent, float textSize, bool drawHealth, boo
 		subRectPos.w = rectPos.w + 1.f;
 		subRectPos.y = subRectPos.w - 1.f * textSize;
 		auto nametagsMod = moduleMgr->getModule<NameTags>();
-		if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(rectPos, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
+		auto interfaceMod = moduleMgr->getModule<Interface>();
+		if (interfaceMod->glowlayers > 0) DrawUtils::drawGlow(rectPos, MC_Color(0, 0, 0), interfaceMod->glowopacity / interfaceMod->glowlayers, interfaceMod->glowlayers, 4);
 		fillRoundRectangle(rectPos, MC_Color(0, 0, 0, nametagsMod->opacity), false);
 		if (nametagsMod->health) {
 			float health = ent->getHealth();
