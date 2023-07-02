@@ -20,8 +20,8 @@ public:
 	int opacity = 150;
 	int coloropacity = 255;
 	int glowlayers = 12;
+	float glowopacity = 0.75;
 	bool info = true;
-	bool ping = true;
 	bool fps = true;
 	bool speed = true;
 	bool position = true;
