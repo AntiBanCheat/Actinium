@@ -160,13 +160,13 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 
 #pragma region Math
 			vec4_t rectPos = vec4_t(xOffset - 3, yOffset, windowSize.x + (textPadding * 2) + 2, yOffset + textPadding * 2 + textHeight);
-			vec4_t bar = vec4_t(rectPos.z - 1.f, rectPos.y, rectPos.z, rectPos.w);
-			if (mode.getSelectedValue() == 4) bar = vec4_t(rectPos.z - 1.f, rectPos.y - 2.f, rectPos.z, rectPos.w);
+			vec4_t bar = vec4_t(rectPos.z, rectPos.y, rectPos.z + 1.f, rectPos.w);
+			if (mode.getSelectedValue() == 4) bar = vec4_t(rectPos.z, rectPos.y - 2.f, rectPos.z + 1.f, rectPos.w);
 			if (mode.getSelectedValue() == 4 && invert) bar = vec4_t(rectPos.z - 1.f, rectPos.y, rectPos.z, rectPos.w + 2.f);
-			vec4_t topLine = vec4_t(rectPos.x - 1.f, rectPos.y - 1.f, rectPos.z, rectPos.y);
-			vec4_t topLine2 = vec4_t(rectPos.x, rectPos.y - 2, rectPos.z, rectPos.y);
+			vec4_t topLine = vec4_t(rectPos.x - 1.f, rectPos.y - 1.f, rectPos.z + 1.f, rectPos.y);
+			vec4_t topLine2 = vec4_t(rectPos.x, rectPos.y - 2, rectPos.z + 1.f, rectPos.y);
 			if (invert) topLine2 = vec4_t(rectPos.x, rectPos.y + (textPadding * 2) + textHeight, rectPos.z, rectPos.y + (textPadding * 2) + textHeight + 2);
-			vec4_t topLine3 = vec4_t(rectPos.x, rectPos.y - 3.f, rectPos.z, rectPos.y - 2);
+			vec4_t topLine3 = vec4_t(rectPos.x, rectPos.y - 3.f, rectPos.z + 1.f, rectPos.y - 2);
 			if (invert) topLine3 = vec4_t(rectPos.x, rectPos.y + (textPadding * 2) + textHeight + 2, rectPos.z, rectPos.y + (textPadding * 2) + textHeight + 3);
 			if (invert) topLine = vec4_t(rectPos.x, rectPos.y + (textPadding * 2) + textHeight - 1, rectPos.z + 1.f, rectPos.y + (textPadding * 2) + textHeight);
 			vec4_t leftRect = vec4_t(xOffset - 4, yOffset, xOffset - 3, yOffset + textPadding * 2 + textHeight);
@@ -181,7 +181,7 @@ void ArrayList::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 #pragma endregion
 
 			// Drawing
-			auto rectPos2 = vec4_t(xOffset - 3 + test, yOffset + test2, windowSize.x + (textPadding * 2) - test, yOffset + textPadding * 2 + textHeight - test2);//test = -17.83    test2=15.65
+			auto rectPos2 = vec4_t(rectPos.x + test, rectPos.y + test2, rectPos.z - test, rectPos.w - test2);
 			auto interfaceColor = ColorUtil::interfaceColor(curIndex);
 			auto interfaceColortwo = ColorUtil::interfaceColortwo(curIndex);
 			if (arraycoloropa2 > 0) DrawUtils::drawGlow(rectPos2, MC_Color(interfaceColortwo), arraycoloropa2, layers, radius);

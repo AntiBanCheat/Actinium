@@ -8,9 +8,9 @@ ClickGUIMod::ClickGUIMod() : IModule(VK_INSERT, Category::VISUAL, "A GUI that di
 	theme.addEntry("Astolfo", 2);
 	theme.addEntry("PacketOld", 3);
 	theme.addEntry("Tenacity", 4);
-	theme.addEntry("Rise", 5); //LOL I'm KaeruClient :cold: developed
+	//theme.addEntry("Rise", 5); //LOL I'm KaeruClient :cold: developed
 	theme.addEntry("Lunar", 6); //Made by rasky1
-	theme.addEntry("Badlion", 7); //ika turai kanasii
+	//theme.addEntry("Badlion", 7); //ika turai kanasii
 	theme.addEntry("ONECONFIG", 8); //ika ha turakunai kara motto tukurou! made by rasky1
 	theme.addEntry("TENACITY NEW", 9); //ika ga dev yametakara orega kawarini iroiro tukurimasu by rasky1 (watasi ha dougu deha arimasen)
 	registerEnumSetting("Color", &color, 0);

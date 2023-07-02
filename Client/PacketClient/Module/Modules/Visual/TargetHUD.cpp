@@ -517,8 +517,8 @@ void TargetHUD::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 						if (rawName.length() < distance.length()) targetLen = DrawUtils::getTextWidth(&distance, 1) + 10.5;
 						else targetLen = DrawUtils::getTextWidth(&rawName, 1) + 6.5;
 						vec4_t testRect = vec4_t(positionX, positionY, targetLen + positionX, positionY + defaultRectHeight - 11);
-						vec4_t testRect2 = vec4_t((positionX)+4, (positionY) + 2, (targetLen + positionX) - 4, (positionY + defaultRectHeight - 11) - 2);
-						if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(testRect2, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
+						auto interfaceMod = moduleMgr->getModule<Interface>();
+						if (interfaceMod->glowlayers > 0) DrawUtils::drawGlow(testRect, MC_Color(0, 0, 0), interfaceMod->glowopacity / interfaceMod->glowlayers, interfaceMod->glowlayers, 4);
 						DrawUtils::fillRoundRectangle(testRect, MC_Color(0, 0, 0, opacity), true);
 						DrawUtils::fillRoundRectangle(testRect, MC_Color(33, 0, 0, steveOpacity), true);
 						//		DrawUtils::drawRoundRectangle(testRect, MC_Color(33, 33, 33, opacity), false);
@@ -554,8 +554,8 @@ void TargetHUD::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 						if (rawName.length() < distance.length()) targetLen = DrawUtils::getTextWidth(&distance, 1) + 10.5;
 						else targetLen = DrawUtils::getTextWidth(&rawName, 1) + 6.5;
 						vec4_t testRect = vec4_t(positionX, positionY, targetLen + positionX, positionY + defaultRectHeight + 1);
-						vec4_t testRect2 = vec4_t((positionX)+4, (positionY)+2, (targetLen + positionX) - 4, (positionY + defaultRectHeight + 1) - 2);
-						if (moduleMgr->getModule<Interface>()->glowlayers > 0) DrawUtils::drawGlow(testRect2, MC_Color(0, 0, 0), 0.75 / moduleMgr->getModule<Interface>()->glowlayers, moduleMgr->getModule<Interface>()->glowlayers, 4);
+						auto interfaceMod = moduleMgr->getModule<Interface>();
+						if (interfaceMod->glowlayers > 0) DrawUtils::drawGlow(testRect, MC_Color(0, 0, 0), interfaceMod->glowopacity / interfaceMod->glowlayers, interfaceMod->glowlayers, 4);
 						DrawUtils::fillRoundRectangle(testRect, MC_Color(0, 0, 0, opacity), true);
 						DrawUtils::fillRoundRectangle(testRect, MC_Color(33, 0, 0, steveOpacity), true);
 						//		DrawUtils::drawRoundRectangle(testRect, MC_Color(33, 33, 33, opacity), false);

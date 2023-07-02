@@ -10,7 +10,7 @@ Interface::Interface() : IModule(0, Category::VISUAL, "Displays the HUD") {
 	Fonts.addEntry("Mojangles", 0);
 	Fonts.addEntry("Notosans", 1);
 	Fonts.addEntry("TEN", 2);
-	Fonts.addEntry("Unicod", 3);
+	//Fonts.addEntry("Unicod", 3);
 	registerBoolSetting("ArmorHUD", &armorHUD, armorHUD);
 	registerBoolSetting("Release", &release, release);
 	registerBoolSetting("Info", &info, info);
@@ -20,6 +20,7 @@ Interface::Interface() : IModule(0, Category::VISUAL, "Displays the HUD") {
 	registerIntSetting("Opacity", &opacity, opacity, 0, 255);
 	registerIntSetting("ColorOpacity", &coloropacity, coloropacity, 0, 255);
 	registerIntSetting("GlowQuality", &glowlayers, glowlayers, 0, 30);
+	registerFloatSetting("GlowOpacity", &glowopacity , glowopacity, 0.f, 1.5f);
 	registerFloatSetting("Saturation", &saturation, saturation, 0.f, 1.f);
 	registerIntSetting("Seperation", &spacing, spacing, 5, 500);
 	registerFloatSetting("Red", &r, r, 0.f, 255.f);
@@ -45,7 +46,7 @@ void Interface::onPreRender(C_MinecraftUIRenderContext* renderCtx) {
 void Interface::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 	auto player = g_Data.getLocalPlayer();
 	if (player == nullptr) return;
-	versionStr = "Beta Build 4";
+	versionStr = "Beta Build 7";
 	auto clickGUI = moduleMgr->getModule<ClickGUIMod>();
 
 	static int index = 0;
