@@ -39,6 +39,7 @@
 #include "Modules/Visual/BreadCrumbs.h"
 #include "Modules/Visual/SessionInfo.h"
 #include "Modules/Visual/Animations.h"
+#include "Modules/Visual/SwingSpeed.h"
 #include "Modules/Visual/PlayerList.h"
 #include "Modules/Visual/WayPoints.h"
 #include "Modules/Visual/ArrayList.h"
