@@ -48,6 +48,7 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new BreadCrumbs()));
 		moduleList.push_back(std::shared_ptr<IModule>(new SessionInfo()));
 		moduleList.push_back(std::shared_ptr<IModule>(new Animations()));
+		moduleList.push_back(std::shared_ptr<IModule>(new SlowSwing()));
 		moduleList.push_back(std::shared_ptr<IModule>(new PlayerList()));
 		moduleList.push_back(std::shared_ptr<IModule>(new ArrayList()));
 		moduleList.push_back(std::shared_ptr<IModule>(new CustomSky()));
