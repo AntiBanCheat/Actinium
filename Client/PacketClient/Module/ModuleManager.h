@@ -15,7 +15,6 @@
 #include "Modules/DebugMenu.h"
 
 // Combat
-#include "Modules/Combat/CubePlayerTP.h"
 #include "Modules/Combat/AutoClicker.h"
 #include "Modules/Combat/CrystalAura.h"
 #include "Modules/Combat/TriggerBot.h"
