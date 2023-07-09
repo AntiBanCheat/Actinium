@@ -24,7 +24,6 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new DebugMenu()));
 
 		// Combat
-		moduleList.push_back(std::shared_ptr<IModule>(new CubePlayerTP()));
 		moduleList.push_back(std::shared_ptr<IModule>(new AutoClicker()));
 		moduleList.push_back(std::shared_ptr<IModule>(new CrystalAura()));
 		moduleList.push_back(std::shared_ptr<IModule>(new TriggerBot()));
