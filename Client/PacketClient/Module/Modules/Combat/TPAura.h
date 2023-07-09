@@ -5,21 +5,27 @@
 
 class TPAura : public IModule {
 private:
-	bool teleported = false;
-	bool multi = false;
+	int tick = 0;
+	int realdelay = 0;
 	int delay = 10;
-	int ticks = 0;
+	int height = 0;
+	int multi = 1;
+	bool spoof = true;
+	bool backsettings = true;
+	bool once = false;
+	bool behind = false;
+	bool voidCheck = false;
+	bool back = false;
+	int check = 0;
+	int bdelay = 0;
+	vec3_t savepos;
 public:
-	float range = 250.f;
+	int range = 250;
 
 	std::string name = "TPAura";
-	SettingEnum mode = this;
 
-	virtual void onPostRender(C_MinecraftUIRenderContext* renderCtx);
-	virtual void onSendPacket(C_Packet* packet);
 	virtual const char* getModuleName();
 	virtual void onTick(C_GameMode* gm);
-	virtual void onLevelRender();
 	virtual void onDisable();
 	virtual void onEnable();
 	TPAura();
