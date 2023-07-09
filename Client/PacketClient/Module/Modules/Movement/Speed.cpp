@@ -16,12 +16,13 @@ Speed::Speed() : IModule(0, Category::MOVEMENT, "Increases your speed") {
 	mode.addEntry("TPBoost", 9);
 	mode.addEntry("Flareon", 10);
 	mode.addEntry("HiveBoost", 11);
+	mode.addEntry("FrictionBoost", 12);
 
 	registerFloatSetting("Height", &height, height, 0.000001f, 0.40f);
 	registerFloatSetting("Speed", &speed, speed, 0.2f, 2.f);
 	registerIntSetting("Timer", &timer, timer, 10, 40);
 	registerFloatSetting("Random", &random2, random2, 0.f, 0.5f);
-	registerFloatSetting("Duration", &duration, duration, 0.5f, 1.05f, 0.001f);
+	registerFloatSetting("Duration", &duration, duration, 0.75f, 1.05f, 0.001f);
 	registerBoolSetting("NoSlabs", &noslabs, noslabs);
 	registerBoolSetting("DamageBoost", &dmgboost, dmgboost);
 	registerIntSetting("DamageTime", &damagetime, damagetime, 1, 20);
@@ -448,6 +449,30 @@ void Speed::onMove(C_MoveInputHandler* input) {
 			random3 = 0 - random2;
 			fricspeed = randomFloat(random2, random3);
 			MoveUtil::setSpeed(speed + fricspeed);
+		}
+	}
+
+	if (mode.getSelectedValue() == 12) {
+		static bool useVelocity = false;
+		// eat my absctrionalie
+		if (height >= 0.385) { if (player->onGround && pressed) player->jumpFromGround(); useVelocity = false; }
+		else useVelocity = true;
+		if (height <= 0.04 && !input->isJumping) { player->velocity.y += height; useVelocity = false; }
+
+		float smoothing = 10.f;
+		float miniumSpeed = 0.25f;
+		speedFriction *= duration;
+		if (speedFriction > miniumSpeed) speedFriction -= ((speedFriction - miniumSpeed) / smoothing);
+		else if (speedFriction < miniumSpeed) speedFriction += ((miniumSpeed - speedFriction) / smoothing);
+		if (pressed) {
+			if (player->onGround) {
+				jumpticks = 0;
+				if (useVelocity && !input->isJumping) player->velocity.y = height;
+				random3 = 0 - random2;
+				fricspeed = randomFloat(random2, random3);
+				speedFriction = speed + fricspeed;
+			}
+			else if (strafeticks > startstrafe && jumpticks > startjumpstrafe) { strafeticks = 0; MoveUtil::setSpeed(speedFriction); }
 		}
 	}
 }
