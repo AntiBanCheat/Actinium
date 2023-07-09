@@ -15,7 +15,7 @@ Speed::Speed() : IModule(0, Category::MOVEMENT, "Increases your speed") {
 	//mode.addEntry("Packet", 9);
 	mode.addEntry("TPBoost", 9);
 	mode.addEntry("Flareon", 10);
-	mode.addEntry("HiveBoost", 11);
+	mode.addEntry("StrafeBoost", 11);
 	mode.addEntry("FrictionBoost", 12);
 
 	registerFloatSetting("Height", &height, height, 0.000001f, 0.40f);
