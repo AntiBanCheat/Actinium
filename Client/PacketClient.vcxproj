@@ -297,6 +297,7 @@
     <ClCompile Include="PacketClient\Module\ModuleManager.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Combat\Aimbot.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Visual\Animations.cpp" />
+    <ClCompile Include="PacketClient\Module\Modules\Visual\SwingSpeed.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Combat\AntiBot.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Exploit\AntiImmobile.cpp" />
     <ClCompile Include="PacketClient\Module\Modules\Movement\AntiVoid.cpp" />
@@ -507,6 +508,7 @@
     <ClInclude Include="PacketClient\Module\ModuleManager.h" />
     <ClInclude Include="PacketClient\Module\Modules\Combat\Aimbot.h" />
     <ClInclude Include="PacketClient\Module\Modules\Visual\Animations.h" />
+    <ClInclude Include="PacketClient\Module\Modules\Visual\SwingSpeed.h" />
     <ClInclude Include="PacketClient\Module\Modules\Combat\AntiBot.h" />
     <ClInclude Include="PacketClient\Module\Modules\Exploit\AntiImmobile.h" />
     <ClInclude Include="PacketClient\Module\Modules\Movement\AntiVoid.h" />
