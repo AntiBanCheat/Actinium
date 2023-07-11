@@ -15,6 +15,7 @@ TargetHUD::TargetHUD() : IModule(0, Category::VISUAL, "Displays information abou
 	mode.addEntry("Rise", 8);
 	mode.addEntry("jd", 9);
 	mode.addEntry("HvH", 10);
+	mode.addEntry("MoonOld", 11);
 	registerBoolSetting("Animation", &animation, animation);
 	registerBoolSetting("Items", &showItems, showItems);
 	registerIntSetting("Opacity", &opacity, opacity, 0, 255);
@@ -118,6 +119,7 @@ void TargetHUD::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 			vec3_t* pos = targetList[0]->getPos();
 			auto health = targetList[0]->getHealth();
 			int inthealth = health;
+			int healthcolor = inthealth * 12.75;
 			float Absorbtionhp = ((int)targetList[0]->getAbsorption());
 			int percentage = (health / 20) * 100;
 			string displaypercent = to_string(percentage);
@@ -581,7 +583,31 @@ void TargetHUD::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 						}
 					}
 				}
-				
+
+				if (mode.getSelectedValue() == 11) { // moon
+					float defaultRectHeight = (40, 40);
+					string name = "          ";
+					string rawName = targetList[0]->getNameTag()->getText();
+					rawName = Utils::sanitize(rawName);
+					rawName = name + rawName;
+					rawName = rawName.substr(0, rawName.find('\n'));
+					targetLen = 150.5;
+					vec4_t testRect = vec4_t(positionX - 1, positionY - 1, targetLen + positionX + 1, positionY + defaultRectHeight + 1);
+					DrawUtils::fillRectangleA(testRect, MC_Color(30, 30, 30, opacity));
+					DrawUtils::drawImage("textures/entity/steve.png", vec2_t(positionX, positionY), vec2_t(40, 40), vec2_t(0.125f, 0.125f), vec2_t(0.125f, 0.125f));
+					vec4_t gayRect = vec4_t(testRect.x + 41.5, testRect.y + 35.5, testRect.x + 12, testRect.y + 40.5);
+					DrawUtils::fillRectangleA(gayRect, MC_Color(0, 0, 0, 160));
+					if (Absorbtionhp == 0) {
+						vec4_t healthRect = vec4_t(testRect.x + 42, testRect.y + 36, testRect.x + 42 + ((86.5) / 20) * health, testRect.y + 40);
+						DrawUtils::fillRectangleA(healthRect, MC_Color(255 - healthcolor, healthcolor, 0));
+					}
+
+					if (Absorbtionhp >= 0.1) {
+						vec4_t healthRect = vec4_t(testRect.x + 42, testRect.y + 36, testRect.x + 42 + ((86.5) / 10) * displayhealth2, testRect.y + 40);
+						DrawUtils::fillRectangleA(healthRect, MC_Color(200, 200, 10, 255));
+					}
+				}
+
 				if (mode.getSelectedValue() == 1) {
 					if (showItems) defaultRectHeight = (7, 2) * DrawUtils::getFont(Fonts::SMOOTH)->getLineHeight();
 					string name = targetList[0]->getNameTag()->getText();
@@ -697,6 +723,28 @@ void TargetHUD::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 					float targetLen = DrawUtils::getTextWidth(&targetName, 1) + 35.5;
 					vec4_t testRect = vec4_t(positionX, positionY, targetLen + positionX, positionY + defaultRectHeight - 11.f);
 					DrawUtils::drawText(vec2_t(testRect.x + 40, testRect.y + 15), &targetName, MC_Color(255, 255, 255), 1, 1, true);
+				}
+				if (mode.getSelectedValue() == 11) {
+					string gaytext = string(YELLOW) + to_string(Absorbtionhp) + string(GRAY) + "/" + string(YELLOW) + "10";
+					string notgaytext = string(GRAY) + "/" + string(GREEN) + "20";
+					string stringhealth = to_string(inthealth);
+					sort(targetList.begin(), targetList.end(), CompareTargetEnArray());
+					string distance = "Dist: " + string(GRAY) + to_string((int)dist) + string(".") + to_string((int)(dist * 10) - ((int)dist * 10)) + string("m");
+					int damageTime = targetList[0]->damageTime;
+					std::string hurtTime = "Hurt:" + string(GRAY) + std::to_string(damageTime);
+					float targetLen = DrawUtils::getTextWidth(&targetName, 1) + 35.5;
+					vec4_t testRect = vec4_t(positionX, positionY, targetLen + positionX, positionY + defaultRectHeight - 11.f);
+					DrawUtils::drawText(vec2_t(testRect.x + 42, testRect.y + 2), &targetName, MC_Color(255, 255, 255), 1, 1, true);
+					DrawUtils::drawText(vec2_t(testRect.x + 42, testRect.y + 11), &distance, MC_Color(255, 255, 255), 0.8, 1, true);
+					DrawUtils::drawText(vec2_t(testRect.x + 42, testRect.y + 19), &hurtTime, MC_Color(255, 255, 255), 0.8, 1, true);
+
+					if (Absorbtionhp == 0) {
+						DrawUtils::drawText(vec2_t(testRect.x + 138, testRect.y + 35), &notgaytext, MC_Color(255, 255, 255), 0.7, 1, true);
+						DrawUtils::drawText(vec2_t(testRect.x + 130, testRect.y + 35), &stringhealth, MC_Color(255 - healthcolor, healthcolor, 0), 0.7, 1, true);
+					}
+					if (Absorbtionhp >= 0.1) {
+						DrawUtils::drawText(vec2_t(testRect.x + 133, testRect.y + 35), &gaytext, MC_Color(255, 255, 255), 0.7, 1, true);
+					}
 				}
 
 				// Old

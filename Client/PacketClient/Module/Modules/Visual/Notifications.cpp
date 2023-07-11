@@ -5,6 +5,7 @@ Notifications::Notifications() : IModule(0, Category::VISUAL, "Displays notifica
 	registerEnumSetting("Theme", &mode, 0);
 	mode.addEntry("Packet", 0);
 	mode.addEntry("Solaris", 1);
+	mode.addEntry("Moon", 2);
 	registerBoolSetting("ShowToggle", &showToggle, showToggle);
 	registerBoolSetting("Color", &color, color);
 	registerIntSetting("Opacity", &opacity, opacity, 0, 255);

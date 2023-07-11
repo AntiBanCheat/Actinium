@@ -766,8 +766,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 				}
 			}
 		}
-		else
-		{
+		if (notificationsMod->mode.getSelectedValue() == 1) {
 			vec2_t windowSize = g_Data.getClientInstance()->getGuiData()->windowSize;
 			auto notifications = g_Data.getInfoBoxList();
 			float yPos = windowSize.y - 10;
@@ -853,6 +852,92 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 						yPos -= margin + 20;
 				}
 				index++;
+			}
+		}
+		if (notificationsMod->mode.getSelectedValue() == 2) {
+			vec2_t windowSize = g_Data.getClientInstance()->getGuiData()->windowSize;
+			auto& notifications = g_Data.getInfoBoxList();
+			int index = 0;
+			index++; int curIndex = -index * interfaceMod->spacing;
+			auto interfaceColor = ColorUtil::interfaceColor(curIndex);
+			float yPos = windowSize.y - 15;
+			constexpr float margin = 6;
+			if (arraylist->invert) {
+				constexpr float notificationMessage = 1;
+				constexpr float unused = 0.7f;
+				static const float textHeight = (notificationMessage + unused * 1) * DrawUtils::getFont(Fonts::SMOOTH)->getLineHeight();
+				yPos = margin + textHeight + 10;
+			}
+			for (auto& notification : notifications) {
+				if (notification->check) {
+					notification->fadeVal += (notification->fadeTarget - notification->fadeVal) * 0.08f;
+					if (notification->fadeTarget == 0 && notification->fadeVal < 0.001f)
+						notification->isOpen = false;
+					if (notification->fadeTarget == 1 && notification->duration <= 0 && notification->duration > -1)
+						notification->fadeTarget = 0;
+					else if (notification->duration > 0)
+						notification->duration -= 1.f / 60;
+
+					int lines = 1;
+
+					std::string substring = notification->message;
+
+					while (lines < 5) {
+						auto brea = substring.find("\n");
+						if (brea == std::string::npos || brea + 1 >= substring.size())
+							break;
+						substring = substring.substr(brea + 1);
+						lines++;
+					}
+					if (notification->message.size() == 0)
+						lines = 0;
+
+					constexpr float notificationMessage = 1;
+					constexpr float unused = 0.7f;
+					static const float textHeight = (notificationMessage + unused * 1) * DrawUtils::getFont(Fonts::SMOOTH)->getLineHeight();
+					constexpr float borderPadding = 10;
+					float nameLength = DrawUtils::getTextWidth(&substring, notificationMessage);
+					float fullTextLength = nameLength;
+					std::string message = notification->message + std::string(GRAY) + " (" + std::to_string((int)notification->duration) + std::string(".") + std::to_string((int)(notification->duration * 10) - ((int)notification->duration * 10)) + ")";
+					std::string title = std::string(BOLD) + notification->title + std::string(RESET);
+					std::string textStr = " " + title + "\n" + message;
+
+					notification->animate.y += (yPos - notification->animate.y) * 0.1f;
+					if (notification->fadeTarget == 1)
+						notification->animate.x += ((windowSize.x - margin - fullTextLength - 2 - borderPadding * 2) - notification->animate.x) * 0.1f;
+					else
+						notification->animate.x += (windowSize.x - notification->animate.x) * 0.1f;
+
+					vec4_t rect = vec4_t(
+						notification->animate.x,
+						notification->animate.y - margin - textHeight - 4,
+						(notification->animate.x + margin + fullTextLength + 2 + borderPadding * 2) + margin - borderPadding - 2,
+						notification->animate.y - margin);
+
+					float duration = (rect.z - rect.x) * (notification->duration / notification->maxDuration);
+					if (duration < 1) duration = 1;
+					vec2_t textPos = vec2_t(rect.x + 9, rect.y + 1);
+					vec2_t titlePos = vec2_t(rect.x + 9, rect.y + 1);
+
+					DrawUtils::drawText(vec2_t(textPos.x, textPos.y), &textStr, MC_Color(255, 255, 255), 0.8, 1, true);
+					auto n = moduleMgr->getModule<Notifications>();
+					auto interfaceMod = moduleMgr->getModule<Interface>();
+					if (interfaceMod->glowlayers > 0) DrawUtils::drawGlow(rect, MC_Color(0, 0, 0), interfaceMod->glowopacity / interfaceMod->glowlayers, interfaceMod->glowlayers, 4);
+					DrawUtils::fillRoundRectangle(rect, MC_Color(notification->colorR, notification->colorG, notification->colorB, notificationsMod->opacity), false);
+					DrawUtils::drawBottomLine(vec4_t{ rect.x + 1.5f, rect.y, rect.z - duration, rect.w + 0.5f }, MC_Color(255, 255, 255), 1);
+				}
+				else {
+					notification->maxDuration = notification->duration;
+					notification->check = true;
+					notification->animate.y = yPos;
+					notification->animate.x = windowSize.x;
+				}
+				if (notification->animate.x < windowSize.x + margin - 12 || notification->fadeTarget == 1) {
+					if (arraylist->invert)
+						yPos += margin + 30;
+					else
+						yPos -= margin + 30;
+				}
 			}
 		}
 	}

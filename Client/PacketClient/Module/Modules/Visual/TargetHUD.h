@@ -20,7 +20,7 @@ public:
 	float targetLen = 0.f;
 	float positionX = 10;
 	float positionY = 40;
-	int RiseQuality = 20;
+	int RiseQuality = 20;	
 
 	SettingEnum mode = this;
 
