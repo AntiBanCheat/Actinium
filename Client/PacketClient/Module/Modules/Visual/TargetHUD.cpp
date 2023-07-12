@@ -603,7 +603,7 @@ void TargetHUD::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 					}
 
 					if (Absorbtionhp >= 0.1) {
-						vec4_t healthRect = vec4_t(testRect.x + 42, testRect.y + 36, testRect.x + 42 + ((86.5) / 10) * displayhealth2, testRect.y + 40);
+						vec4_t healthRect = vec4_t(testRect.x + 42, testRect.y + 36, testRect.x + 42 + ((86.5) / 10) * absorbtion, testRect.y + 40);
 						DrawUtils::fillRectangleA(healthRect, MC_Color(200, 200, 10, 255));
 					}
 				}
@@ -725,7 +725,8 @@ void TargetHUD::onPostRender(C_MinecraftUIRenderContext* renderCtx) {
 					DrawUtils::drawText(vec2_t(testRect.x + 40, testRect.y + 15), &targetName, MC_Color(255, 255, 255), 1, 1, true);
 				}
 				if (mode.getSelectedValue() == 11) {
-					string gaytext = string(YELLOW) + to_string(Absorbtionhp) + string(GRAY) + "/" + string(YELLOW) + "10";
+					std::string absorptionString = std::to_string((int)(Absorbtionhp));
+					string gaytext = string(YELLOW) + absorptionString + string(GRAY) + "/" + string(YELLOW) + "10";
 					string notgaytext = string(GRAY) + "/" + string(GREEN) + "20";
 					string stringhealth = to_string(inthealth);
 					sort(targetList.begin(), targetList.end(), CompareTargetEnArray());
