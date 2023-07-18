@@ -30,6 +30,12 @@ private:
 	float random2 = 0.f;
 	float random3 = 0.f;
 	float fricspeed = 0.f;
+	int boosttimer = 0;
+	int jumptimer = 0;
+	int jumpboosttimer = 0;
+	int stopjumpboost = 0;
+	bool checkjmpboost = false;
+	vec2_t SaveMoveVec2D;
 
 	virtual void setSpeed(float speed);
 public:
