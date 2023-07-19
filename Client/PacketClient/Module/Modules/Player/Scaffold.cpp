@@ -647,8 +647,8 @@ void Scaffold::onMove(C_MoveInputHandler* input) {
 				g_Data.getLocalPlayer()->lerpMotion(moveVec);
 			}
 			break;
-		case 6: //Slow
-			g_Data.getClientInstance()->minecraft->setTimerSpeed(50.f);
+		case 6: //FlareonFast
+			g_Data.getClientInstance()->minecraft->setTimerSpeed(40.f);
 			if (offGroundTicks < 3) {
 				moveVec.y = 0.37;
 				g_Data.getLocalPlayer()->lerpMotion(moveVec);
