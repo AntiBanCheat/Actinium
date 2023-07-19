@@ -30,7 +30,7 @@ private:
 	float random2 = 0.f;
 	float random3 = 0.f;
 	float fricspeed = 0.f;
-	int boosttimer = 0;
+	int newboosttimer = 0;
 	int jumptimer = 0;
 	int jumpboosttimer = 0;
 	int stopjumpboost = 0;
