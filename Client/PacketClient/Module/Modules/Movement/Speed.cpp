@@ -473,11 +473,11 @@ void Speed::onMove(C_MoveInputHandler* input) {
 		if (height >= 0.385) { if (player->onGround && pressed) player->jumpFromGround(); useVelocity = false; }
 		else useVelocity = true;
 		if (height <= 0.04 && !input->isJumping) { player->velocity.y += height; useVelocity = false; }
-		if (boosttimer >= 1) 
+		if (newboosttimer >= 1) 
 		{
 			g_Data.getClientInstance()->minecraft->setTimerSpeed(timer + jumpboosttimer);
-			if (boosttimer >= (1 + stopjumpboost)) boosttimer = 0;
-			else boosttimer++;
+			if (newboosttimer >= (1 + stopjumpboost)) newboosttimer = 0;
+			else newboosttimer++;
 		}
 		else
 		{
@@ -502,7 +502,7 @@ void Speed::onMove(C_MoveInputHandler* input) {
 			if (jumpticks > startjumpstrafe && !checkjmpboost) //jump delay
 			{
 				checkjmpboost = true;
-				boosttimer = 1;
+				newboosttimer = 1;
 				speedFriction = speed + fricspeed;
 			}
 			if (strafeticks > startstrafe) strafeticks = 0; //strafe delay
