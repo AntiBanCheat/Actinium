@@ -617,7 +617,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 	{
 		// Main Menu
 		string screenName(g_Hooks.currentScreenName);
-		if (strcmp(screenName.c_str(), "start_screen") == 0) {
+		if (strcmp(screenName.c_str(), "start_screen") == 0) {//
 			auto white = string(WHITE);
 			auto gray = string(GRAY);
 			auto bold = string(BOLD);
@@ -651,7 +651,7 @@ __int64 Hooks::RenderText(__int64 a1, C_MinecraftUIRenderContext* renderCtx) {
 				);
 
 			//float size = g_Data.getClientInstance()->getGuiData()->widthGame / g_Data.getClientInstance()->getGuiData()->heightGame - 1.7769f; // interesting
-			DrawUtils::drawText(vec2_t(5, 5), &changeLog, MC_Color(255, 255, 255), 0.669, 1, true);
+			DrawUtils::drawText(vec2_t(5, 5), &changeLog, MC_Color(255, 0, 0), 0.669, 1, true);
 		}
 		else {
 			shouldRenderTabGui = interfaceMod->tabGUI && interfaceMod->isEnabled();
