@@ -86,11 +86,11 @@ void ModuleManager::initModules() {
 		moduleList.push_back(std::shared_ptr<IModule>(new Speed()));
 		moduleList.push_back(std::shared_ptr<IModule>(new Bhop()));
 		moduleList.push_back(std::shared_ptr<IModule>(new Step()));
-#ifdef _DEBUG
 		moduleList.push_back(std::shared_ptr<IModule>(new HiveFlytwo()));
 		moduleList.push_back(std::shared_ptr<IModule>(new HiveFly()));
 		moduleList.push_back(std::shared_ptr<IModule>(new KBFly()));
 		moduleList.push_back(std::shared_ptr<IModule>(new HiveTestModule()));
+#ifdef _DEBUG
 #endif
 
 		// Player
